@@ -21,8 +21,8 @@ React.js
 develop 브랜치로부터 뻗어나오는 형태
 
 ## 2. Commit Message Form (커밋 메시지 형태)
----
-기본 구조 **[type]: [subject]**
+
+### 기본 구조 **[type]: [subject]**
 되도록 **영어**로 작성
 ---
 ### Type
