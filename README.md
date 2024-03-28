@@ -6,12 +6,13 @@ React.js
 <br/>
 
 ## 1. branch info (브랜치 정보)
+![캡처](https://github.com/Cheetah-19/uam_knu_frontend/assets/143021741/099e0b47-1013-4411-a27b-038d48090655)
 ### main
 실제 배포를 위한 브랜치
 
 ### develop
 개발을 위한 브랜치 <br/>
-프로젝트의 생성과 동시에 main 브랜치로부터 뻗어나오는 형태
+프로젝트의 생성과 동시에 main 브랜치로부터 뻗어나오는 형태 <br/>
 완료된 feature 브랜치들이 병합되는 브랜치
 
 ### feature
