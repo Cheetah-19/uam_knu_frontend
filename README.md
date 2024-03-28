@@ -22,9 +22,10 @@ develop 브랜치로부터 뻗어나오는 형태
 
 ## 2. Commit Message Form (커밋 메시지 형태)
 
-### 기본 구조 **[type]: [subject]**
-되도록 **영어**로 작성
+### 기본 구조 [type]: [subject] , 영어로 작성
+
 ---
+
 ### Type
 - **feat**: 새로운 기능 추가
 - **fix**: 버그 수정
