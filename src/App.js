@@ -10,14 +10,24 @@ import React, { Component } from "react";
 class App extends Component {
   render() {
     return (
-      <div id="bigcontainer" class="bigcontainer">
+      <div class="bigcontainer">
         <header class="header"></header>
         <div class="tablist"></div>
         <div class="content">
           <div class="aside"></div>
           <div class="main">
-            <Barchart/>
-            <Piechart/>
+            <div class="chart_area">
+              <div class="chart">
+                <Barchart/>
+              </div>
+              <div class="chart">
+                <Piechart/>
+              </div>
+            </div>
+            {/* <button class="random_button">
+              dice!
+            </button> */}
+            
           </div>
         </div>
       </div>

@@ -1,36 +1,60 @@
 html,body{
 	height: 100%;
+  margin: 0; /* 브라우저 기본 마진을 제거 */
 }
 .bigcontainer {
-    display: flex;
-    flex-direction: column;
-		height: 100vh;
+  display: flex;
+  flex-direction: column;
+	height: 100vh;
 }
 .header {
   height: 65px;
   background-color: #eeccee;
 }
 .tablist {
-    height: 70px;
-    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
-    background-color: white;
+  height: 70px;
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
+  background-color: white;
 }
 
 .content {
-    display: flex;
-    flex: 1;
-    height: calc(100vh - 65px - 70px); /*header와 content 를 뺀 만큼의 height를 가져야 함*/
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 65px - 70px); /*header와 content 를 뺀 만큼의 height를 가져야 함*/
 }
 .aside {
-    display: flex;
-    flex: 20%;
-    background-color: #bfbab078;
+  display: flex;
+  flex: 20%;
+  background-color: #bfbab078;
 }
 .main{
-    display: flex;
-    flex: 80%;
-    overflow: auto;
+  display: flex;
+  flex: 80%;
+  flex-direction: column;
+  overflow: auto;
 }
+.chart_area {
+  display: flex;
+  justify-content: space-between; /* 이미지를 나란히 배치합니다. */
+}
+
+.chart {
+  flex: 1; /* 이미지가 컨테이너 공간을 균등하게 차지 */
+  max-width: 50%; /* 각 이미지의 최대 너비를 50%로 */
+  object-fit: cover; /* 이미지가 비율을 유지하며 컨테이너를 채우도록 */
+}
+
+.random_button {
+  width: 100%; /* 버튼이 전체 너비를 차지 */
+  padding: 10px 0; /* 버튼의 상하 패딩을 설정 */
+  margin-top: auto; /* 이미지와 버튼 사이의 공간을 설정 */
+  background-color: #eeccee; 
+  color: blue;
+  border: none; 
+  cursor: pointer; 
+}
+
+
 
 
 @media (max-width: 767px){

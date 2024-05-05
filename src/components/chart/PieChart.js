@@ -1,91 +1,76 @@
-import * as React from 'react';
+import React, { useState } from 'react'; // React와 useState를 임포트합니다.
 import { ResponsivePie } from '@nivo/pie';
 import '../../styles/PieChart.css';
 
-const Piechart = () => {
+const PieChart = () => {
+    // 차트 데이터 상태 관리
+    const [data, setData] = useState([
+        { id: 'fato', value: 0.1 },
+        { id: 'path_in', value: 0.2 },
+        { id: 'gate', value: 0.4 },
+        { id: 'path_out', value: 0.3 },
+        { id: 'dahapsil', value: 0.3 },
+    ]);
+
+    // 차트 데이터를 랜덤으로 업데이트하되 모든 수의 합이 1이 되도록 하는 함수
+    const updateData = () => {
+        // 임시 배열과 총합 변수를 생성
+        let tempData = [];
+        let total = 0;
+
+        // 랜덤한 수를 생성하고 총합을 계산
+        data.forEach(item => {
+            const randomValue = Math.random();
+            tempData.push({
+                ...item,
+                value: randomValue,
+            });
+            total += randomValue;
+        });
+
+        // 생성된 랜덤 수들의 합으로 각 값을 나누어 정규화
+        const normalizedData = tempData.map(item => ({
+            ...item,
+            value: item.value / total,
+        }));
+
+        // 상태를 업데이트
+        setData(normalizedData);
+    };
+
+    // 클릭 이벤트 핸들러
     const handle = {
         padClick: (data) => {
             console.log(data);
         },
-
         legendClick: (data) => {
             console.log(data);
         },
     };
 
     return (
-        // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
-        <div className = "Piechart">
+        <div className="Piechart">
             <ResponsivePie
-                /**
-                 * chart에 사용될 데이터
-                 */
-                data={[
-                    { id: 'fato', value: 0.1 },
-                    { id: 'path_in', value: 0.1 },
-                    { id: 'gate', value: 0.2 },
-                    { id: 'path_out', value: 0.4 },
-                    { id: 'dahapsil', value: 0.3 },
-                ]}
-                /**
-                 * chart margin
-                 */
+                data={data} 
                 margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
                 valueFormat=" >-~%"
-                /**
-                 * chart 중간 빈공간 반지름
-                 */
                 innerRadius={0.5}
-                /**
-                 * pad 간격
-                 */
                 padAngle={1.8}
-                /**
-                 * pad radius 설정 (pad별 간격이 있을 시 보임)
-                 */
                 cornerRadius={8}
-                /**
-                 * chart 색상
-                 */
-                // colors={['olive', 'brown', 'orange', 'skyblue', '']} // 커스텀하여 사용할 때
-                colors={{ scheme: 'nivo' }} // nivo에서 제공해주는 색상 조합 사용할 때
-                /**
-                 * pad border 두께 설정
-                 */
+                colors={{ scheme: 'nivo' }}
                 borderWidth={2}
-                /**
-                 * link label skip할 기준 각도
-                 */
                 arcLinkLabelsSkipAngle={0}
-                /**
-                 * link label 색상
-                 */
                 arcLinkLabelsTextColor="#000000"
-                /**
-                 * link label 연결되는 선 두께
-                 */
                 arcLinkLabelsThickness={2}
-                /**
-                 * link label 연결되는 선 색상
-                 */
-                arcLinkLabelsColor={{ from: 'color' }} // pad 색상에 따라감
-                /**
-                 * label (pad에 표현되는 글씨) skip할 기준 각도
-                 */
+                arcLinkLabelsColor={{ from: 'color' }}
                 arcLabelsSkipAngle={10}
                 theme={{
-                    /**
-                     * label style (pad에 표현되는 글씨)
-                     */
                     labels: {
                         text: {
                             fontSize: 14,
                             fill: '#000000',
                         },
                     },
-                    /**
-                     * legend style (default로 하단에 있는 색상별 key 표시)
-                     */
                     legends: {
                         text: {
                             fontSize: 12,
@@ -93,42 +78,36 @@ const Piechart = () => {
                         },
                     },
                 }}
-                /**
-                 * pad 클릭 이벤트
-                 */
                 onClick={handle.padClick}
-                /**
-                 * legend 설정 (default로 하단에 있는 색상별 key 표시)
-                 */
                 legends={[
                     {
-                        anchor: 'bottom', // 위치
-                        direction: 'row', // item 그려지는 방향
-                        justify: false, // 글씨, 색상간 간격 justify 적용 여부
-                        translateX: 0, // chart와 X 간격
-                        translateY: 56, // chart와 Y 간격
-                        itemsSpacing: 0, // item간 간격
-                        itemWidth: 100, // item width
-                        itemHeight: 18, // item height
-                        itemDirection: 'left-to-right', // item 내부에 그려지는 방향
-                        itemOpacity: 1, // item opacity
-                        symbolSize: 18, // symbol (색상 표기) 크기
-                        symbolShape: 'circle', // symbol (색상 표기) 모양
+                        anchor: 'bottom',
+                        direction: 'row',
+                        justify: false,
+                        translateX: 0,
+                        translateY: 56,
+                        itemsSpacing: 0,
+                        itemWidth: 100,
+                        itemHeight: 18,
+                        itemDirection: 'left-to-right',
+                        itemOpacity: 1,
+                        symbolSize: 18,
+                        symbolShape: 'circle',
                         effects: [
                             {
-                                // 추가 효과 설정 (hover하면 textColor를 olive로 변경)
                                 on: 'hover',
                                 style: {
                                     itemTextColor: 'olive',
                                 },
                             },
                         ],
-                        onClick: handle.legendClick, // legend 클릭 이벤트
+                        onClick: handle.legendClick,
                     },
                 ]}
             />
+            <button onClick={updateData}>데이터 변경</button>
         </div>
     );
 };
 
-export default Piechart;
+export default PieChart;
