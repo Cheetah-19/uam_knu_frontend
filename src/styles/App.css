@@ -1,6 +1,57 @@
-.App {
-  text-align: center;
+html,body{
+	height: 100%;
 }
+.bigcontainer {
+    display: flex;
+    flex-direction: column;
+		height: 100vh;
+}
+.header {
+  height: 65px;
+  background-color: #eeccee;
+}
+.tablist {
+    height: 70px;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
+    background-color: white;
+}
+
+.content {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 65px - 70px); /*header와 content 를 뺀 만큼의 height를 가져야 함*/
+}
+.aside {
+    display: flex;
+    flex: 20%;
+    background-color: #bfbab078;
+}
+.main{
+    display: flex;
+    flex: 80%;
+    overflow: auto;
+}
+
+
+@media (max-width: 767px){
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  
+}
+
+@media (min-width: 1200px) {
+  
+}
+
+
+
+
 
 .App-logo {
   height: 40vmin;
@@ -36,3 +87,5 @@
     transform: rotate(360deg);
   }
 }
+
+

@@ -10,10 +10,16 @@ import React, { Component } from "react";
 class App extends Component {
   render() {
     return (
-      <div>
-        <Barchart/>
-        <Piechart/>
-        <RadialBarchart/>
+      <div id="bigcontainer" class="bigcontainer">
+        <header class="header"></header>
+        <div class="tablist"></div>
+        <div class="content">
+          <div class="aside"></div>
+          <div class="main">
+            <Barchart/>
+            <Piechart/>
+          </div>
+        </div>
       </div>
     );
   }
