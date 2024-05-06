@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import './styles/App.css';
 
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Barchart from "./components/chart/BarChart"; 
 import Piechart from "./components/chart/PieChart"; 
 import RadialBarchart from "./components/chart/RadialBarChart";
@@ -16,7 +17,20 @@ class App extends Component {
         <div class="content">
           <div class="aside"></div>
           <div class="main">
-          <div class="tablist"></div>
+          <div class="tablist">
+            <div className="dropdown-container">
+                <DropdownButton id="dropdown-left" title="버티포트">
+                  <Dropdown.Item href="#">Option 1</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 2</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 3</Dropdown.Item>
+                </DropdownButton>
+                <DropdownButton id="dropdown-right" title="식별번호">
+                  <Dropdown.Item href="#">Option 1</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 2</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 3</Dropdown.Item>
+                </DropdownButton>
+            </div>
+          </div>
             <div class="chart_area">
               <div class="chart">
                 <Barchart/>
