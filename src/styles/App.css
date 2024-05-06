@@ -7,15 +7,27 @@ html,body{
   flex-direction: column;
 	height: 100vh;
 }
+
 .header {
   height: 65px;
   background-color: #eeccee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: BalckHanSans-Regular;
+  font-size: 40px;
 }
 .tablist {
   height: 70px;
+  width: 100%;
   box-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
   background-color: white;
 }
+
+.hi{
+  font-family: 'Century Gothic';
+}
+
 
 .content {
   display: flex;

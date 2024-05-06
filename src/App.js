@@ -11,11 +11,12 @@ class App extends Component {
   render() {
     return (
       <div class="bigcontainer">
-        <header class="header">사용자 페이지</header>
-        <div class="tablist"></div>
+        <header className="header">사용자 페이지</header>
+        
         <div class="content">
           <div class="aside"></div>
           <div class="main">
+          <div class="tablist"></div>
             <div class="chart_area">
               <div class="chart">
                 <Barchart/>

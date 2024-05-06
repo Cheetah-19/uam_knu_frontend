@@ -112,7 +112,7 @@ const Barchart = () => {
                     },
                 ]}
             />
-            <button onClick={handleButtonClick}>데이터 변경</button>
+            <button className = "hi" onClick={handleButtonClick}>데이터 변경</button>
         </div>
     );
 };
