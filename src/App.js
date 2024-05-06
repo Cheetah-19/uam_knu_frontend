@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div class="bigcontainer">
-        <header class="header"></header>
+        <header class="header">사용자 페이지</header>
         <div class="tablist"></div>
         <div class="content">
           <div class="aside"></div>

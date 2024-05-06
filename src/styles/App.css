@@ -35,6 +35,8 @@ html,body{
 }
 .chart_area {
   display: flex;
+  flex-direction: row; /* 기본값은 가로 배치 */
+  flex-wrap: wrap; /* 필요 시 세로 배치로 변경 */
   justify-content: space-between; /* 이미지를 나란히 배치합니다. */
 }
 
@@ -52,6 +54,26 @@ html,body{
   color: blue;
   border: none; 
   cursor: pointer; 
+}
+
+@media (max-width: 767px) {
+  .chart_area {
+    flex-direction: column; /* 화면 크기가 작으면 세로 배치 */
+  }
+  
+  .chart {
+    max-width: 100%; /* 화면 크기가 작으면 차트 크기를 100%로 */
+  }
+}
+
+@media (min-width: 768px) {
+  .chart_area {
+    flex-direction: row; /* 화면 크기가 크면 가로 배치 */
+  }
+  
+  .chart {
+    max-width: 50%; /* 화면 크기가 크면 차트 크기를 50%로 */
+  }
 }
 
 
