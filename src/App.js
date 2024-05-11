@@ -21,19 +21,26 @@ async function fetchData(url) {
   }
 }
 
+
 class App extends Component {
 
   async componentDidMount() {
-    const vertiports = await fetchData('http://54.180.164.236:8000/vertiports');
-    if (vertiports && vertiports.data) {
-      this.setState({ vertiports: vertiports.data });
+    try {
+      const vertiports = await fetchData('http://54.180.164.236:8000/vertiports');
+      if (vertiports && vertiports.data) {
+        console.log('버티포트 정보:', vertiports.data); // 버티포트 정보를 콘솔에 출력
+        this.setState({ vertiports: vertiports.data });
+      }
+    } catch (error) {
+      console.error('버티포트 정보를 가져오는 중 오류 발생:', error);
     }
   }
-  
+
   constructor(props) {
     super(props);
     this.state = {
       vertiports: [], // 버티포트 정보를 저장할 상태
+      selectedVertiport: null, // 선택된 버티포트 정보를 저장할 상태 추가
       maxFatoUAM: '',
       maxPathInUAM: '',
       maxPathOutUAM: '',
@@ -46,6 +53,36 @@ class App extends Component {
       currentGatePassengers: '',
       currentBoardedPassengers: ''
     };
+  }
+
+  handleVertiportSelect = (selectedVertiport) => {
+    console.log('선택된 버티포트:', selectedVertiport); // 선택된 버티포트 정보를 콘솔에 출력
+    this.setState({ selectedVertiport });
+    // 선택된 버티포트 정보를 텍스트 박스에 표시
+    if (selectedVertiport) {
+      this.setState({
+        maxFatoUAM: selectedVertiport.fato.toString(),
+        maxPathInUAM: selectedVertiport.path_in.toString(),
+        maxPathOutUAM: selectedVertiport.path_out.toString(),
+        maxGateUAM: selectedVertiport.gate.toString(),
+        maxGatePassengers: selectedVertiport.waiting_room.toString()
+      });
+  
+      // 선택된 버티포트 정보를 드롭다운 버튼의 제목으로 설정
+      document.getElementById('dropdown-left').innerText = selectedVertiport.name;
+    } else {
+      // 선택이 해제된 경우 초기화
+      this.setState({
+        maxFatoUAM: '',
+        maxPathInUAM: '',
+        maxPathOutUAM: '',
+        maxGateUAM: '',
+        maxGatePassengers: ''
+      });
+  
+      // 선택이 해제되었으므로 드롭다운 버튼의 제목을 초기 상태로 설정
+      document.getElementById('dropdown-left').innerText = '버티포트';
+    }
   }
 
   //값 업데이트
@@ -152,7 +189,9 @@ class App extends Component {
               <div className="dropdown-container">
                 <DropdownButton id="dropdown-left" title="버티포트">
                   {vertiports.map((vertiport, index) => (
-                    <Dropdown.Item key={index}>{vertiport.name}</Dropdown.Item>
+                    <Dropdown.Item key={index} onClick={() => this.handleVertiportSelect(vertiport)}>
+                      {vertiport.name}
+                    </Dropdown.Item>
                   ))}
                 </DropdownButton>
                 <DropdownButton id="dropdown-right" title="식별번호">
