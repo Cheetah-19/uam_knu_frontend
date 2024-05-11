@@ -60,9 +60,67 @@ html,body{
 }
 .aside {
   display: flex;
+  flex-direction: column; /* 세로 정렬 */
   flex: 20%;
-  background-color: #bfbab078;
+  background-color: white;
+  max-height: 100vh; /* 화면 높이의 80%로 최대 높이 설정 */
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
 }
+
+.aside-content {
+  flex: 0 0 80%; /* 텍스트 박스 영역 80% */
+  overflow: auto;
+}
+
+.aside-buttons {
+  flex: 0 0 20%; /* 버튼 영역 20% */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 10px;
+}
+
+.aside-buttons button {
+  flex: 0 0 48%; /* 버튼 너비 48% */
+}
+
+@media (max-width: 768px) {
+  .aside {
+    max-height: none; /* 작은 화면에서는 최대 높이 제한 없음 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+  }
+}
+
+.constant-settings, .current-situation-settings {
+  padding: 20px;
+  display: flex; /* 내부 요소들을 세로로 정렬 */
+  flex-direction: column;
+  align-items: center; /* 가운데 정렬 */
+}
+
+.constant-input-container, .current-situation-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 라벨을 좌측 정렬 */
+  margin-bottom: 10px;
+}
+
+.constant-input-container label, .current-situation-input-container label {
+  margin-bottom: 5px;
+}
+
+.constant-input, .current-situation-input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
 .main{
   display: flex;
   flex: 80%;
