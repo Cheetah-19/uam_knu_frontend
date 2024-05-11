@@ -26,39 +26,32 @@ class App extends Component {
     };
   }
 
+  //값 업데이트
   handleInputChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
+  // 계산 핸들러
   handleCalculation = () => {
-    // 텍스트 박스 중 하나라도 비어 있거나 숫자가 아닌 값이 있으면 팝업을 띄우고 초기화
+    /* 텍스트 박스 중 하나라도 비어 있거나 숫자가 아닌 값이 있으면 팝업을 띄우고 초기화 */
     const inputs = Object.values(this.state);
-    const isValid = inputs.every(value => value !== '' && !isNaN(Number(value)));
-    
+    const isValid = inputs.every(value => value !== '' && !isNaN(Number(value))); // 모든 입력값이 숫자인지 확인
+
     if (!isValid) {
       alert('모든 텍스트 박스를 채우고, 숫자 값만 입력하세요.');
       this.handleReset(); // 리셋 함수 호출
-    return;
+      return;
     }
-    // 계산 로직 추가
+
     console.log('계산 버튼 클릭');
-    console.log('maxFatoUAM:', this.state.maxFatoUAM);
-    console.log('maxPathInUAM:', this.state.maxPathInUAM);
-    console.log('maxPathOutUAM:', this.state.maxPathOutUAM);
-    console.log('maxGateUAM:', this.state.maxGateUAM);
-    console.log('maxGatePassengers:', this.state.maxGatePassengers);
-    console.log('currentFatoUAM:', this.state.currentFatoUAM);
-    console.log('currentPathInUAM:', this.state.currentPathInUAM);
-    console.log('currentGateUAM:', this.state.currentGateUAM);
-    console.log('currentFatoOutUAM:', this.state.currentFatoOutUAM);
-    console.log('currentGatePassengers:', this.state.currentGatePassengers);
-    console.log('currentBoardedPassengers:', this.state.currentBoardedPassengers);
+    console.log('상태:', this.state);
   }
 
+  // 초기화 핸들러
   handleReset = () => {
-    // 모든 상태를 초기화합니다.
+    /* 모든 상태를 초기화 */
     this.setState({
       maxFatoUAM: '',
       maxPathInUAM: '',
@@ -74,7 +67,39 @@ class App extends Component {
     });
   }
 
+  renderInputs = (inputs) => {
+    return inputs.map(input => (
+      <div className="current-situation-input-container" key={input.name}>
+        <label>{input.label}</label>
+        <input
+          type="text"
+          name={input.name}
+          value={this.state[input.name]}
+          className={input.className}
+          onChange={this.handleInputChange}
+        />
+      </div>
+    ));
+  };
+
   render() {
+    const constantInputs = [
+      { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
+      { name: "maxPathInUAM", label: "Path_In의 최대 UAM 수", className: "constant-input" },
+      { name: "maxPathOutUAM", label: "Path_Out의 최대 UAM 수", className: "constant-input" },
+      { name: "maxGateUAM", label: "Gate의 최대 UAM 수", className: "constant-input" },
+      { name: "maxGatePassengers", label: "Gate의 최대 승객 수", className: "constant-input" }
+    ];
+
+    const currentSituationInputs = [
+      { name: "currentFatoUAM", label: "Fato에 있는 UAM 수", className: "current-situation-input" },
+      { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
+      { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
+      { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
+      { name: "currentGatePassengers", label: "Gate의 승객 수", className: "current-situation-input" },
+      { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
+    ];
+
     return (
       <div class="bigcontainer">
         <header className="header">사용자 페이지</header>
@@ -84,120 +109,11 @@ class App extends Component {
             <div className="aside-content">
               <div className="constant-settings">
                 <h5>상수 설정</h5>
-                <div className="constant-input-container">
-                  <label>Fato의 최대 UAM 수</label>
-                  <input
-                    type="text"
-                    name="maxFatoUAM"
-                    value={this.state.maxFatoUAM}
-                    className="constant-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="constant-input-container">
-                  <label>Path_In의 최대 UAM 수</label>
-                  <input
-                    type="text"
-                    name="maxPathInUAM"
-                    value={this.state.maxPathInUAM}
-                    className="constant-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                {/* 이하 동일한 방식으로 각 입력 필드 추가 */}
-                <div className="constant-input-container">
-                  <label>Path_Out의 최대 UAM 수</label>
-                  <input
-                    type="text"
-                    name="maxPathOutUAM"
-                    value={this.state.maxPathOutUAM}
-                    className="constant-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="constant-input-container">
-                  <label>Gate의 최대 UAM 수</label>
-                  <input
-                    type="text"
-                    name="maxGateUAM"
-                    value={this.state.maxGateUAM}
-                    className="constant-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="constant-input-container">
-                  <label>Gate의 최대 승객 수</label>
-                  <input
-                    type="text"
-                    name="maxGatePassengers"
-                    value={this.state.maxGatePassengers}
-                    className="constant-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                {this.renderInputs(constantInputs)}
               </div>
               <div className="current-situation-settings">
                 <h5>현재 상황 설정</h5>
-                <div className="current-situation-input-container">
-                  <label>Fato에 있는 UAM 수</label>
-                  <input
-                    type="text"
-                    name="currentFatoUAM"
-                    value={this.state.currentFatoUAM}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="current-situation-input-container">
-                  <label>Path_In에 있는 UAM 수</label>
-                  <input
-                    type="text"
-                    name="currentPathInUAM"
-                    value={this.state.currentPathInUAM}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="current-situation-input-container">
-                  <label>Gate에 있는 UAM 수</label>
-                  <input
-                    type="text"
-                    name="currentGateUAM"
-                    value={this.state.currentGateUAM}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="current-situation-input-container">
-                  <label>Fato_Out에 있는 UAM 수</label>
-                  <input
-                    type="text"
-                    name="currentFatoOutUAM"
-                    value={this.state.currentFatoOutUAM}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="current-situation-input-container">
-                  <label>Gate의 승객 수</label>
-                  <input
-                    type="text"
-                    name="currentGatePassengers"
-                    value={this.state.currentGatePassengers}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
-                <div className="current-situation-input-container">
-                  <label>UAM에 탑승한 승객 수</label>
-                  <input
-                    type="text"
-                    name="currentBoardedPassengers"
-                    value={this.state.currentBoardedPassengers}
-                    className="current-situation-input"
-                    onChange={this.handleInputChange}
-                  />
-                </div>
+                {this.renderInputs(currentSituationInputs)}
               </div>
             </div>
             <div className="aside-buttons">
