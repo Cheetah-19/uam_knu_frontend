@@ -33,6 +33,15 @@ class App extends Component {
   };
 
   handleCalculation = () => {
+    // 텍스트 박스 중 하나라도 비어 있거나 숫자가 아닌 값이 있으면 팝업을 띄우고 초기화
+    const inputs = Object.values(this.state);
+    const isValid = inputs.every(value => value !== '' && !isNaN(Number(value)));
+    
+    if (!isValid) {
+      alert('모든 텍스트 박스를 채우고, 숫자 값만 입력하세요.');
+      this.handleReset(); // 리셋 함수 호출
+    return;
+    }
     // 계산 로직 추가
     console.log('계산 버튼 클릭');
     console.log('maxFatoUAM:', this.state.maxFatoUAM);
