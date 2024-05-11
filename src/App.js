@@ -7,11 +7,33 @@ import Piechart from "./components/chart/PieChart";
 import RadialBarchart from "./components/chart/RadialBarChart";
 import React, { Component } from "react";
 
+async function fetchData(url) {
+  try {
+    const response = await fetch(url); // 서버로 GET 요청을 보냅니다.
+    if (!response.ok) { // 응답이 성공적이지 않으면 에러를 발생시킵니다.
+      throw new Error('서버 응답이 실패했습니다.');
+    }
+    const data = await response.json(); // JSON 형식으로 응답 데이터를 파싱합니다.
+    return data; // 파싱된 데이터를 반환합니다.
+  } catch (error) {
+    console.error('데이터 가져오기 실패:', error);
+    return null; // 에러가 발생하면 null을 반환합니다.
+  }
+}
 
 class App extends Component {
+
+  async componentDidMount() {
+    const vertiports = await fetchData('http://54.180.164.236:8000/vertiports');
+    if (vertiports && vertiports.data) {
+      this.setState({ vertiports: vertiports.data });
+    }
+  }
+  
   constructor(props) {
     super(props);
     this.state = {
+      vertiports: [], // 버티포트 정보를 저장할 상태
       maxFatoUAM: '',
       maxPathInUAM: '',
       maxPathOutUAM: '',
@@ -67,22 +89,25 @@ class App extends Component {
     });
   }
 
-  renderInputs = (inputs) => {
+  renderInputs = (inputs, disabled = false) => {
     return inputs.map(input => (
-      <div className="current-situation-input-container" key={input.name}>
+      <div className="input-container" key={input.name}>
         <label>{input.label}</label>
         <input
           type="text"
           name={input.name}
           value={this.state[input.name]}
           className={input.className}
-          onChange={this.handleInputChange}
+          onChange={!disabled ? this.handleInputChange : null}
+          disabled={disabled}
         />
       </div>
     ));
   };
 
   render() {
+    const { vertiports } = this.state;
+
     const constantInputs = [
       { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
       { name: "maxPathInUAM", label: "Path_In의 최대 UAM 수", className: "constant-input" },
@@ -101,19 +126,19 @@ class App extends Component {
     ];
 
     return (
-      <div class="bigcontainer">
+      <div className="bigcontainer">
         <header className="header">사용자 페이지</header>
 
-        <div class="content">
+        <div className="content">
           <div className="aside">
             <div className="aside-content">
               <div className="constant-settings">
                 <h5>상수 설정</h5>
-                {this.renderInputs(constantInputs)}
+                {this.renderInputs(constantInputs, true)} {/* readOnly로 렌더링 */}
               </div>
               <div className="current-situation-settings">
                 <h5>현재 상황 설정</h5>
-                {this.renderInputs(currentSituationInputs)}
+                {this.renderInputs(currentSituationInputs)} {/* 사용자 입력 허용 */}
               </div>
             </div>
             <div className="aside-buttons">
@@ -122,13 +147,13 @@ class App extends Component {
             </div>
           </div>
 
-          <div class="main">
-            <div class="tablist">
+          <div className="main">
+            <div className="tablist">
               <div className="dropdown-container">
                 <DropdownButton id="dropdown-left" title="버티포트">
-                  <Dropdown.Item href="#">Option 1</Dropdown.Item>
-                  <Dropdown.Item href="#">Option 2</Dropdown.Item>
-                  <Dropdown.Item href="#">Option 3</Dropdown.Item>
+                  {vertiports.map((vertiport, index) => (
+                    <Dropdown.Item key={index}>{vertiport.name}</Dropdown.Item>
+                  ))}
                 </DropdownButton>
                 <DropdownButton id="dropdown-right" title="식별번호">
                   <Dropdown.Item href="#">Option 1</Dropdown.Item>
@@ -137,11 +162,11 @@ class App extends Component {
                 </DropdownButton>
               </div>
             </div>
-            <div class="chart_area">
-              <div class="chart">
+            <div className="chart_area">
+              <div className="chart">
                 <Barchart />
               </div>
-              <div class="chart">
+              <div className="chart">
                 <Piechart />
               </div>
             </div>
