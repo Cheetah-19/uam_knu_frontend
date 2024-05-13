@@ -15,6 +15,8 @@ async function fetchData(endpoint) {
   }
 }
 
+
+
 const Start = () => {
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
@@ -165,17 +167,16 @@ const Start = () => {
       <div className="content">
         <div className="aside">
           <div className="aside-content">
-            <div className="constant-settings">
-              <h5>상수 설정</h5>
+          <div className="constant-settings">
+            <h5>상수 설정</h5>
               {constantInputs.map(input => (
-                <div className="input-container" key={input.name}>
+                <div className="constant-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>
                   <input
                     type="text"
                     name={input.name}
                     value={input.name.includes('max') ? eval(input.name) : ''}
                     className={input.className}
-
                     disabled
                   />
                 </div>
@@ -184,7 +185,7 @@ const Start = () => {
             <div className="current-situation-settings">
               <h5>현재 상황 설정</h5>
               {currentSituationInputs.map(input => (
-                <div className="input-container" key={input.name}>
+                <div className="current-situation-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>
                   <input
                     type="text"
@@ -215,7 +216,6 @@ const Start = () => {
                 <div>{weight}</div>
               </div>
             </div>
-
           </div>
           <div className="aside-buttons">
             <button className="button" onClick={handleCalculation}>계산</button>

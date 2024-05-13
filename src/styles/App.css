@@ -120,6 +120,9 @@ html,body{
   border-radius: 10px;
   box-sizing: border-box;
   text-align: center; /* 텍스트를 가운데 정렬합니다. */
+  /*추가*/
+  margin-left: 0px;
+  margin-right: 35px;
 }
 
 .slidecontainer {
@@ -141,7 +144,7 @@ html,body{
   -webkit-transition: .2s; /* 0.2 seconds transition on hover */
   transition: opacity .2s;
   border-radius: 10px;
-
+  
 }
 
 /* Mouse-over effects */
@@ -157,6 +160,7 @@ html,body{
   height: 25px; /* Slider handle height */
   background: #04AA6D; /* Green background */
   cursor: pointer; /* Cursor on hover */
+  border-radius: 10px; /*추가 (좌 우 끝으로 몰렸을때, 침범하지 않도록)*/
 }
 
 .slider::-moz-range-thumb {
