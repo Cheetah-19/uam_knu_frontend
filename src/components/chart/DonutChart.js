@@ -1,24 +1,26 @@
-import {styled} from "styled-components";
-import {Chart as ChartJS, ArcElement, Tooltip, Legend} from "chart.js";
-import {Doughnut} from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
 import styles from '../../styles/DonutChart.module.css';
-import { getDonutChartData } from '../../utils/ChartData';
+import { getDonutChartDataBeforeOptimization, getDonutChartDataAfterOptimization } from '../../utils/ChartData';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Main = styled.div`
-  display: flex;
-  align-items: center;
-  width: 50%;
-`;
-
 export default function DonutChart() {
-  const Options = {};
-  const { labels, datasets } = getDonutChartData();
-
-  return (
-    <div className={styles.DonutChart}>
-      <Doughnut data={{ labels, datasets }} options={Options}></Doughnut>
-    </div>
-  );
-}
+    const Options = {};
+  
+    // 최적화 전 데이터
+    const { labels: labelsBeforeOptimization, datasets: datasetsBeforeOptimization } = getDonutChartDataBeforeOptimization();
+  
+    // 최적화 후 데이터
+    const { labels: labelsAfterOptimization, datasets: datasetsAfterOptimization } = getDonutChartDataAfterOptimization();
+  
+    return (
+      <div className={styles.DonutChart}>
+        {/* 최적화 전 도넛 그래프 */}
+        <Doughnut data={{ labels: labelsBeforeOptimization, datasets: datasetsBeforeOptimization }} options={Options}></Doughnut>
+  
+        {/* 최적화 후 도넛 그래프 */}
+        <Doughnut data={{ labels: labelsAfterOptimization, datasets: datasetsAfterOptimization }} options={Options}></Doughnut>
+      </div>
+    );
+  }

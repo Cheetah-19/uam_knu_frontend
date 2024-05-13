@@ -1,9 +1,20 @@
-.DonutChart.css {
-    width: 500px;
-    height: 500px; 
+.DonutChart {
+    max-width: 1000%;
+    max-height: 80%;
     margin: 0 auto;
-    background-color: #f5f5f5; /* 배경색 추가 */
-    padding: 20px; /* 여백 추가 */
-    border-radius: 10px; /* 둥근 모서리 추가 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    overflow: auto; /* 화면 크기를 넘어가면 스크롤 생성 */
+
+    @media (max-width: 768px) {
+        flex-direction: column; /* 화면 크기가 작으면 세로로 배열 */
+        align-items: center; /* 가운데 정렬 */
+    }
+}
+
+.DonutChart canvas {
+    width: 80%; /* 차트의 너비를 100%로 설정 */
+    height: 80%; /* 차트의 높이를 100%로 설정 */
 }

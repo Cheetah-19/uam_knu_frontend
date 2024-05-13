@@ -63,7 +63,7 @@ html,body{
   flex-direction: column; /* 세로 정렬 */
   flex: 20%;
   background-color: white;
-  max-height: 100vh; /* 화면 높이의 80%로 최대 높이 설정 */
+  max-height: 100vh; 
   overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
 }
 
@@ -122,6 +122,52 @@ html,body{
   text-align: center; /* 텍스트를 가운데 정렬합니다. */
 }
 
+.slidecontainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Width of the outside container */
+  text-align: center; /* 가운데 정렬 */
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  border-radius: 10px;
+
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+
+
 
 
 .main{
@@ -131,16 +177,12 @@ html,body{
   overflow: auto;
 }
 .chart_area {
+  flex: 80%;
   display: flex;
+  flex: 1; /* 이미지가 컨테이너 공간을 균등하게 차지 */
   flex-direction: row; /* 기본값은 가로 배치 */
   flex-wrap: wrap; /* 필요 시 세로 배치로 변경 */
   justify-content: space-between; /* 이미지를 나란히 배치합니다. */
-}
-
-.chart {
-  flex: 1; /* 이미지가 컨테이너 공간을 균등하게 차지 */
-  max-width: 50%; /* 각 이미지의 최대 너비를 50%로 */
-  object-fit: cover; /* 이미지가 비율을 유지하며 컨테이너를 채우도록 */
 }
 
 .random_button {

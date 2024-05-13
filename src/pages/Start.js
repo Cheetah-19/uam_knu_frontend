@@ -7,16 +7,18 @@ import "../styles/App.css";
 import { privateApi } from "../components/Functions";
 
 async function fetchData(endpoint) {
-    try {
-      const response = await privateApi.get(endpoint); // 이곳에서의 endpoint란 BASE_URL뒤에 붙는 Api 주소.
-      return response.data;
-    } catch (error) {
-      console.error('데이터 가져오기 실패:', error);
-      return null;
-    }
+  try {
+    const response = await privateApi.get(endpoint); // 이곳에서의 endpoint란 BASE_URL뒤에 붙는 Api 주소.
+    return response.data;
+  } catch (error) {
+    console.error('데이터 가져오기 실패:', error);
+    return null;
   }
+}
 
 const Start = () => {
+  const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
+
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
   const [maxFatoUAM, setMaxFatoUAM] = useState('');
@@ -65,6 +67,10 @@ const Start = () => {
     { name: "currentPathOUTUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
   ];
+
+  const handleWeightChange = (e) => {
+    setWeight(parseFloat(e.target.value));
+  };
 
   const handleGraphSelect = (graphType) => {
     setSelectedGraph(graphType);
@@ -139,7 +145,7 @@ const Start = () => {
     console.log('상태:', {
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
       currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
-      currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers
+      currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers, weight
     });
   };
 
@@ -169,7 +175,7 @@ const Start = () => {
                     name={input.name}
                     value={input.name.includes('max') ? eval(input.name) : ''}
                     className={input.className}
-                    onChange={handleInputChange}
+
                     disabled
                   />
                 </div>
@@ -190,6 +196,26 @@ const Start = () => {
                 </div>
               ))}
             </div>
+            <div className="current-situation-settings">
+              <h5>가중치 설정</h5>
+
+              <div className="slidecontainer">
+                {/* Range slider for weight */}
+                <input
+                  type="range"
+                  name="weight"
+                  value={weight}
+                  min="0"
+                  max="1"
+                  step="0.1" // Add step attribute
+                  className="slider"
+                  onChange={handleWeightChange}
+                />
+                {/* Display the selected weight value */}
+                <div>{weight}</div>
+              </div>
+            </div>
+
           </div>
           <div className="aside-buttons">
             <button className="button" onClick={handleCalculation}>계산</button>
@@ -207,8 +233,8 @@ const Start = () => {
                 ))}
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="그래프">
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="식별번호">
                 <Dropdown.Item href="#">Option 1</Dropdown.Item>
@@ -218,14 +244,8 @@ const Start = () => {
             </div>
           </div>
           <div className="chart_area">
-            <div className="chart">
-              {selectedGraph === 'donut' && <Donutchart />}
-              {selectedGraph === 'pie' && <Piechart />}
-            </div>
-            <div className="chart">
-              {selectedGraph === 'donut' && <Donutchart />}
-              {selectedGraph === 'pie' && <Piechart />}
-            </div>
+            {selectedGraph === 'donut' && <Donutchart />}
+            {selectedGraph === 'pie' && <Piechart />}
           </div>
         </div>
       </div>
