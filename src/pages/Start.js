@@ -223,40 +223,52 @@ const Start = () => {
           </div>
         </div>
         <div className="main">
-            <div className="tablist">
-              <div className="dropdown-container">
-                <DropdownButton id="dropdown-left" title="버티포트">
-                  {vertiports.map((vertiport, index) => (
-                    <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
-                      {vertiport.name}
-                    </Dropdown.Item>
-                  ))}
-                </DropdownButton>
-                <DropdownButton id="dropdown-right" title="그래프">
-                  <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
-                </DropdownButton>
-                <DropdownButton id="dropdown-right" title="식별번호">
-                  <Dropdown.Item href="#">Option 1</Dropdown.Item>
-                  <Dropdown.Item href="#">Option 2</Dropdown.Item>
-                  <Dropdown.Item href="#">Option 3</Dropdown.Item>
-                </DropdownButton>
-              </div>
+          <div className="tablist">
+            <div className="dropdown-container">
+              <DropdownButton id="dropdown-left" title="버티포트">
+                {vertiports.map((vertiport, index) => (
+                  <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
+                    {vertiport.name}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+              <DropdownButton id="dropdown-right" title="그래프">
+                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
+              </DropdownButton>
+              <DropdownButton id="dropdown-right" title="식별번호">
+                <Dropdown.Item href="#">Option 1</Dropdown.Item>
+                <Dropdown.Item href="#">Option 2</Dropdown.Item>
+                <Dropdown.Item href="#">Option 3</Dropdown.Item>
+              </DropdownButton>
             </div>
-            <div className="chart_area">
-          {showChart ? (
-            <div>
-              {selectedGraph === 'donut' && <Donutchart />}
-              {selectedGraph === 'pie' && <Piechart />}
+          </div>
+          <div className="chart_area">
+            {selectedGraph === 'donut' && (
+              <div className="chart-container">
+                <Donutchart />
+                {!showChart && (
+                  <div className="calculation-overlay">
+                    <div className="overlay-content">
+                      <h2>계산을 누르세요</h2>
+                    </div>
+                  </div>
+                )}
               </div>
-          ) : (
-            <div className="calculation-overlay">
-              <div className="overlay-content">
-                <h2>계산을 누르세요</h2>
+            )}
+            {selectedGraph === 'pie' && (
+              <div className="chart-container">
+                <Piechart />
+                {!showChart && (
+                  <div className="calculation-overlay">
+                    <div className="overlay-content">
+                      <h2>계산을 누르세요</h2>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-            </div>
+            )}
+          </div>
 
         </div>
       </div>
