@@ -5,6 +5,7 @@ import { getDonutChartDataBeforeOptimization, getDonutChartDataAfterOptimization
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
 export default function DonutChart() {
     const Options = {};
   

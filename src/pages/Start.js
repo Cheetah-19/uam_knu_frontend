@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Donutchart from "../components/chart/DonutChart";
 import Piechart from "../components/chart/PieChart";
-import RadialBarchart from "../components/chart/RadialBarChart";
 import "../styles/App.css";
 import { privateApi } from "../components/Functions";
 
@@ -18,7 +17,6 @@ async function fetchData(endpoint) {
 
 const Start = () => {
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
-
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
   const [maxFatoUAM, setMaxFatoUAM] = useState('');
@@ -34,6 +32,7 @@ const Start = () => {
   const [currentGatePassengers, setCurrentGatePassengers] = useState('');
   const [currentBoardedPassengers, setCurrentBoardedPassengers] = useState('');
   const [selectedGraph, setSelectedGraph] = useState('donut');
+  const [showChart, setShowChart] = useState(false); // State for showing chart after calculation
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -147,6 +146,7 @@ const Start = () => {
       currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
       currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers, weight
     });
+    setShowChart(true); // Show chart after calculation
   };
 
   const handleReset = () => {
@@ -223,30 +223,41 @@ const Start = () => {
           </div>
         </div>
         <div className="main">
-          <div className="tablist">
-            <div className="dropdown-container">
-              <DropdownButton id="dropdown-left" title="버티포트">
-                {vertiports.map((vertiport, index) => (
-                  <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
-                    {vertiport.name}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              <DropdownButton id="dropdown-right" title="그래프">
-                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
-              </DropdownButton>
-              <DropdownButton id="dropdown-right" title="식별번호">
-                <Dropdown.Item href="#">Option 1</Dropdown.Item>
-                <Dropdown.Item href="#">Option 2</Dropdown.Item>
-                <Dropdown.Item href="#">Option 3</Dropdown.Item>
-              </DropdownButton>
+            <div className="tablist">
+              <div className="dropdown-container">
+                <DropdownButton id="dropdown-left" title="버티포트">
+                  {vertiports.map((vertiport, index) => (
+                    <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
+                      {vertiport.name}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                <DropdownButton id="dropdown-right" title="그래프">
+                  <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
+                </DropdownButton>
+                <DropdownButton id="dropdown-right" title="식별번호">
+                  <Dropdown.Item href="#">Option 1</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 2</Dropdown.Item>
+                  <Dropdown.Item href="#">Option 3</Dropdown.Item>
+                </DropdownButton>
+              </div>
             </div>
-          </div>
-          <div className="chart_area">
-            {selectedGraph === 'donut' && <Donutchart />}
-            {selectedGraph === 'pie' && <Piechart />}
-          </div>
+            <div className="chart_area">
+          {showChart ? (
+            <div>
+              {selectedGraph === 'donut' && <Donutchart />}
+              {selectedGraph === 'pie' && <Piechart />}
+              </div>
+          ) : (
+            <div className="calculation-overlay">
+              <div className="overlay-content">
+                <h2>계산을 누르세요</h2>
+              </div>
+            </div>
+          )}
+            </div>
+
         </div>
       </div>
     </div>
