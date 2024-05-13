@@ -97,21 +97,6 @@ const Start = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'maxFatoUAM':
-        setMaxFatoUAM(value);
-        break;
-      case 'maxPathInUAM':
-        setMaxPathInUAM(value);
-        break;
-      case 'maxPathOutUAM':
-        setMaxPathOutUAM(value);
-        break;
-      case 'maxGateUAM':
-        setMaxGateUAM(value);
-        break;
-      case 'maxGatePassengers':
-        setMaxGatePassengers(value);
-        break;
       case 'currentFatoUAM':
         setCurrentFatoUAM(value);
         break;
@@ -159,11 +144,6 @@ const Start = () => {
   };
 
   const handleReset = () => {
-    setMaxFatoUAM('');
-    setMaxPathInUAM('');
-    setMaxPathOutUAM('');
-    setMaxGateUAM('');
-    setMaxGatePassengers('');
     setCurrentFatoUAM('');
     setCurrentPathInUAM('');
     setCurrentGateUAM('');
