@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
-import Donutchart from "./components/chart/DonutChart";
-import Piechart from "./components/chart/PieChart";
-import RadialBarchart from "./components/chart/RadialBarChart";
-import "./styles/App.css";
-import { privateApi } from "./components/Functions";
+import Donutchart from "../components/chart/DonutChart";
+import Piechart from "../components/chart/PieChart";
+import RadialBarchart from "../components/chart/RadialBarChart";
+import "../styles/App.css";
+import { privateApi } from "../components/Functions";
 
 async function fetchData(endpoint) {
     try {
