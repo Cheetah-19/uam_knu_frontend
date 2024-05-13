@@ -2,7 +2,7 @@
 import './styles/App.css';
 
 import { Dropdown, DropdownButton } from 'react-bootstrap';
-import Barchart from "./components/chart/BarChart";
+import Donutchart from "./components/chart/DonutChart";
 import Piechart from "./components/chart/PieChart";
 import RadialBarchart from "./components/chart/RadialBarChart";
 import React, { Component } from "react";
@@ -49,11 +49,21 @@ class App extends Component {
       currentFatoUAM: '',
       currentPathInUAM: '',
       currentGateUAM: '',
+      currentPathOUTUAM: '',
       currentFatoOutUAM: '',
       currentGatePassengers: '',
-      currentBoardedPassengers: ''
+      currentBoardedPassengers: '',
+      selectedGraph: 'donut' // 기본 그래프 유형 설정
     };
   }
+
+  handleGraphSelect = (graphType) => {
+    this.setState({ selectedGraph: graphType });
+    const dropdownButton = document.getElementById('dropdown-right');
+    if (dropdownButton) {
+      dropdownButton.innerText = graphType === 'pie' ? '원형' : '도넛';
+    }
+  };
 
   handleVertiportSelect = (selectedVertiport) => {
     console.log('선택된 버티포트:', selectedVertiport); // 선택된 버티포트 정보를 콘솔에 출력
@@ -67,7 +77,7 @@ class App extends Component {
         maxGateUAM: selectedVertiport.gate.toString(),
         maxGatePassengers: selectedVertiport.waiting_room.toString()
       });
-  
+
       // 선택된 버티포트 정보를 드롭다운 버튼의 제목으로 설정
       document.getElementById('dropdown-left').innerText = selectedVertiport.name;
     } else {
@@ -79,7 +89,7 @@ class App extends Component {
         maxGateUAM: '',
         maxGatePassengers: ''
       });
-  
+
       // 선택이 해제되었으므로 드롭다운 버튼의 제목을 초기 상태로 설정
       document.getElementById('dropdown-left').innerText = '버티포트';
     }
@@ -120,6 +130,7 @@ class App extends Component {
       currentFatoUAM: '',
       currentPathInUAM: '',
       currentGateUAM: '',
+      currentPathOUTUAM: '',
       currentFatoOutUAM: '',
       currentGatePassengers: '',
       currentBoardedPassengers: ''
@@ -143,7 +154,7 @@ class App extends Component {
   };
 
   render() {
-    const { vertiports } = this.state;
+    const { vertiports, selectedGraph } = this.state;
 
     const constantInputs = [
       { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -159,6 +170,7 @@ class App extends Component {
       { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
       { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
       { name: "currentGatePassengers", label: "Gate의 승객 수", className: "current-situation-input" },
+      { name: "currentPathOUTUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
       { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
     ];
 
@@ -194,6 +206,10 @@ class App extends Component {
                     </Dropdown.Item>
                   ))}
                 </DropdownButton>
+                <DropdownButton id="dropdown-right" title="그래프">
+                  <Dropdown.Item onClick={() => this.handleGraphSelect('pie')}>원형</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.handleGraphSelect('donut')}>도넛</Dropdown.Item>
+                </DropdownButton>
                 <DropdownButton id="dropdown-right" title="식별번호">
                   <Dropdown.Item href="#">Option 1</Dropdown.Item>
                   <Dropdown.Item href="#">Option 2</Dropdown.Item>
@@ -203,10 +219,15 @@ class App extends Component {
             </div>
             <div className="chart_area">
               <div className="chart">
-                <Barchart />
+                {/*<Donutchart />*/}
+                {selectedGraph === 'donut' && <Donutchart />}
+                {selectedGraph === 'pie' && <Piechart />}
               </div>
               <div className="chart">
-                <Piechart />
+                {/*<Piechart />*/}
+                {selectedGraph === 'donut' && <Donutchart />}
+                {selectedGraph === 'pie' && <Piechart />}
+
               </div>
             </div>
             {/* <button class="random_button">
