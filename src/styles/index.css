@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Pretendard-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif, 'BalckHanSans-Regular';
   -webkit-font-smoothing: antialiased;
@@ -13,6 +13,13 @@ code {
 }
 
 @font-face {
-	font-family: "BalckHanSans-Regular";
-	src: url(../assets/fonts/BlackHanSans-Regular/BlackHanSans-Regular.ttf) format("truetype");
+  font-family: 'BalckHanSans-Regular';
+  src: url(../assets/fonts/BlackHanSans-Regular/BlackHanSans-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
 }
