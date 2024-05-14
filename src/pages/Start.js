@@ -167,8 +167,8 @@ const Start = () => {
       <div className="content">
         <div className="aside">
           <div className="aside-content">
-          <div className="constant-settings">
-            <h5>상수 설정</h5>
+            <div className="constant-settings">
+              <h5>상수 설정</h5>
               {constantInputs.map(input => (
                 <div className="constant-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>
@@ -199,28 +199,28 @@ const Start = () => {
             </div>
             <div className="current-situation-settings">
               <h5>가중치 설정</h5>
-
-              <div className="slidecontainer">
-                {/* Range slider for weight */}
-                <input
-                  type="range"
-                  name="weight"
-                  value={weight}
-                  min="0"
-                  max="1"
-                  step="0.1" // Add step attribute
-                  className="slider"
-                  onChange={handleWeightChange}
-                />
-                {/* Display the selected weight value */}
-                <div>{weight}</div>
-              </div>
+                <div className="slidecontainer">
+                  {/* Range slider for weight */}
+                  <input
+                    type="range"
+                    name="weight"
+                    value={weight}
+                    min="0"
+                    max="1"
+                    step="0.1" // Add step attribute
+                    className="slider"
+                    onChange={handleWeightChange}
+                  />
+                  {/* Display the selected weight value */}
+                  <div>{weight}</div>
+                </div>
             </div>
           </div>
           <div className="aside-buttons">
-            <button className="button" onClick={handleCalculation}>계산</button>
-            <button className="button" onClick={handleReset}>초기화</button>
+            <button className="button calculation-btn" onClick={handleCalculation}>계산</button>
+            <button className="button reset-btn" onClick={handleReset}>초기화</button>
           </div>
+
         </div>
         <div className="main">
           <div className="tablist">

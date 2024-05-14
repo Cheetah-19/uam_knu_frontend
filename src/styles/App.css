@@ -72,20 +72,49 @@ html,body{
   flex: 0 0 80%; /* 텍스트 박스 영역 80% */
   overflow: auto;
 }
-
 .aside-buttons {
   flex: 0 0 20%; /* 버튼 영역 20% */
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
   align-items: center;
   position: sticky;
   bottom: 0;
   background-color: white;
-  padding: 10px;
+  padding: 5%;
+  grid-column-gap: 10px; /* 버튼 사이의 간격 설정 */
 }
 
 .aside-buttons button {
-  flex: 0 0 48%; /* 버튼 너비 48% */
+  width: 100%;
+}
+
+.button.calculation-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #91F48F;
+  color: black;
+  padding: 10% 20%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 초기화 버튼 스타일 */
+.button.reset-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #D9D9D9; 
+  color: black;
+  padding: 10% 20%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  
 }
 
 @media (max-width: 768px) {
@@ -104,6 +133,7 @@ html,body{
 
 .constant-input-container, .current-situation-input-container {
   display: flex;
+  width: 80%; /* Width of the outside container */
   flex-direction: column;
   align-items: flex-start; /* 라벨을 좌측 정렬 */
   margin-bottom: 10px;
@@ -129,7 +159,7 @@ html,body{
 .slidecontainer {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Width of the outside container */
+  width: 80%; /* Width of the outside container */
   text-align: center; /* 가운데 정렬 */
 }
 
