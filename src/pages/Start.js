@@ -15,6 +15,16 @@ async function fetchData(endpoint) {
   }
 }
 
+async function postData(endpoint, dataToSend) {
+  try {
+    const response = await privateApi.post(endpoint, dataToSend);
+    return response.data;
+  } catch (error) {
+    console.error('데이터 전송 실패:', error);
+    throw error; // 오류를 다시 던져서 호출하는 쪽에서 오류 처리할 수 있도록 함.
+  }
+}
+
 
 
 const Start = () => {
@@ -33,8 +43,9 @@ const Start = () => {
   const [currentFatoOutUAM, setCurrentFatoOutUAM] = useState('');
   const [currentGatePassengers, setCurrentGatePassengers] = useState('');
   const [currentBoardedPassengers, setCurrentBoardedPassengers] = useState('');
-  const [selectedGraph, setSelectedGraph] = useState('donut');
+  const [selectedGraph, setSelectedGraph] = useState(null);
   const [showChart, setShowChart] = useState(false); // State for showing chart after calculation
+  const [solution, setSolution] = useState(null); // solution 상태 추가
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -56,7 +67,7 @@ const Start = () => {
     { name: "maxPathInUAM", label: "Path_In의 최대 UAM 수", className: "constant-input" },
     { name: "maxPathOutUAM", label: "Path_Out의 최대 UAM 수", className: "constant-input" },
     { name: "maxGateUAM", label: "Gate의 최대 UAM 수", className: "constant-input" },
-    { name: "maxGatePassengers", label: "Gate의 최대 승객 수", className: "constant-input" }
+    { name: "maxGatePassengers", label: "대합실의 최대 승객 수", className: "constant-input" }
   ];
 
   const currentSituationInputs = [
@@ -64,7 +75,7 @@ const Start = () => {
     { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
-    { name: "currentGatePassengers", label: "Gate의 승객 수", className: "current-situation-input" },
+    { name: "currentGatePassengers", label: "대합실의 승객 수", className: "current-situation-input" },
     { name: "currentPathOUTUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
   ];
@@ -130,26 +141,55 @@ const Start = () => {
     }
   };
 
-  const handleCalculation = () => {
+  const handleCalculation = async () => {
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
       currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
       currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers
     ];
-    const isValid = inputs.every(value => value !== '' && !isNaN(Number(value)));
+
+    // 입력값을 숫자로 변환
+    const numericInputs = inputs.map(value => Number(value));
+
+    const isValid = numericInputs.every(value => !isNaN(value) && value !== '');
     if (!isValid) {
       alert('모든 텍스트 박스를 채우고, 숫자 값만 입력하세요.');
       handleReset();
       return;
     }
-    console.log('계산 버튼 클릭');
-    console.log('상태:', {
-      maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
-      currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
-      currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers, weight
-    });
-    setShowChart(true); // Show chart after calculation
+
+    const dataToSend = {
+      weight,
+      name: selectedVertiport ? selectedVertiport.name : '',
+      state: {
+        fato_in_UAM: numericInputs[5],
+        path_in_UAM: numericInputs[6],
+        gate_UAM: numericInputs[7],
+        path_out_UAM: numericInputs[10],
+        fato_out_UAM: numericInputs[8],
+        gate_UAM_psg: numericInputs[11],
+        waiting_room_psg: numericInputs[9]
+      }
+    };
+
+    console.log('서버에 보내는 데이터:', dataToSend);
+
+    try {
+      const responseData = await postData('/optimizations', dataToSend);
+      console.log('서버로부터 받은 데이터:', responseData);
+      if (responseData && responseData.result === 'success' && responseData.data) {
+        const { solution } = responseData.data;
+        setSolution(solution); // solution 상태 업데이트
+        setShowChart(true);
+        setSelectedGraph('donut');
+        handleGraphSelect('donut');
+      }
+    } catch (error) {
+      console.error('서버 요청 실패:', error);
+    }
   };
+
+
 
   const handleReset = () => {
     setCurrentFatoUAM('');
@@ -199,21 +239,21 @@ const Start = () => {
             </div>
             <div className="current-situation-settings">
               <h5>가중치 설정</h5>
-                <div className="slidecontainer">
-                  {/* Range slider for weight */}
-                  <input
-                    type="range"
-                    name="weight"
-                    value={weight}
-                    min="0"
-                    max="1"
-                    step="0.1" // Add step attribute
-                    className="slider"
-                    onChange={handleWeightChange}
-                  />
-                  {/* Display the selected weight value */}
-                  <div>{weight}</div>
-                </div>
+              <div className="slidecontainer">
+                {/* Range slider for weight */}
+                <input
+                  type="range"
+                  name="weight"
+                  value={weight}
+                  min="0"
+                  max="1"
+                  step="0.1" // Add step attribute
+                  className="slider"
+                  onChange={handleWeightChange}
+                />
+                {/* Display the selected weight value */}
+                <div>{weight}</div>
+              </div>
             </div>
           </div>
           <div className="aside-buttons">
@@ -244,9 +284,8 @@ const Start = () => {
             </div>
           </div>
           <div className="chart_area">
-            {selectedGraph === 'donut' && (
+            {selectedGraph === null && (
               <div className="chart-container">
-                <Donutchart />
                 {!showChart && (
                   <div className="calculation-overlay">
                     <div className="overlay-content">
@@ -256,16 +295,14 @@ const Start = () => {
                 )}
               </div>
             )}
+            {selectedGraph === 'donut' && (
+              <div className="chart-container">
+                <Donutchart solution={solution} />
+              </div>
+            )}
             {selectedGraph === 'pie' && (
               <div className="chart-container">
-                <Piechart />
-                {!showChart && (
-                  <div className="calculation-overlay">
-                    <div className="overlay-content">
-                      <h2>계산을 누르세요</h2>
-                    </div>
-                  </div>
-                )}
+                <Piechart solution={solution} />
               </div>
             )}
           </div>
