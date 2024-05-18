@@ -46,6 +46,7 @@ const Start = () => {
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showChart, setShowChart] = useState(false); // State for showing chart after calculation
   const [solution, setSolution] = useState(null); // solution 상태 추가
+  const [occupancyData, setOccupancyData] = useState([]);
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -71,7 +72,7 @@ const Start = () => {
   ];
 
   const currentSituationInputs = [
-    { name: "currentFatoInUAM", label: "Fato에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentFatoInUAM", label: "Fato_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
@@ -88,7 +89,7 @@ const Start = () => {
     setSelectedGraph(graphType);
     const dropdownButton = document.getElementById('dropdown-right');
     if (dropdownButton) {
-      dropdownButton.innerText = graphType === 'pie' ? '원형' : '도넛';
+      dropdownButton.innerText = graphType === 'pie' ? '점유율' : '혼잡도 및 이용률';
     }
   };
 
@@ -141,7 +142,33 @@ const Start = () => {
     }
   };
 
+  const calculateOccupancy = () => {
+    const fatoInUAM = currentFatoInUAM / maxFatoUAM;
+    const fatoOutUAM = currentFatoOutUAM / maxFatoUAM;
+    const gateUAM = currentGateUAM / maxGateUAM;
+    const gateUAMPassengers = currentBoardedPassengers / (maxGateUAM * 4);
+    const pathInUAM = currentPathInUAM / maxPathInUAM;
+    const pathOutUAM = currentPathOUTUAM / maxPathOutUAM;
+    const waitingRoomPassengers = currentGatePassengers / maxGatePassengers;
+
+    
+
+    return {
+      fato_in_UAM: fatoInUAM,
+      fato_out_UAM: fatoOutUAM,
+      gate_UAM: gateUAM,
+      gate_UAM_psg: gateUAMPassengers,
+      path_in_UAM: pathInUAM,
+      path_out_UAM: pathOutUAM,
+      waiting_room_psg: waitingRoomPassengers
+    };
+  };
+
   const handleCalculation = async () => {
+
+    const occupancyData = calculateOccupancy();
+    setOccupancyData(occupancyData);
+
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
       currentFatoInUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
@@ -273,8 +300,8 @@ const Start = () => {
                 ))}
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="그래프">
-                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유율</Dropdown.Item>
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="식별번호">
                 <Dropdown.Item href="#">Option 1</Dropdown.Item>
@@ -302,7 +329,7 @@ const Start = () => {
             )}
             {selectedGraph === 'pie' && (
               <div className="chart-container">
-                <Piechart solution={solution} />
+                <Piechart solution={solution} occupancyData = {occupancyData}/>
               </div>
             )}
           </div>
