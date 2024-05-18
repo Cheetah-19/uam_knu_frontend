@@ -36,7 +36,7 @@ const Start = () => {
   const [maxPathOutUAM, setMaxPathOutUAM] = useState('');
   const [maxGateUAM, setMaxGateUAM] = useState('');
   const [maxGatePassengers, setMaxGatePassengers] = useState('');
-  const [currentFatoUAM, setCurrentFatoUAM] = useState('');
+  const [currentFatoInUAM, setcurrentFatoInUAM] = useState('');
   const [currentPathInUAM, setCurrentPathInUAM] = useState('');
   const [currentGateUAM, setCurrentGateUAM] = useState('');
   const [currentPathOUTUAM, setCurrentPathOUTUAM] = useState('');
@@ -71,7 +71,7 @@ const Start = () => {
   ];
 
   const currentSituationInputs = [
-    { name: "currentFatoUAM", label: "Fato에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentFatoInUAM", label: "Fato에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
@@ -115,8 +115,8 @@ const Start = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'currentFatoUAM':
-        setCurrentFatoUAM(value);
+      case 'currentFatoInUAM':
+        setcurrentFatoInUAM(value);
         break;
       case 'currentPathInUAM':
         setCurrentPathInUAM(value);
@@ -144,7 +144,7 @@ const Start = () => {
   const handleCalculation = async () => {
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
-      currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
+      currentFatoInUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
       currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers
     ];
 
@@ -192,7 +192,7 @@ const Start = () => {
 
 
   const handleReset = () => {
-    setCurrentFatoUAM('');
+    setcurrentFatoInUAM('');
     setCurrentPathInUAM('');
     setCurrentGateUAM('');
     setCurrentPathOUTUAM('');
