@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import styles from '../../styles/DonutChart.module.css';
 
-const DonutChart = ({ solution }) => {
+const DonutChart = ({ solution, congetion_utilization_Data }) => {
   const Options = {};
 
   // 최적화 전 도넛 차트 데이터 설정
@@ -34,6 +34,21 @@ const DonutChart = ({ solution }) => {
       setDonutChartDataAfter({ labels: labelsAfter, datasets: datasetsAfter });
     }
   }, [solution]);
+
+  useEffect(() => {
+    if (congetion_utilization_Data) {
+      // 최적화 전 도넛 차트 데이터 설정
+      const datasetsBefore = [{
+        data: [
+          congetion_utilization_Data.congestion * 100,
+          congetion_utilization_Data.utilization * 100
+        ],
+        backgroundColor: ["#ffeb9b", "#b5f2ff"],
+        borderColor: ["#ffeb9b", "#b5f2ff"],
+      }];
+      setDonutChartDataBefore({ labels: labelsBefore, datasets: datasetsBefore });
+    }
+  }, [congetion_utilization_Data]);
 
   useEffect(() => {
     if (chartRefBefore.current) {

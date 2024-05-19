@@ -39,7 +39,7 @@ const Start = () => {
   const [currentFatoInUAM, setcurrentFatoInUAM] = useState('');
   const [currentPathInUAM, setCurrentPathInUAM] = useState('');
   const [currentGateUAM, setCurrentGateUAM] = useState('');
-  const [currentPathOUTUAM, setCurrentPathOUTUAM] = useState('');
+  const [currentPathOutUAM, setcurrentPathOutUAM] = useState('');
   const [currentFatoOutUAM, setCurrentFatoOutUAM] = useState('');
   const [currentGatePassengers, setCurrentGatePassengers] = useState('');
   const [currentBoardedPassengers, setCurrentBoardedPassengers] = useState('');
@@ -47,6 +47,8 @@ const Start = () => {
   const [showChart, setShowChart] = useState(false); // State for showing chart after calculation
   const [solution, setSolution] = useState(null); // solution 상태 추가
   const [occupancyData, setOccupancyData] = useState([]);
+  const [congetion_utilization_Data, Setcongetion_utilization_Data] = useState([]);
+
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -77,7 +79,7 @@ const Start = () => {
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGatePassengers", label: "대합실의 승객 수", className: "current-situation-input" },
-    { name: "currentPathOUTUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentPathOutUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
   ];
 
@@ -131,8 +133,8 @@ const Start = () => {
       case 'currentGatePassengers':
         setCurrentGatePassengers(value);
         break;
-      case 'currentPathOUTUAM':
-        setCurrentPathOUTUAM(value);
+      case 'currentPathOutUAM':
+        setcurrentPathOutUAM(value);
         break;
       case 'currentBoardedPassengers':
         setCurrentBoardedPassengers(value);
@@ -142,13 +144,14 @@ const Start = () => {
     }
   };
 
-  const calculateOccupancy = () => {
+  //최적화 전 점유율 계산
+  const calculate_Occupancy = () => {
     const fatoInUAM = currentFatoInUAM / maxFatoUAM;
     const fatoOutUAM = currentFatoOutUAM / maxFatoUAM;
     const gateUAM = currentGateUAM / maxGateUAM;
     const gateUAMPassengers = currentBoardedPassengers / (maxGateUAM * 4);
     const pathInUAM = currentPathInUAM / maxPathInUAM;
-    const pathOutUAM = currentPathOUTUAM / maxPathOutUAM;
+    const pathOutUAM = currentPathOutUAM / maxPathOutUAM;
     const waitingRoomPassengers = currentGatePassengers / maxGatePassengers;
 
     
@@ -164,15 +167,58 @@ const Start = () => {
     };
   };
 
+  // 최적화 전 혼잡도 및 이용률 계산
+const calculate_Congettion_Utilization = () => {
+  // 가중치 정의
+  const weights = {
+      w1: 0.04,
+      w2: 0.02,
+      w3: 0.38,
+      w4: 0.31,
+      w5: 0.1,
+      w6: 0.15,
+      w7: 0.31,
+      w8: 0.2,
+      w9: 0.2,
+      w10: 0.29
+  };
+
+  // 혼잡도 계산
+  const congestion = (
+      weights.w1 * (currentFatoInUAM / maxFatoUAM) +
+      weights.w2 * (currentPathInUAM / maxPathInUAM) +
+      weights.w3 * (currentGateUAM / maxGateUAM) +
+      weights.w4 * (currentGatePassengers / maxGatePassengers) +
+      weights.w5 * (currentPathOutUAM / maxPathOutUAM) +
+      weights.w6 * (currentFatoOutUAM / maxFatoUAM)
+  );
+
+  // 이용률 계산
+  const utilization = (
+      weights.w7 * (currentGateUAM / maxGateUAM) +
+      weights.w8 * (currentBoardedPassengers / (maxGateUAM * 4)) +
+      weights.w9 * (currentPathOutUAM / maxPathOutUAM) +
+      weights.w10 * (currentFatoOutUAM / maxFatoUAM)
+  );
+
+  return {
+      congestion: congestion,
+      utilization: utilization
+  };
+};
+
+
   const handleCalculation = async () => {
 
-    const occupancyData = calculateOccupancy();
+    const occupancyData = calculate_Occupancy();
+    const congetion_utilization_Data = calculate_Congettion_Utilization();
     setOccupancyData(occupancyData);
+    Setcongetion_utilization_Data(congetion_utilization_Data);
 
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
       currentFatoInUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
-      currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers
+      currentGatePassengers, currentPathOutUAM, currentBoardedPassengers
     ];
 
     // 입력값을 숫자로 변환
@@ -222,7 +268,7 @@ const Start = () => {
     setcurrentFatoInUAM('');
     setCurrentPathInUAM('');
     setCurrentGateUAM('');
-    setCurrentPathOUTUAM('');
+    setcurrentPathOutUAM('');
     setCurrentFatoOutUAM('');
     setCurrentGatePassengers('');
     setCurrentBoardedPassengers('');
@@ -324,7 +370,7 @@ const Start = () => {
             )}
             {selectedGraph === 'donut' && (
               <div className="chart-container">
-                <Donutchart solution={solution} />
+                <Donutchart solution={solution} congetion_utilization_Data = {congetion_utilization_Data} />
               </div>
             )}
             {selectedGraph === 'pie' && (
