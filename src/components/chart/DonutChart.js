@@ -82,6 +82,11 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     }
   }, [donutChartDataAfter]);
 
+  useEffect(() => {
+    console.log('congetion_utilization_Data:', congetion_utilization_Data);
+}, [congetion_utilization_Data]);
+
+
   return (
     <div className={styles.DonutChart}>
       {/* 최적화 전 도넛 차트 */}

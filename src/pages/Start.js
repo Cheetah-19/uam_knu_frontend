@@ -146,13 +146,13 @@ const Start = () => {
 
   //최적화 전 점유율 계산
   const calculate_Occupancy = () => {
-    const fatoInUAM = currentFatoInUAM / maxFatoUAM;
-    const fatoOutUAM = currentFatoOutUAM / maxFatoUAM;
-    const gateUAM = currentGateUAM / maxGateUAM;
-    const gateUAMPassengers = currentBoardedPassengers / (maxGateUAM * 4);
-    const pathInUAM = currentPathInUAM / maxPathInUAM;
-    const pathOutUAM = currentPathOutUAM / maxPathOutUAM;
-    const waitingRoomPassengers = currentGatePassengers / maxGatePassengers;
+    const fatoInUAM = currentFatoInUAM ;
+    const fatoOutUAM = currentFatoOutUAM ;
+    const gateUAM = currentGateUAM ;
+    const gateUAMPassengers = currentBoardedPassengers;
+    const pathInUAM = currentPathInUAM;
+    const pathOutUAM = currentPathOutUAM;
+    const waitingRoomPassengers = currentGatePassengers;
 
     
 
