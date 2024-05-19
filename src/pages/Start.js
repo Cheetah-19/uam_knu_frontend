@@ -91,7 +91,7 @@ const Start = () => {
     setSelectedGraph(graphType);
     const dropdownButton = document.getElementById('dropdown-right');
     if (dropdownButton) {
-      dropdownButton.innerText = graphType === 'pie' ? '점유율' : '혼잡도 및 이용률';
+      dropdownButton.innerText = graphType === 'pie' ? '점유상황' : '혼잡도 및 이용률';
     }
   };
 
@@ -144,7 +144,7 @@ const Start = () => {
     }
   };
 
-  //최적화 전 점유율 계산
+  //최적화 전 점유상황
   const calculate_Occupancy = () => {
     const fatoInUAM = currentFatoInUAM ;
     const fatoOutUAM = currentFatoOutUAM ;
@@ -347,7 +347,7 @@ const calculate_Congettion_Utilization = () => {
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유율</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="식별번호">
                 <Dropdown.Item href="#">Option 1</Dropdown.Item>

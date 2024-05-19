@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
+
 
 function Login() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault(); // Prevent the default form submission
@@ -16,6 +19,7 @@ function Login() {
             if (response.status === 200) {
                 alert("로그인 성공");
                 // Handle successful login (e.g., save token, redirect)
+                handleLoginSuccess();
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -25,6 +29,10 @@ function Login() {
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
         }
+    };
+
+    const handleLoginSuccess = () => {
+        navigate("/start"); // 페이지 이동을 useNavigate로 변경
     };
 
     return (
