@@ -4,6 +4,7 @@ import Donutchart from "../components/chart/DonutChart";
 import Piechart from "../components/chart/PieChart";
 import "../styles/App.css";
 import { privateApi } from "../components/Functions";
+import Modal from "../components/modal/Modal";
 
 async function fetchData(endpoint) {
   try {
@@ -28,6 +29,7 @@ async function postData(endpoint, dataToSend) {
 
 
 const Start = () => {
+  const [Modalstate,setModalstate] = useState(false)
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
@@ -272,6 +274,10 @@ const Start = () => {
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
+              <React.Fragment>
+                <button onClick={setModalstate}> 버티포트 추가</button>
+                
+              </React.Fragment>
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
@@ -286,6 +292,7 @@ const Start = () => {
           <div className="chart_area">
             {selectedGraph === null && (
               <div className="chart-container">
+                
                 {!showChart && (
                   <div className="calculation-overlay">
                     <div className="overlay-content">
@@ -293,6 +300,10 @@ const Start = () => {
                     </div>
                   </div>
                 )}
+                {
+                  Modalstate &&
+                  <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports}></Modal>
+                }
               </div>
             )}
             {selectedGraph === 'donut' && (
