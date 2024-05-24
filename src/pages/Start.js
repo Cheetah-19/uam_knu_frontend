@@ -38,16 +38,19 @@ const Start = () => {
   const [maxPathOutUAM, setMaxPathOutUAM] = useState('');
   const [maxGateUAM, setMaxGateUAM] = useState('');
   const [maxGatePassengers, setMaxGatePassengers] = useState('');
-  const [currentFatoUAM, setCurrentFatoUAM] = useState('');
+  const [currentFatoInUAM, setcurrentFatoInUAM] = useState('');
   const [currentPathInUAM, setCurrentPathInUAM] = useState('');
   const [currentGateUAM, setCurrentGateUAM] = useState('');
-  const [currentPathOUTUAM, setCurrentPathOUTUAM] = useState('');
+  const [currentPathOutUAM, setcurrentPathOutUAM] = useState('');
   const [currentFatoOutUAM, setCurrentFatoOutUAM] = useState('');
   const [currentGatePassengers, setCurrentGatePassengers] = useState('');
   const [currentBoardedPassengers, setCurrentBoardedPassengers] = useState('');
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showChart, setShowChart] = useState(false); // State for showing chart after calculation
   const [solution, setSolution] = useState(null); // solution 상태 추가
+  const [occupancyData, setOccupancyData] = useState([]);
+  const [congetion_utilization_Data, Setcongetion_utilization_Data] = useState([]);
+
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -73,12 +76,12 @@ const Start = () => {
   ];
 
   const currentSituationInputs = [
-    { name: "currentFatoUAM", label: "Fato에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentFatoInUAM", label: "Fato_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGatePassengers", label: "대합실의 승객 수", className: "current-situation-input" },
-    { name: "currentPathOUTUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentPathOutUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
   ];
 
@@ -90,7 +93,7 @@ const Start = () => {
     setSelectedGraph(graphType);
     const dropdownButton = document.getElementById('dropdown-right');
     if (dropdownButton) {
-      dropdownButton.innerText = graphType === 'pie' ? '원형' : '도넛';
+      dropdownButton.innerText = graphType === 'pie' ? '점유상황' : '혼잡도 및 이용률';
     }
   };
 
@@ -117,8 +120,8 @@ const Start = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'currentFatoUAM':
-        setCurrentFatoUAM(value);
+      case 'currentFatoInUAM':
+        setcurrentFatoInUAM(value);
         break;
       case 'currentPathInUAM':
         setCurrentPathInUAM(value);
@@ -132,8 +135,8 @@ const Start = () => {
       case 'currentGatePassengers':
         setCurrentGatePassengers(value);
         break;
-      case 'currentPathOUTUAM':
-        setCurrentPathOUTUAM(value);
+      case 'currentPathOutUAM':
+        setcurrentPathOutUAM(value);
         break;
       case 'currentBoardedPassengers':
         setCurrentBoardedPassengers(value);
@@ -143,11 +146,81 @@ const Start = () => {
     }
   };
 
+  //최적화 전 점유상황
+  const calculate_Occupancy = () => {
+    const fatoInUAM = currentFatoInUAM ;
+    const fatoOutUAM = currentFatoOutUAM ;
+    const gateUAM = currentGateUAM ;
+    const gateUAMPassengers = currentBoardedPassengers;
+    const pathInUAM = currentPathInUAM;
+    const pathOutUAM = currentPathOutUAM;
+    const waitingRoomPassengers = currentGatePassengers;
+
+    
+
+    return {
+      fato_in_UAM: fatoInUAM,
+      fato_out_UAM: fatoOutUAM,
+      gate_UAM: gateUAM,
+      gate_UAM_psg: gateUAMPassengers,
+      path_in_UAM: pathInUAM,
+      path_out_UAM: pathOutUAM,
+      waiting_room_psg: waitingRoomPassengers
+    };
+  };
+
+  // 최적화 전 혼잡도 및 이용률 계산
+const calculate_Congettion_Utilization = () => {
+  // 가중치 정의
+  const weights = {
+      w1: 0.04,
+      w2: 0.02,
+      w3: 0.38,
+      w4: 0.31,
+      w5: 0.1,
+      w6: 0.15,
+      w7: 0.31,
+      w8: 0.2,
+      w9: 0.2,
+      w10: 0.29
+  };
+
+  // 혼잡도 계산
+  const congestion = (
+      weights.w1 * (currentFatoInUAM / maxFatoUAM) +
+      weights.w2 * (currentPathInUAM / maxPathInUAM) +
+      weights.w3 * (currentGateUAM / maxGateUAM) +
+      weights.w4 * (currentGatePassengers / maxGatePassengers) +
+      weights.w5 * (currentPathOutUAM / maxPathOutUAM) +
+      weights.w6 * (currentFatoOutUAM / maxFatoUAM)
+  );
+
+  // 이용률 계산
+  const utilization = (
+      weights.w7 * (currentGateUAM / maxGateUAM) +
+      weights.w8 * (currentBoardedPassengers / (maxGateUAM * 4)) +
+      weights.w9 * (currentPathOutUAM / maxPathOutUAM) +
+      weights.w10 * (currentFatoOutUAM / maxFatoUAM)
+  );
+
+  return {
+      congestion: congestion,
+      utilization: utilization
+  };
+};
+
+
   const handleCalculation = async () => {
+
+    const occupancyData = calculate_Occupancy();
+    const congetion_utilization_Data = calculate_Congettion_Utilization();
+    setOccupancyData(occupancyData);
+    Setcongetion_utilization_Data(congetion_utilization_Data);
+
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
-      currentFatoUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
-      currentGatePassengers, currentPathOUTUAM, currentBoardedPassengers
+      currentFatoInUAM, currentPathInUAM, currentGateUAM, currentFatoOutUAM,
+      currentGatePassengers, currentPathOutUAM, currentBoardedPassengers
     ];
 
     // 입력값을 숫자로 변환
@@ -194,10 +267,10 @@ const Start = () => {
 
 
   const handleReset = () => {
-    setCurrentFatoUAM('');
+    setcurrentFatoInUAM('');
     setCurrentPathInUAM('');
     setCurrentGateUAM('');
-    setCurrentPathOUTUAM('');
+    setcurrentPathOutUAM('');
     setCurrentFatoOutUAM('');
     setCurrentGatePassengers('');
     setCurrentBoardedPassengers('');
@@ -279,8 +352,8 @@ const Start = () => {
                 
               </React.Fragment>
               <DropdownButton id="dropdown-right" title="그래프">
-                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>도넛</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>원형</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
               </DropdownButton>
               <DropdownButton id="dropdown-right" title="식별번호">
                 <Dropdown.Item href="#">Option 1</Dropdown.Item>
@@ -308,12 +381,12 @@ const Start = () => {
             )}
             {selectedGraph === 'donut' && (
               <div className="chart-container">
-                <Donutchart solution={solution} />
+                <Donutchart solution={solution} congetion_utilization_Data = {congetion_utilization_Data} />
               </div>
             )}
             {selectedGraph === 'pie' && (
               <div className="chart-container">
-                <Piechart solution={solution} />
+                <Piechart solution={solution} occupancyData = {occupancyData}/>
               </div>
             )}
           </div>

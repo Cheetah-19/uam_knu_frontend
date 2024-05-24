@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import styles from '../../styles/DonutChart.module.css';
 
-const PieChart = ({ solution }) => {
+const PieChart = ({ solution, occupancyData }) => {
     const Options = {};
 
     // 최적화 전 파이차트 데이터
@@ -18,6 +18,26 @@ const PieChart = ({ solution }) => {
 
     const chartRefBefore = useRef(null); // 최적화 전 차트 인스턴스 변수
     const chartRefAfter = useRef(null); // 최적화 후 차트 인스턴스 변수
+
+    useEffect(() => {
+        if (occupancyData) {
+            // 최적화 전 파이차트 데이터 설정
+            const datasetsBeforeUpdated = [{
+                data: [
+                    occupancyData.fato_in_UAM,
+                    occupancyData.fato_out_UAM,
+                    occupancyData.gate_UAM,
+                    occupancyData.gate_UAM_psg,
+                    occupancyData.path_in_UAM,
+                    occupancyData.path_out_UAM,
+                    occupancyData.waiting_room_psg
+                ],
+                backgroundColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
+                borderColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
+            }];
+            setPieChartDataBefore({ labels: labelsBefore, datasets: datasetsBeforeUpdated });
+        }
+    }, [occupancyData]);
 
     useEffect(() => {
         if (solution) {
@@ -63,6 +83,10 @@ const PieChart = ({ solution }) => {
           };
         }
       }, [pieChartDataAfter]);
+
+      useEffect(() => {
+        console.log('Occupancy Data:', occupancyData);
+    }, [occupancyData]);
 
       return (
         <div className={styles.DonutChart}>
