@@ -14,7 +14,11 @@ function Login() {
             const response = await privateApi.post("/users/auth", {
                 id: id,
                 password: password
-            });
+            },
+            {
+                withCredentials: true
+            }
+        );
             console.log(response);
             if (response.status === 200) {
                 alert("로그인 성공");

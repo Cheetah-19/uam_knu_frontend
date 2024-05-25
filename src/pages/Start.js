@@ -18,7 +18,10 @@ async function fetchData(endpoint) {
 
 async function postData(endpoint, dataToSend) {
   try {
-    const response = await privateApi.post(endpoint, dataToSend);
+    const response = await privateApi.post(endpoint, dataToSend,
+      {
+          withCredentials: true
+      });
     return response.data;
   } catch (error) {
     console.error('데이터 전송 실패:', error);
