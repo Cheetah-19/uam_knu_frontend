@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
 
 
-function Login() {
+function Login(props) {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -14,14 +14,19 @@ function Login() {
             const response = await privateApi.post("/users/auth", {
                 id: id,
                 password: password
-            },
-            {
-                withCredentials: true
             }
         );
             console.log(response);
             if (response.status === 200) {
                 alert("로그인 성공");
+                
+                // 쿠키 저장
+                props.setCookie('access', response.data.data.token.access, {secure:true, sameSite:"none"});
+                props.setCookie('refresh', response.data.data.token.refresh, {secure:true, sameSite:"none"});
+
+                // 사용자 구분
+                props.setUser(response.data.data.admin ? 2:1);
+                
                 // Handle successful login (e.g., save token, redirect)
                 handleLoginSuccess();
             }
