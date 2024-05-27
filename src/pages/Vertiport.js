@@ -1,88 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { Stage, Layer, Image as KonvaImage, Label, Tag, Text } from 'react-konva';
-import vertiportImageSrc from '../assets/Vertiport.png';
-import personImageSrc from '../assets/heechan.png';
+import React, { useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import DraggableComponent from '../components/vertiport/DraggableComponent';
+import DropArea from '../components/vertiport/DropArea';
+import { ItemTypes } from '../components/vertiport/ItemTypes';
 
 const Vertiport = () => {
-  const [vertiportImage, setVertiportImage] = useState(null);
-  const [personImages, setPersonImages] = useState([]); // 이미지 배열 상태
-  const [labels, setLabels] = useState([]); // 라벨 배열 상태
+  const [boxContents, setBoxContents] = useState({
+    Box1: [],
+    Box2: [],
+    Box3: []
+  });
 
-  useEffect(() => {
-    const imgVertiport = new window.Image();
-    imgVertiport.src = vertiportImageSrc;
-    imgVertiport.onload = () => {
-      setVertiportImage(imgVertiport);
-    };
-  }, []);
-
-  // 이미지를 추가하는 함수
-  const addImage = () => {
-    const imgDraggable = new window.Image();
-    imgDraggable.src = personImageSrc;
-    imgDraggable.onload = () => {
-      setPersonImages([...personImages, imgDraggable]); // 이미지 배열에 추가
-    };
+  const handleDrop = (item, boxName) => {
+    const newContents = { ...boxContents, [boxName]: [...boxContents[boxName], item] };
+    setBoxContents(newContents);
+    console.log(`Dropped ${item.type} in ${boxName}`);
   };
 
-  // 라벨을 추가하는 함수
-  const addLabel = () => {
-    setLabels([...labels, { x: 100, y: 100 + labels.length * 60, text: "Aircraft " + (labels.length + 1) }]); // 항공기 라벨 배열에 추가
+  // 각 박스에 Airplane과 Person의 수를 계산하는 함수
+  const countItems = (boxItems) => {
+    const counts = { AIRPLANE: 0, PERSON: 0 };
+    boxItems.forEach(item => {
+      counts[item.type] += 1;
+    });
+    return `✈️: ${counts.AIRPLANE}, 👤: ${counts.PERSON}`;
   };
 
   return (
-    <div>
-      <button onClick={addImage}>+ 사람</button> {/* 사람 이미지 추가 버튼 */}
-      <button onClick={addLabel}>+ 항공기</button> {/* 항공기 라벨 추가 버튼 */}
-      <div>사람 수: {personImages.length}</div> {/* 사람 이미지 수 표시 */}
-      <div>항공기 수: {labels.length}</div> {/* 항공기 라벨 대수 표시 */}
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-        <Layer>
-          {vertiportImage && (
-            <KonvaImage image={vertiportImage} x={100} y={100} />
-          )}
-          {personImages.map((image, index) => (
-            <KonvaImage
-              key={index}
-              image={image}
-              x={200}
-              y={200 + index * 60} // 이미지 위치 조정
-              width={80} // 이미지 크기 조정
-              height={100}
-              draggable
+    <DndProvider backend={HTML5Backend}>
+      <div style={{ overflow: 'hidden', clear: 'both' }}>
+        <DraggableComponent name="Airplane" type={ItemTypes.AIRPLANE} />
+        <DraggableComponent name="Person" type={ItemTypes.PERSON} />
+      </div>
+      <div style={{ overflow: 'hidden', clear: 'both' }}>
+        {Object.keys(boxContents).map((boxName) => (
+          <div key={boxName} style={{ float: 'left', margin: '1rem' }}>
+            <DropArea 
+              name={boxName} 
+              onDrop={handleDrop} 
+              droppedItems={boxContents[boxName]} 
             />
-          ))}
-          {labels.map((label, index) => (
-            <Label
-              key={index}
-              x={label.x}
-              y={label.y}
-              draggable
-            >
-              <Tag
-                fill="black"
-                pointerDirection="down"
-                pointerWidth={10}
-                pointerHeight={10}
-                lineJoin="round"
-                shadowColor="black"
-                shadowBlur={10}
-                shadowOffsetX={10}
-                shadowOffsetY={10}
-                shadowOpacity={0.5}
-              />
-              <Text
-                text={label.text}
-                fontFamily="Calibri"
-                fontSize={18}
-                padding={5}
-                fill="white"
-              />
-            </Label>
-          ))}
-        </Layer>
-      </Stage>
-    </div>
+            <div>{countItems(boxContents[boxName])}</div>
+          </div>
+        ))}
+      </div>
+    </DndProvider>
   );
 };
 
