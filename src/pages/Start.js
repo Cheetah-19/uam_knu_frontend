@@ -20,7 +20,7 @@ async function postData(endpoint, dataToSend) {
   try {
     const response = await privateApi.post(endpoint, dataToSend,
       {
-          withCredentials: true
+        withCredentials: true
       });
     return response.data;
   } catch (error) {
@@ -32,7 +32,7 @@ async function postData(endpoint, dataToSend) {
 
 
 const Start = () => {
-  const [Modalstate,setModalstate] = useState(false)
+  const [Modalstate, setModalstate] = useState(false)
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
@@ -53,6 +53,9 @@ const Start = () => {
   const [solution, setSolution] = useState(null); // solution 상태 추가
   const [occupancyData, setOccupancyData] = useState([]);
   const [congetion_utilization_Data, Setcongetion_utilization_Data] = useState([]);
+  const [stateId, setStateId] = useState(null); // 식별 번호 state 추가
+  const [states, setStates] = useState([]); // State to hold the fetched states
+  const [sequences, setSequences] = useState([]); // State to hold sequences for dropdown
 
 
   useEffect(() => {
@@ -69,6 +72,35 @@ const Start = () => {
     };
     fetchDataFromServer();
   }, []);
+
+  // 버티포트 선택 시 식별 번호 콘솔에 출력
+  useEffect(() => {
+    console.log('식별 번호:', stateId);
+  }, [stateId]);
+
+  const fetchStatesByVertiport = async () => {
+    if (!selectedVertiport) return;
+
+    try {
+      console.log("선택 버티포트 = ", selectedVertiport.name)
+
+      const responseData = await fetchData(`/users/history?vertiport=${selectedVertiport.name}`);
+      if (responseData && responseData.result === 'success' && responseData.data) {
+        setStates(responseData.data.states);
+        console.log(responseData.data.states);
+
+        // Extract sequences from the fetched data
+        const fetchedSequences = responseData.data.states.map(state => state.sequence);
+        setSequences(fetchedSequences); // sequences 상태 업데이트
+      }
+    } catch (error) {
+      console.error('식별 번호를 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatesByVertiport();
+  }, [selectedVertiport]);
 
   const constantInputs = [
     { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -151,15 +183,15 @@ const Start = () => {
 
   //최적화 전 점유상황
   const calculate_Occupancy = () => {
-    const fatoInUAM = currentFatoInUAM ;
-    const fatoOutUAM = currentFatoOutUAM ;
-    const gateUAM = currentGateUAM ;
+    const fatoInUAM = currentFatoInUAM;
+    const fatoOutUAM = currentFatoOutUAM;
+    const gateUAM = currentGateUAM;
     const gateUAMPassengers = currentBoardedPassengers;
     const pathInUAM = currentPathInUAM;
     const pathOutUAM = currentPathOutUAM;
     const waitingRoomPassengers = currentGatePassengers;
 
-    
+
 
     return {
       fato_in_UAM: fatoInUAM,
@@ -173,9 +205,9 @@ const Start = () => {
   };
 
   // 최적화 전 혼잡도 및 이용률 계산
-const calculate_Congettion_Utilization = () => {
-  // 가중치 정의
-  const weights = {
+  const calculate_Congettion_Utilization = () => {
+    // 가중치 정의
+    const weights = {
       w1: 0.04,
       w2: 0.02,
       w3: 0.38,
@@ -186,31 +218,31 @@ const calculate_Congettion_Utilization = () => {
       w8: 0.2,
       w9: 0.2,
       w10: 0.29
-  };
+    };
 
-  // 혼잡도 계산
-  const congestion = (
+    // 혼잡도 계산
+    const congestion = (
       weights.w1 * (currentFatoInUAM / maxFatoUAM) +
       weights.w2 * (currentPathInUAM / maxPathInUAM) +
       weights.w3 * (currentGateUAM / maxGateUAM) +
       weights.w4 * (currentGatePassengers / maxGatePassengers) +
       weights.w5 * (currentPathOutUAM / maxPathOutUAM) +
       weights.w6 * (currentFatoOutUAM / maxFatoUAM)
-  );
+    );
 
-  // 이용률 계산
-  const utilization = (
+    // 이용률 계산
+    const utilization = (
       weights.w7 * (currentGateUAM / maxGateUAM) +
       weights.w8 * (currentBoardedPassengers / (maxGateUAM * 4)) +
       weights.w9 * (currentPathOutUAM / maxPathOutUAM) +
       weights.w10 * (currentFatoOutUAM / maxFatoUAM)
-  );
+    );
 
-  return {
+    return {
       congestion: congestion,
       utilization: utilization
+    };
   };
-};
 
 
   const handleCalculation = async () => {
@@ -261,6 +293,9 @@ const calculate_Congettion_Utilization = () => {
         setShowChart(true);
         setSelectedGraph('donut');
         handleGraphSelect('donut');
+
+        // 식별 번호 목록 업데이트
+        await fetchStatesByVertiport();
       }
     } catch (error) {
       console.error('서버 요청 실패:', error);
@@ -352,23 +387,31 @@ const calculate_Congettion_Utilization = () => {
               </DropdownButton>
               <React.Fragment>
                 <button onClick={setModalstate}> 버티포트 추가</button>
-                
+
               </React.Fragment>
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
               </DropdownButton>
-              <DropdownButton id="dropdown-right" title="식별번호">
-                <Dropdown.Item href="#">Option 1</Dropdown.Item>
-                <Dropdown.Item href="#">Option 2</Dropdown.Item>
-                <Dropdown.Item href="#">Option 3</Dropdown.Item>
+              <DropdownButton
+                id="dropdown-right"
+                title="시퀀스 선택"
+              >
+                {sequences.map((sequence, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => setStateId(sequence)}
+                  >
+                    {sequence}
+                  </Dropdown.Item>
+                ))}
               </DropdownButton>
             </div>
           </div>
           <div className="chart_area">
             {selectedGraph === null && (
               <div className="chart-container">
-                
+
                 {!showChart && (
                   <div className="calculation-overlay">
                     <div className="overlay-content">
@@ -384,12 +427,12 @@ const calculate_Congettion_Utilization = () => {
             )}
             {selectedGraph === 'donut' && (
               <div className="chart-container">
-                <Donutchart solution={solution} congetion_utilization_Data = {congetion_utilization_Data} />
+                <Donutchart solution={solution} congetion_utilization_Data={congetion_utilization_Data} />
               </div>
             )}
             {selectedGraph === 'pie' && (
               <div className="chart-container">
-                <Piechart solution={solution} occupancyData = {occupancyData}/>
+                <Piechart solution={solution} occupancyData={occupancyData} />
               </div>
             )}
           </div>
