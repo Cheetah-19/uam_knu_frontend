@@ -56,6 +56,8 @@ const Start = () => {
   const [stateId, setStateId] = useState(null); // 식별 번호 state 추가
   const [states, setStates] = useState([]); // State to hold the fetched states
   const [sequences, setSequences] = useState([]); // State to hold sequences for dropdown
+  const [previousData, setPreviousData] = useState(null); // 최적화 전 데이터 상태 추가
+  const [newsolution, setNewsolution] = useState(null); // 최적화 후 데이터 상태
 
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const Start = () => {
       try {
         const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
         if (vertiportsData && vertiportsData.data) {
-          console.log('버티포트 정보:', vertiportsData.data);
+          //console.log('버티포트 정보:', vertiportsData.data);
           setVertiports(vertiportsData.data);
         }
       } catch (error) {
@@ -82,12 +84,12 @@ const Start = () => {
     if (!selectedVertiport) return;
 
     try {
-      console.log("선택 버티포트 = ", selectedVertiport.name)
+      //console.log("선택 버티포트 = ", selectedVertiport.name)
 
       const responseData = await fetchData(`/users/history?vertiport=${selectedVertiport.name}`);
       if (responseData && responseData.result === 'success' && responseData.data) {
         setStates(responseData.data.states);
-        console.log(responseData.data.states);
+        //console.log(responseData.data.states);
 
         // Extract sequences from the fetched data
         const fetchedSequences = responseData.data.states.map(state => state.sequence);
@@ -101,6 +103,72 @@ const Start = () => {
   useEffect(() => {
     fetchStatesByVertiport();
   }, [selectedVertiport]);
+
+  // 데이터 형식 변환 함수 작성
+  const transformNewSolution = (newsolution) => {
+    if (Array.isArray(newsolution) && newsolution.length > 0) {
+      const firstSolution = newsolution[0];
+      // 필요한 속성만 추출하고 숫자로 변환
+      return {
+        congestion: parseFloat(firstSolution.congestion),
+        fato_in_UAM: parseInt(firstSolution.fato_in_UAM, 10),
+        fato_out_UAM: parseInt(firstSolution.fato_out_UAM, 10),
+        gate_UAM: parseInt(firstSolution.gate_UAM, 10),
+        gate_UAM_psg: parseInt(firstSolution.gate_UAM_psg, 10),
+        path_in_UAM: parseInt(firstSolution.path_in_UAM, 10),
+        path_out_UAM: parseInt(firstSolution.path_out_UAM, 10),
+        utilization: parseFloat(firstSolution.utilization),
+        waiting_room_psg: parseInt(firstSolution.waiting_room_psg, 10),
+        weight: parseFloat(firstSolution.weight)
+      };
+    }
+    return null;
+  };
+
+
+
+
+  const fetchStateData = async (sequenceId) => {
+    try {
+      const response = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}`);
+      if (response && response.data && response.data.result === 'success' && response.data.data) {
+        const states = response.data.data.states;
+        const selectedState = states.find(state => state.sequence === sequenceId);
+        if (selectedState) {
+          setPreviousData(selectedState);
+          console.log("선택 데이터 = ", selectedState);
+
+          // 최적화 후 데이터 가져오기
+          const responseOptimization = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}&sequence=${sequenceId}`);
+          if (responseOptimization && responseOptimization.data && responseOptimization.data.result === 'success' && responseOptimization.data.data) {
+            const optimizationData = responseOptimization.data.data.optimization;
+            if (optimizationData) {
+              const transformedSolution = transformNewSolution(optimizationData);
+              setNewsolution(transformedSolution);
+              console.log("최적화 데이터 = ", transformedSolution);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('최적화 전 데이터를 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (stateId && selectedVertiport) {
+      fetchStateData(stateId);
+    }
+  }, [stateId, selectedVertiport]);
+
+
+  useEffect(() => {
+    if (stateId && selectedVertiport) {
+      fetchStateData(stateId);
+    }
+  }, [stateId, selectedVertiport]);
+
+
 
   const constantInputs = [
     { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -133,7 +201,7 @@ const Start = () => {
   };
 
   const handleVertiportSelect = (selectedVertiport) => {
-    console.log('선택된 버티포트:', selectedVertiport);
+    //console.log('선택된 버티포트:', selectedVertiport);
     setSelectedVertiport(selectedVertiport);
     if (selectedVertiport) {
       setMaxFatoUAM(selectedVertiport.fato.toString());
@@ -286,7 +354,7 @@ const Start = () => {
 
     try {
       const responseData = await postData('/optimizations', dataToSend);
-      console.log('서버로부터 받은 데이터:', responseData);
+      console.log('서버로부터 최적화 받은 데이터:', responseData.data);
       if (responseData && responseData.result === 'success' && responseData.data) {
         const { solution } = responseData.data;
         setSolution(solution); // solution 상태 업데이트
@@ -432,7 +500,11 @@ const Start = () => {
             )}
             {selectedGraph === 'pie' && (
               <div className="chart-container">
-                <Piechart solution={solution} occupancyData={occupancyData} />
+                {stateId && previousData && newsolution ? (
+                  <Piechart solution={newsolution} occupancyData={previousData} />
+                ) : (
+                  <Piechart solution={solution} occupancyData={occupancyData} />
+                )}
               </div>
             )}
           </div>
