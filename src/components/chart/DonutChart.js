@@ -24,6 +24,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
 
   useEffect(() => {
     if (solution) {
+      //console.log("받은 sol = ", solution);
       // 최적화 후 도넛 차트 데이터 설정
       const labelsAfter = ["congestion", "using"];
       const datasetsAfter = [{
@@ -83,7 +84,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   }, [donutChartDataAfter]);
 
   useEffect(() => {
-    console.log('congetion_utilization_Data:', congetion_utilization_Data);
+    //console.log('congetion_utilization_Data:', congetion_utilization_Data);
 }, [congetion_utilization_Data]);
 
 
