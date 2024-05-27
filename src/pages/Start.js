@@ -57,6 +57,7 @@ const Start = () => {
   const [states, setStates] = useState([]); // State to hold the fetched states
   const [sequences, setSequences] = useState([]); // State to hold sequences for dropdown
   const [previousData, setPreviousData] = useState(null); // 최적화 전 데이터 상태 추가
+  const [previous_congetion_utilization_Data, SetPreviousCongettionUtilizationData] = useState(null);
   const [newsolution, setNewsolution] = useState(null); // 최적화 후 데이터 상태
 
 
@@ -76,9 +77,9 @@ const Start = () => {
   }, []);
 
   // 버티포트 선택 시 식별 번호 콘솔에 출력
-  useEffect(() => {
-    console.log('식별 번호:', stateId);
-  }, [stateId]);
+  // useEffect(() => {
+  //   console.log('식별 번호:', stateId);
+  // }, [stateId]);
 
   const fetchStatesByVertiport = async () => {
     if (!selectedVertiport) return;
@@ -126,8 +127,6 @@ const Start = () => {
   };
 
 
-
-
   const fetchStateData = async (sequenceId) => {
     try {
       const response = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}`);
@@ -136,7 +135,11 @@ const Start = () => {
         const selectedState = states.find(state => state.sequence === sequenceId);
         if (selectedState) {
           setPreviousData(selectedState);
-          console.log("선택 데이터 = ", selectedState);
+          //console.log("선택 데이터 = ", selectedState);
+
+           // Calculate congestion and utilization using selectedState
+           const previous_congetion_utilization_Data = calculate_Congettion_Utilization(selectedState);
+           SetPreviousCongettionUtilizationData(previous_congetion_utilization_Data); // New state setter for previous data
 
           // 최적화 후 데이터 가져오기
           const responseOptimization = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}&sequence=${sequenceId}`);
@@ -145,7 +148,7 @@ const Start = () => {
             if (optimizationData) {
               const transformedSolution = transformNewSolution(optimizationData);
               setNewsolution(transformedSolution);
-              console.log("최적화 데이터 = ", transformedSolution);
+              //console.log("최적화 데이터 = ", transformedSolution);
             }
           }
         }
@@ -155,6 +158,12 @@ const Start = () => {
     }
   };
 
+  // 시퀀스를 선택할 때 stateId를 업데이트하는 함수
+  const handleSequenceSelect = (sequence) => {
+    setStateId(sequence);
+  };
+
+  // sequence를 선택할 때 데이터를 가져오는 useEffect
   useEffect(() => {
     if (stateId && selectedVertiport) {
       fetchStateData(stateId);
@@ -259,8 +268,6 @@ const Start = () => {
     const pathOutUAM = currentPathOutUAM;
     const waitingRoomPassengers = currentGatePassengers;
 
-
-
     return {
       fato_in_UAM: fatoInUAM,
       fato_out_UAM: fatoOutUAM,
@@ -273,44 +280,45 @@ const Start = () => {
   };
 
   // 최적화 전 혼잡도 및 이용률 계산
-  const calculate_Congettion_Utilization = () => {
-    // 가중치 정의
-    const weights = {
-      w1: 0.04,
-      w2: 0.02,
-      w3: 0.38,
-      w4: 0.31,
-      w5: 0.1,
-      w6: 0.15,
-      w7: 0.31,
-      w8: 0.2,
-      w9: 0.2,
-      w10: 0.29
-    };
-
-    // 혼잡도 계산
-    const congestion = (
-      weights.w1 * (currentFatoInUAM / maxFatoUAM) +
-      weights.w2 * (currentPathInUAM / maxPathInUAM) +
-      weights.w3 * (currentGateUAM / maxGateUAM) +
-      weights.w4 * (currentGatePassengers / maxGatePassengers) +
-      weights.w5 * (currentPathOutUAM / maxPathOutUAM) +
-      weights.w6 * (currentFatoOutUAM / maxFatoUAM)
-    );
-
-    // 이용률 계산
-    const utilization = (
-      weights.w7 * (currentGateUAM / maxGateUAM) +
-      weights.w8 * (currentBoardedPassengers / (maxGateUAM * 4)) +
-      weights.w9 * (currentPathOutUAM / maxPathOutUAM) +
-      weights.w10 * (currentFatoOutUAM / maxFatoUAM)
-    );
-
-    return {
-      congestion: congestion,
-      utilization: utilization
-    };
+const calculate_Congettion_Utilization = (data = {}) => {
+  // 가중치 정의
+  const weights = {
+    w1: 0.04,
+    w2: 0.02,
+    w3: 0.38,
+    w4: 0.31,
+    w5: 0.1,
+    w6: 0.15,
+    w7: 0.31,
+    w8: 0.2,
+    w9: 0.2,
+    w10: 0.29
   };
+
+  // 혼잡도 계산
+  const congestion = (
+    weights.w1 * ((data.fato_in_UAM ?? currentFatoInUAM) / maxFatoUAM) +
+    weights.w2 * ((data.path_in_UAM ?? currentPathInUAM) / maxPathInUAM) +
+    weights.w3 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
+    weights.w4 * ((data.gate_UAM_psg ?? currentGatePassengers) / maxGatePassengers) +
+    weights.w5 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
+    weights.w6 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
+  );
+
+  // 이용률 계산
+  const utilization = (
+    weights.w7 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
+    weights.w8 * ((data.gate_UAM_psg ?? currentBoardedPassengers) / (maxGateUAM * 4)) +
+    weights.w9 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
+    weights.w10 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
+  );
+
+  return {
+    congestion: congestion,
+    utilization: utilization
+  };
+};
+
 
 
   const handleCalculation = async () => {
@@ -361,7 +369,6 @@ const Start = () => {
         setShowChart(true);
         setSelectedGraph('donut');
         handleGraphSelect('donut');
-
         // 식별 번호 목록 업데이트
         await fetchStatesByVertiport();
       }
@@ -466,10 +473,7 @@ const Start = () => {
                 title="시퀀스 선택"
               >
                 {sequences.map((sequence, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    onClick={() => setStateId(sequence)}
-                  >
+                  <Dropdown.Item key={index} onClick={() => handleSequenceSelect(sequence)}>
                     {sequence}
                   </Dropdown.Item>
                 ))}
@@ -495,7 +499,11 @@ const Start = () => {
             )}
             {selectedGraph === 'donut' && (
               <div className="chart-container">
-                <Donutchart solution={solution} congetion_utilization_Data={congetion_utilization_Data} />
+                {stateId && previous_congetion_utilization_Data && newsolution ? (
+                  <Donutchart solution={newsolution} congetion_utilization_Data={previous_congetion_utilization_Data} />
+                ) : (
+                  <Donutchart solution={solution} congetion_utilization_Data={congetion_utilization_Data} />
+                )}
               </div>
             )}
             {selectedGraph === 'pie' && (
