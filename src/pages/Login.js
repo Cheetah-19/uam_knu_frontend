@@ -40,6 +40,11 @@ function Login(props) {
         navigate("/start"); // 페이지 이동을 useNavigate로 변경
     };
 
+    const handleNonMember = () => {
+        props.setUser(0);
+        navigate("/start");
+    };
+
     return (
         <div>
             <h1>로그인 페이지</h1>
@@ -66,6 +71,7 @@ function Login(props) {
                 </div>
                 <button type="submit">로그인</button>
             </form>
+            <button onClick={handleNonMember}>비회원으로 시작하기</button>
         </div>
     );
 }
