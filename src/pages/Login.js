@@ -12,17 +12,13 @@ function Login(props) {
         event.preventDefault(); // Prevent the default form submission
         try {
             const response = await privateApi.post("/users/auth", {
-                id: id,
-                password: password
-            }
-        );
+                    id: id,
+                    password: password
+                }
+            );
             console.log(response);
             if (response.status === 200) {
                 alert("로그인 성공");
-                
-                // 쿠키 저장
-                props.setCookie('access', response.data.data.token.access, {secure:true, sameSite:"none"});
-                props.setCookie('refresh', response.data.data.token.refresh, {secure:true, sameSite:"none"});
 
                 // 사용자 구분
                 props.setUser(response.data.data.admin ? 2:1);
