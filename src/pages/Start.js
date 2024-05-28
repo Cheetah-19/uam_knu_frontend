@@ -1,37 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Donutchart from "../components/chart/DonutChart";
 import Piechart from "../components/chart/PieChart";
 import "../styles/App.css";
-import { privateApi } from "../components/Functions";
+import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
 
-async function fetchData(endpoint) {
-  try {
-    const response = await privateApi.get(endpoint); // 이곳에서의 endpoint란 BASE_URL뒤에 붙는 Api 주소.
-    return response.data;
-  } catch (error) {
-    console.error('데이터 가져오기 실패:', error);
-    return null;
-  }
-}
 
-async function postData(endpoint, dataToSend) {
-  try {
-    const response = await privateApi.post(endpoint, dataToSend,
-      {
-          withCredentials: true
-      });
-    return response.data;
-  } catch (error) {
-    console.error('데이터 전송 실패:', error);
-    throw error; // 오류를 다시 던져서 호출하는 쪽에서 오류 처리할 수 있도록 함.
-  }
-}
-
-
-
-const Start = () => {
+const Start = (props) => {
   const [Modalstate,setModalstate] = useState(false)
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
@@ -53,9 +30,33 @@ const Start = () => {
   const [solution, setSolution] = useState(null); // solution 상태 추가
   const [occupancyData, setOccupancyData] = useState([]);
   const [congetion_utilization_Data, Setcongetion_utilization_Data] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchDataFromServer = async () => {
+    try {
+      const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
+      if (vertiportsData && vertiportsData.data) {
+        console.log('버티포트 정보:', vertiportsData.data);
+        setVertiports(vertiportsData.data);
+      }
+    } catch (error) {
+      console.error('버티포트 정보를 가져오는 중 오류 발생:', error);
+    }
+  };
 
 
   useEffect(() => {
+    const fetchNewAccessToken = async () => {
+      try {
+        const response = await fetchData('/api/token/refresh');
+      } catch (error) {
+        console.log(error.response.data.message);
+        props.setUser(0);
+      }
+    };
+
+    fetchNewAccessToken();
+    
     const fetchDataFromServer = async () => {
       try {
         const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
@@ -67,8 +68,10 @@ const Start = () => {
         console.error('버티포트 정보를 가져오는 중 오류 발생:', error);
       }
     };
+
     fetchDataFromServer();
   }, []);
+
 
   const constantInputs = [
     { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -279,9 +282,17 @@ const calculate_Congettion_Utilization = () => {
     setCurrentBoardedPassengers('');
   };
 
+  const handleUserInfo = () => {
+    navigate("/user");
+  };
+
   return (
     <div className="bigcontainer">
-      <header className="header">사용자 페이지</header>
+      <header className="header">사용자 페이지
+      {props.user != 0 && (     
+        <button className="userInfoButton" onClick={handleUserInfo}>사용자 정보</button>
+      )}
+      </header>
       <div className="content">
         <div className="aside">
           <div className="aside-content">
@@ -350,10 +361,12 @@ const calculate_Congettion_Utilization = () => {
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
-              <React.Fragment>
-                <button onClick={setModalstate}> 버티포트 추가</button>
-                
-              </React.Fragment>
+              
+              {props.user != 0 && (     
+                <React.Fragment>
+                  <button onClick={setModalstate}> 버티포트 추가</button>
+                </React.Fragment>
+              )}
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
