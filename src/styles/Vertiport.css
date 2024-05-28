@@ -1,0 +1,20 @@
+.container {
+    overflow: hidden;
+    clear: both;
+  }
+  
+  .dragComponents {
+    overflow: hidden;
+    clear: both;
+  }
+  
+  .dropAreas {
+    overflow: hidden;
+    clear: both;
+  }
+  
+  .dropAreaContainer {
+    float: left;
+    margin: 1rem;
+  }
+  

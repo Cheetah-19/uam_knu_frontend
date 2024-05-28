@@ -1,62 +1,25 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import { ItemTypes } from './ItemTypes';
-
-const style = {
-  height: '12rem',
-  width: '20%',
-  marginRight: '1.5rem',
-  marginBottom: '1.5rem',
-  color: 'black',
-  padding: '1rem',
-  textAlign: 'center',
-  fontSize: '1rem',
-  lineHeight: 'normal',
-  float: 'left',
-  border: '1px solid black',
-};
-
-const getEmojiByType = (type) => {
-  switch (type) {
-    case ItemTypes.AIRPLANE:
-      return '✈️';
-    case ItemTypes.PERSON:
-      return '👤';
-    default:
-      return '❓';
-  }
-};
+import { ItemTypes } from './ItemTypes'; 
+import '../../styles/DropArea.css'; 
 
 const DropArea = ({ name, onDrop, droppedItems }) => {
-  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop({
     accept: [ItemTypes.AIRPLANE, ItemTypes.PERSON],
     drop: (item) => {
-      onDrop(item, name);
+      onDrop(item, name); // 드롭된 후 부모 컴포넌트에 알림
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
     }),
-  }));
+  });
 
-  const isActive = canDrop && isOver;
-  let backgroundColor = '#f2f2f2';
-  if (isActive) {
-    backgroundColor = 'darkgreen';
-  } else if (canDrop) {
-    backgroundColor = 'darkkhaki';
-  }
+  const isActive = isOver;
 
   return (
-    <div ref={drop} style={{ ...style, backgroundColor }}>
+    <div ref={drop} className={`dropArea ${isActive ? "active" : ""}`}>
       <p>{name}</p>
-      <ul>
-        {droppedItems.map((item, index) => (
-          <li key={index}>
-            {getEmojiByType(item.type)} {item.name}
-          </li>
-        ))}
-      </ul>
+      <p>Airplanes: {droppedItems.filter(item => item.type === ItemTypes.AIRPLANE).length}, Persons: {droppedItems.filter(item => item.type === ItemTypes.PERSON).length}</p>
     </div>
   );
 };
