@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Start from '../src/pages/Start';
 import Login from '../src/pages/Login';
 import Vertiport from '../src/pages/Vertiport';

@@ -5,6 +5,8 @@ import DraggableComponent from '../components/vertiport/DraggableComponent';
 import DropArea from '../components/vertiport/DropArea';
 import { ItemTypes } from '../components/vertiport/ItemTypes';
 import { v4 as uuidv4 } from 'uuid';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Vertiport.css';
 
 const Vertiport = () => {
@@ -71,24 +73,45 @@ const Vertiport = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="container">
-        <div className="dragComponents">
-          <DraggableComponent name="Airplane" type={ItemTypes.AIRPLANE} />
-          <DraggableComponent name="Person" type={ItemTypes.PERSON} />
-        </div>
-        <div className="dropAreas">
+      <Container>
+        <Row className="my-4">
+          <Col>
+            <h1 className="text-center">Vertiport Resource Customizing Page</h1>
+          </Col>
+        </Row>
+        <Row className="mb-4">
+          <Col>
+            <Card>
+              <Card.Header>추가 가능한 리소스</Card.Header>
+              <Card.Body>
+                <DraggableComponent name="Airplane" type={ItemTypes.AIRPLANE} />
+                <DraggableComponent name="Person" type={ItemTypes.PERSON} />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
           {Object.keys(boxContents).map((boxName) => (
-            <div key={boxName} className="dropAreaContainer">
-              <DropArea
-                name={boxName}
-                onDrop={handleDrop}
-                droppedItems={boxContents[boxName]}
-              />
-            </div>
+            <Col key={boxName} md={6} className="mb-4">
+              <Card>
+                <Card.Header>{boxName}</Card.Header>
+                <Card.Body>
+                  <DropArea
+                    name={boxName}
+                    onDrop={handleDrop}
+                    droppedItems={boxContents[boxName]}
+                  />
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
-        <button onClick={handleSendStatus}>전송</button>
-      </div>
+        </Row>
+        <Row className="mt-4">
+          <Col className="text-center">
+            <Button onClick={handleSendStatus} variant="primary">전송</Button>
+          </Col>
+        </Row>
+      </Container>
     </DndProvider>
   );
 };

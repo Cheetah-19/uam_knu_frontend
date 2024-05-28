@@ -1,13 +1,14 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import { ItemTypes } from './ItemTypes'; 
-import '../../styles/DropArea.css'; 
+import { ItemTypes } from './ItemTypes';
+import { Card } from 'react-bootstrap';
+import '../../styles/DropArea.css';
 
 const DropArea = ({ name, onDrop, droppedItems }) => {
   const [{ isOver }, drop] = useDrop({
     accept: [ItemTypes.AIRPLANE, ItemTypes.PERSON],
     drop: (item) => {
-      onDrop(item, name); // 드롭된 후 부모 컴포넌트에 알림
+      onDrop(item, name);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -17,10 +18,15 @@ const DropArea = ({ name, onDrop, droppedItems }) => {
   const isActive = isOver;
 
   return (
-    <div ref={drop} className={`dropArea ${isActive ? "active" : ""}`}>
-      <p>{name}</p>
-      <p>Airplanes: {droppedItems.filter(item => item.type === ItemTypes.AIRPLANE).length}, Persons: {droppedItems.filter(item => item.type === ItemTypes.PERSON).length}</p>
-    </div>
+    <Card ref={drop} className={`dropArea ${isActive ? "active" : ""}`}>
+      <Card.Body>
+        <Card.Title>{name}</Card.Title>
+        <div className="statusContainer">
+          <span className="statusItem">비행기: {droppedItems.filter(item => item.type === ItemTypes.AIRPLANE).length}</span>
+          <span className="statusItem">사람: {droppedItems.filter(item => item.type === ItemTypes.PERSON).length}</span>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
