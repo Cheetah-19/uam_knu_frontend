@@ -11,7 +11,7 @@ const User = (props) => {
     useEffect(() => {
         const fetchNewAccessToken = async () => {
             try {
-                const response = await fetchData("/api/token/refresh");
+                const responseData = await fetchData("/api/token/refresh");
             } catch (error) {
                 console.log(error.response.data.message);
                 alert("로그아웃 됩니다");
@@ -34,8 +34,15 @@ const User = (props) => {
 
             alert("비밀번호 변경 성공");
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                alert("비밀번호 변경 실패: " + error.response.data.message);
+            if (error.response){
+                if (error.response.status === 400) {
+                    alert("비밀번호 변경 실패: " + error.response.data.message);
+                }
+                else if (error.response.status === 401) {
+                    alert("비밀번호 변경 실패: " + error.response.data.detail);
+                    props.setUser(0);
+                    navigate("/");
+                }
             } else {
                 alert("비밀번호 변경 실패: 서버 오류");
             }

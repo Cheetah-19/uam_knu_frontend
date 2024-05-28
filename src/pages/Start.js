@@ -48,7 +48,7 @@ const Start = (props) => {
   useEffect(() => {
     const fetchNewAccessToken = async () => {
       try {
-        const response = await fetchData('/api/token/refresh');
+        const responseData = await fetchData('/api/token/refresh');
       } catch (error) {
         console.log(error.response.data.message);
         props.setUser(0);
