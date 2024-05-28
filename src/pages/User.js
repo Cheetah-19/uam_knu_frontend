@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi, fetchData, postData } from "../components/Functions";
+import "../styles/App.css";
+import logo from "../assets/logo.png"
+import profile from "../assets/profile.png"
 
 const User = (props) => {
     const [old_password, setOld] = useState("");
@@ -68,42 +71,83 @@ const User = (props) => {
     };
 
     return (
-        <div>
-            <h1>사용자 정보 페이지</h1>
-            <form onSubmit={handleChangePW}>
+        <div className="bigcontainer">
+            <header>
+                <img src={logo}/>
                 <div>
-                    <label htmlFor="old_password">기존 비밀번호:</label>
-                    <input
-                        type="password"
-                        id="old_password"
-                        name="old_password"
-                        value={old_password}
-                        onChange={(e) => setOld(e.target.value)}
-                    />
+                    <div className="header-btn">
+                        최적화하기
+                    </div>
+                    <div className="header-btn selected">
+                        마이페이지
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="new_password1">새 비밀번호:</label>
-                    <input
-                        type="password"
-                        id="new_password1"
-                        name="new_password1"
-                        value={new_password1}
-                        onChange={(e) => setNew1(e.target.value)}
-                    />
+            </header>
+            <div id="sub-container">
+                <div className="sub" style={{marginRight: "20px"}}>
+                    <div id="profile">
+                        <img src={profile} style={{width: "120px"}}/>
+                        <div id="user-id">
+                            user
+                        </div>
+                    </div>
+                    <div>
+                        회원정보
+                        <div className="sub-info">
+                            그룹
+                            <div className="sub-info-contents">
+                                <input id="user-is-admin" type="checkbox" disabled style={{marginRight:"10px"}}/>  
+                                관리자
+                            </div>
+                        </div>
+                        <div className="sub-info">
+                            전화번호
+                            <div id="user-phone-number" className="sub-info-contents">
+                                010-1234-1234
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="new_password2">새 비밀번호 확인:</label>
-                    <input
-                        type="password"
-                        id="new_password2"
-                        name="new_password2"
-                        value={new_password2}
-                        onChange={(e) => setNew2(e.target.value)}
-                    />
+                <div className="sub" style={{marginLeft: "20px"}}>
+                    관리
+                    <div>
+                    <form onSubmit={handleChangePW}>
+                        <div className="sub-info password-reset">
+                            <label htmlFor="old_password">현재 비밀번호</label>
+                            <input className="sub-info-contents"
+                                type="password"
+                                id="old_password"
+                                name="old_password"
+                                value={old_password}
+                                onChange={(e) => setOld(e.target.value)}
+                            />
+                        </div>
+                        <div className="sub-info password-reset">
+                            <label htmlFor="new_password1">새 비밀번호</label>
+                            <input className="sub-info-contents"
+                                type="password"
+                                id="new_password1"
+                                name="new_password1"
+                                value={new_password1}
+                                onChange={(e) => setNew1(e.target.value)}
+                            />
+                        </div>
+                        <div className="sub-info password-reset">
+                            <label htmlFor="new_password2">새 비밀번호 확인</label>
+                            <input className="sub-info-contents"
+                                type="password"
+                                id="new_password2"
+                                name="new_password2"
+                                value={new_password2}
+                                onChange={(e) => setNew2(e.target.value)}
+                            />
+                        </div>
+                        <button id="reset-btn" className="sub-btn" type="submit">변경하기</button>
+                    </form>
+                    <button id="delete-btn" className="sub-btn" onClick={handleDeleteUser}>회원탈퇴</button>
+                    </div>
                 </div>
-                <button type="submit">변경하기</button>
-            </form>
-            <button onClick={handleDeleteUser}>회원탈퇴</button>
+            </div>
         </div>
     );
 };
