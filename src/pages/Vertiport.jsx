@@ -9,28 +9,43 @@ import '../styles/Vertiport.css';
 
 const Vertiport = () => {
   const [boxContents, setBoxContents] = useState({
-    Box1: [],
-    Box2: [],
-    Box3: [],
-    Box4: [],
+    대합실: [],
+    GATE: [],
+    path_in: [],
+    path_out: [],
+    FATO: []
   });
 
   const handleDrop = (item, boxName) => {
-    const newItem = { ...item, id: uuidv4() }; // 아이템에 고유 ID 추가
+    const newItems = [];
+
+    if (boxName === "대합실" && item.type === ItemTypes.PERSON) {
+      newItems.push(...Array.from({ length: item.quantity }, () => ({ 
+        ...item, 
+        id: uuidv4()
+      })));
+    } else if (["GATE", "path_in", "path_out", "FATO"].includes(boxName) && item.type === ItemTypes.AIRPLANE) {
+      newItems.push(...Array.from({ length: item.quantity }, () => ({ 
+        ...item, 
+        id: uuidv4()
+      })));
+      newItems.push(...Array.from({ length: item.quantity * 4 }, () => ({ 
+        type: ItemTypes.PERSON, 
+        name: "Person", 
+        id: uuidv4()
+      })));
+    } else {
+      console.log(`Invalid drop: ${item.type} cannot be dropped in ${boxName}`);
+      return;
+    }
+
     const newContents = {
       ...boxContents,
-      [boxName]: [...boxContents[boxName], newItem],
+      [boxName]: [...boxContents[boxName], ...newItems],
     };
     setBoxContents(newContents);
 
-    console.log(`Dropped ${item.type} in ${boxName}`);
-  };
-
-  const countItems = (items) => {
-    const itemCounts = items.reduce((acc, item) => {
-      acc[item.type] = (acc[item.type] || 0) + 1;
-      return acc;
-    }, {});
+    console.log(`Dropped ${item.quantity} ${item.type}(s) in ${boxName}`);
   };
 
   const handleSendStatus = () => {
@@ -40,13 +55,19 @@ const Vertiport = () => {
         acc[item.type] = (acc[item.type] || 0) + 1;
         return acc;
       }, {});
-  
-      console.log('박스 현황:');
-      status.forEach(box => {
-        console.log(`${box.boxName} - 비행기: ${box.airplanes}, 사람: ${box.persons}`);
-      });
+
+      return {
+        boxName,
+        airplanes: itemCounts[ItemTypes.AIRPLANE] || 0,
+        persons: itemCounts[ItemTypes.PERSON] || 0,
+      };
     });
-  };  
+
+    console.log('박스 현황:');
+    status.forEach(box => {
+      console.log(`${box.boxName} - 비행기: ${box.airplanes}, 사람: ${box.persons}`);
+    });
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -63,7 +84,6 @@ const Vertiport = () => {
                 onDrop={handleDrop}
                 droppedItems={boxContents[boxName]}
               />
-              <div>{countItems(boxContents[boxName])}</div>
             </div>
           ))}
         </div>
