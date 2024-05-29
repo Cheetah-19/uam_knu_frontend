@@ -9,6 +9,7 @@ const User = (props) => {
     const [old_password, setOld] = useState("");
     const [new_password1, setNew1] = useState("");
     const [new_password2, setNew2] = useState("");
+    const [info, setInfo] = useState({id: "", is_admin: false, phone_number: ""});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,6 +25,20 @@ const User = (props) => {
         };
 
         fetchNewAccessToken();
+    
+        const fetchMyInfo = async () => {
+            try {
+                const responseData = await fetchData("/users/info");
+                setInfo(responseData.data);
+            } catch (error) {
+                console.log(error.response.data.detail);
+                alert("로그아웃 됩니다");
+                props.setUser(0);
+                navigate("/");
+            }
+        }
+
+        fetchMyInfo();
     }, []);
 
     const handleChangePW = async (event) => {
@@ -88,7 +103,7 @@ const User = (props) => {
                     <div id="profile">
                         <img src={profile} style={{width: "120px"}}/>
                         <div id="user-id">
-                            user
+                            {info.id}
                         </div>
                     </div>
                     <div>
@@ -96,14 +111,13 @@ const User = (props) => {
                         <div className="sub-info">
                             그룹
                             <div className="sub-info-contents">
-                                <input id="user-is-admin" type="checkbox" disabled style={{marginRight:"10px"}}/>  
-                                관리자
+                                {info.is_admin ? "관리자":""}
                             </div>
                         </div>
                         <div className="sub-info">
                             전화번호
                             <div id="user-phone-number" className="sub-info-contents">
-                                010-1234-1234
+                                {info.phone_number}
                             </div>
                         </div>
                     </div>
