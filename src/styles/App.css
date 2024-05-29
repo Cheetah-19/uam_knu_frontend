@@ -34,6 +34,7 @@ header .header-btn {
   font-size: 27px;
   font-weight: bold;
   color: white;
+  cursor : pointer
 }
 
 .selected {

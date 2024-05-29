@@ -7,7 +7,7 @@ import User from '../src/pages/User';
 import useSessionState from '../src/hooks/useSessionState'
 
 function App() {
-  const [user, setUser] = useSessionState('user', 0);
+  const [user, setUser] = useSessionState("user", 0);
 
   return (
     <Router>

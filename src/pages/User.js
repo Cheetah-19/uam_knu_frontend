@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi, fetchData, postData } from "../components/Functions";
+import Header from "../components/Header"
 import "../styles/App.css";
-import logo from "../assets/logo.png"
 import profile from "../assets/profile.png"
 
 const User = (props) => {
@@ -87,17 +87,7 @@ const User = (props) => {
 
     return (
         <div className="bigcontainer">
-            <header>
-                <img src={logo}/>
-                <div>
-                    <div className="header-btn">
-                        최적화하기
-                    </div>
-                    <div className="header-btn selected">
-                        마이페이지
-                    </div>
-                </div>
-            </header>
+            <Header/>
             <div id="sub-container">
                 <div className="sub" style={{marginRight: "20px"}}>
                     <div id="profile">
