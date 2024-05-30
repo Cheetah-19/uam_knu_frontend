@@ -31,14 +31,18 @@
 }
 
 .person, .plane {
-    width: 20px;
-    height: 20px;
-    background-color: red;
+    width: 23px;
+    height: 23px;
+    background-color: rgb(17, 192, 235);
     border-radius: 50%;
     position: absolute;
 }
 
 .plane {
-    background-color: blue;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 23px solid rgb(245, 11, 11);
 }
+
+
   
