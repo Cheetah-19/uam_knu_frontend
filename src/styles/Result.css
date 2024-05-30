@@ -1,25 +1,44 @@
+.vertiport-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* 이미지의 최대 크기 설정 */
+    margin: auto; /* 가운데 정렬 */
+}
+  
 .vertiport {
     width: 100%;
     height: auto;
 }
   
+.zone .count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: white;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+}
+
 .zone {
     position: absolute;
-    border: 2px solid #000;
-    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    color: #fff;
 }
-  
-.button-group {
+
+.person, .plane {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
     position: absolute;
-    right: 20px;
-    top: 20px;
 }
-  
-.button-group .btn {
-    margin: 5px;
+
+.plane {
+    background-color: blue;
 }
   
