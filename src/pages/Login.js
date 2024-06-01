@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
+import axios from "axios";
 
 
 function Login() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
     const handleLogin = async (event) => {
         event.preventDefault(); // Prevent the default form submission
         try {
@@ -19,7 +19,7 @@ function Login() {
             if (response.status === 200) {
                 alert("로그인 성공");
                 // Handle successful login (e.g., save token, redirect)
-                handleLoginSuccess();
+                handleLoginSuccess(response);
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -31,7 +31,8 @@ function Login() {
         }
     };
 
-    const handleLoginSuccess = () => {
+    const handleLoginSuccess = (response) => {
+        privateApi.defaults.headers.common["Authorization"] = `Bearer ${response.data['data']['token']['access']}`;
         navigate("/start"); // 페이지 이동을 useNavigate로 변경
     };
 
