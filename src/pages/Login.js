@@ -36,7 +36,6 @@ function Login(props) {
     };
 
     const handleLoginSuccess = (response) => {
-        privateApi.defaults.headers.common["Authorization"] = `Bearer ${response.data['data']['token']['access']}`; //accesstoken header에 저장
         navigate("/start"); // 페이지 이동을 useNavigate로 변경
     };
 

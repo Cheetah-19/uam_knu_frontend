@@ -75,8 +75,6 @@ function AddVertiport(props) {
                 "gate": maxGateUAM,
                 "path_out": maxPathOutUAM,
                 "waiting_room": maxGatePassengers
-            },{
-                withCredentials: true
             });
             console.log(response);
             if (response.status === 200) {
