@@ -67,6 +67,24 @@ const User = (props) => {
         }
     };
 
+    const handleLogout = async (event) => {
+        try {
+            const response = await privateApi.delete("users/auth")
+
+            alert("로그아웃 되었습니다.");
+            props.setUser(0);
+            navigate("/");
+        } catch (error) {
+            if (error.response && error.response.status !== 202) {
+                alert("로그아웃 실패: " + error.response.data.detail);
+                props.setUser(0);
+                navigate("/");
+            } else {
+                alert("로그아웃 실패: 서버 오류");
+            }
+        }
+    };
+
     const handleDeleteUser = async (event) => {
         if(window.confirm("회원탈퇴를 하시겠습니까?")){
             try {
@@ -148,6 +166,7 @@ const User = (props) => {
                         </div>
                         <button id="reset-btn" className="sub-btn" type="submit">변경하기</button>
                     </form>
+                    <button id="logout-btn" className="sub-btn" onClick={handleLogout}>로그아웃</button>
                     <button id="delete-btn" className="sub-btn" onClick={handleDeleteUser}>회원탈퇴</button>
                     </div>
                 </div>
