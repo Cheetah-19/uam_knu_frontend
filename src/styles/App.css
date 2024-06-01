@@ -19,7 +19,7 @@ header {
 
 header img {
   width: 90px;
-  margin: 17px 17px 17px 25px;
+  margin: 12px 12px 12px 20px;
 }
 
 header div {
@@ -29,7 +29,7 @@ header div {
 header .header-btn {
   align-items: center;
   justify-content: center;
-  width: 260px;
+  width: 230px;
   height: 100%;
   font-size: 27px;
   font-weight: bold;

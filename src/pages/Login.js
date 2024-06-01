@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
 import "./Login.css";
+import Register from "../pages/Register";
 
 function Login(props) {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [isLogin, setIsLogin] = useState(1);
+
     const handleLogin = async (event) => {
         event.preventDefault(); // Prevent the default form submission
         try {
@@ -47,28 +50,44 @@ function Login(props) {
     return (
         <div className="login-container">
             <h1>MILP Simulator</h1>
-            <form className="login-form" onSubmit={handleLogin}>
-                <label className="login-label" htmlFor="id">아이디</label>
-                <input
-                    type="text"
-                    id="id"
-                    name="id"
-                    className="login-input"
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                />
-                <label className="login-label" htmlFor="password">비밀번호</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="login-input"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit" className="login-button">로그인</button>
-            </form>
-            <button onClick={handleNonMember}>비회원으로 시작하기</button>
+                {isLogin === 1 ?
+                    <>
+                    <form className="login-form" onSubmit={handleLogin}>
+                        <label className="login-label" htmlFor="id">아이디</label>
+                        <input
+                            type="text"
+                            id="id"
+                            name="id"
+                            className="login-input"
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
+                        />
+                        <label className="login-label" htmlFor="password">비밀번호</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            className="login-input"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <button type="submit" className="login-button">로그인</button>
+                    </form>
+                    <div>
+                        계정이 필요하신가요?
+                        <button onClick={() => setIsLogin(0)}>회원가입</button>
+                    </div>
+                    <button onClick={handleNonMember}>비회원으로 시작하기</button>
+                </>
+                :
+                <>
+                    <Register setIsLogin={setIsLogin}/>
+                    <div>
+                        이미 가입하셨나요?
+                        <button onClick={() => setIsLogin(1)}>로그인</button>
+                    </div>
+                </>
+            }
         </div>
     );
 }
