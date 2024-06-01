@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
-import "./Login.css";
+import logo from "../assets/logo.png";
 import Register from "../pages/Register";
+import "./Login.css";
 
 function Login(props) {
     const [id, setId] = useState("");
@@ -49,7 +50,8 @@ function Login(props) {
 
     return (
         <div className="login-container">
-            <h1>MILP Simulator</h1>
+            <img src={logo} alt="logo" />
+            {/* <h1>MILP Simulator</h1> */}
                 {isLogin === 1 ?
                     <>
                     <form className="login-form" onSubmit={handleLogin}>
@@ -73,16 +75,16 @@ function Login(props) {
                         />
                         <button type="submit" className="login-button">로그인</button>
                     </form>
-                    <div>
+                    <div className="login-option">
                         계정이 필요하신가요?
                         <button onClick={() => setIsLogin(0)}>회원가입</button>
                     </div>
-                    <button onClick={handleNonMember}>비회원으로 시작하기</button>
+                    <button className="non-memebr-button" onClick={handleNonMember}>비회원으로 시작하기</button>
                 </>
                 :
                 <>
                     <Register setIsLogin={setIsLogin}/>
-                    <div>
+                    <div className="login-option">
                         이미 가입하셨나요?
                         <button onClick={() => setIsLogin(1)}>로그인</button>
                     </div>

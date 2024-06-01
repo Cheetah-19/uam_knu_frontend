@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../components/Functions";
-import "../styles/App.css";
+import "./Login.css";
 
 const Register = ({ setIsLogin }) => {
     const [id, setId] = useState("");
@@ -59,7 +59,7 @@ const Register = ({ setIsLogin }) => {
             />
             <button type="submit" className="login-button">회원가입</button>
         </form>
-);
+    );
 };
 
 export default Register;
