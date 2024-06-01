@@ -3,7 +3,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 100vh; /* Viewport height to cover the whole screen */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,7 +39,7 @@
     background-color: #86C7ED;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
