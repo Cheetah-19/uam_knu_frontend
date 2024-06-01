@@ -283,6 +283,11 @@ const Start = () => {
     setModalstate(false);
   };
 
+  const openModal = () => {
+    setModalstate(true);
+    console.log(Modalstate)
+  }
+
   // 최적화 전 혼잡도 및 이용률 계산
 const calculate_Congettion_Utilization = (data = {}) => {
   // 가중치 정의
@@ -465,7 +470,7 @@ const calculate_Congettion_Utilization = (data = {}) => {
                 ))}
               </DropdownButton>
               <React.Fragment>
-                <button onClick={setModalstate}> 버티포트 추가</button>
+                <button onClick={() => openModal()}> 버티포트 추가</button>
 
               </React.Fragment>
               <DropdownButton id="dropdown-right" title="그래프">
@@ -495,12 +500,12 @@ const calculate_Congettion_Utilization = (data = {}) => {
                     </div>
                   </div>
                 )}
-                {
-                  Modalstate &&
-                  <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} closeModal={closeModal}></Modal>
-                }
               </div>
             )}
+            {
+              Modalstate &&
+              <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} closeModal={closeModal}></Modal>
+            }
             {selectedGraph === 'donut' && (
               <div className="chart-container">
                 {stateId && previous_congetion_utilization_Data && newsolution ? (
