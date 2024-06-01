@@ -53,6 +53,7 @@
   height: 95%;
   top: 0%;
   left:0%;
+  overflow-y: auto;
 }
 
 .Addmodal-right{

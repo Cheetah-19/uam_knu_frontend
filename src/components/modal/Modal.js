@@ -4,7 +4,6 @@ import React from 'react';
 function Modal(props){
     
     const closeModal = () => {
-        console.log("modal dadge")
         props.closeModal();
     }
     
