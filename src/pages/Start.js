@@ -168,6 +168,10 @@ const Start = () => {
       waiting_room_psg: waitingRoomPassengers
     };
   };
+    //모달창 닫기
+  const closeModal = (closeModal) => {
+    setModalstate(false);
+  };
 
   // 최적화 전 혼잡도 및 이용률 계산
 const calculate_Congettion_Utilization = () => {
@@ -375,7 +379,7 @@ const calculate_Congettion_Utilization = () => {
                 )}
                 {
                   Modalstate &&
-                  <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports}></Modal>
+                  <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} closeModal={closeModal}></Modal>
                 }
               </div>
             )}

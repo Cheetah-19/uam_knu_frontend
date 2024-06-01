@@ -1,11 +1,12 @@
 import "../../styles/Modals.css"
-
 import AddVertiport from "./AddVertiport";
+import React from 'react';
 function Modal(props){
     
-function closeModal(){
-    props.closeModal();
-}
+    const closeModal = () => {
+        console.log("modal dadge")
+        props.closeModal();
+    }
     
     return (
         <div className="Modal" onClick={closeModal}>
@@ -16,7 +17,7 @@ function closeModal(){
             {props.children}
             {props.modaltype === 'addVertiport' &&
                 <div>
-                    <AddVertiport constants={props.constants} vertiports={props.vertiports}></AddVertiport>
+                    <AddVertiport constants={props.constants} vertiports={props.vertiports} closeModal={closeModal}></AddVertiport>
                 </div>
             }
             </div>
