@@ -1,0 +1,25 @@
+.dropArea {
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.dropArea.active {
+  background-color: #f0f8ff;
+}
+
+.statusContainer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.statusItem {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+  

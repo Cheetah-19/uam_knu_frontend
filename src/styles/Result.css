@@ -1,0 +1,48 @@
+.vertiport-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* 이미지의 최대 크기 설정 */
+    margin: auto; /* 가운데 정렬 */
+}
+  
+.vertiport {
+    width: 100%;
+    height: auto;
+}
+  
+.zone .count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: white;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.zone {
+    position: absolute;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.person, .plane {
+    width: 23px;
+    height: 23px;
+    background-color: rgb(17, 192, 235);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.plane {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 23px solid rgb(245, 11, 11);
+}
+
+
+  

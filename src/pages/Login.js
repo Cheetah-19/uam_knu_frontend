@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
-
+import "./Login.css";
 
 function Login() {
     const [id, setId] = useState("");
@@ -13,6 +13,9 @@ function Login() {
             const response = await privateApi.post("/users/auth", {
                 id: id,
                 password: password
+            },
+            {
+                withCredentials: true
             });
             console.log(response);
             if (response.status === 200) {
@@ -36,30 +39,28 @@ function Login() {
     };
 
     return (
-        <div>
-            <h1>로그인 페이지</h1>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="id">아이디:</label>
-                    <input
-                        type="text"
-                        id="id"
-                        name="id"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">비밀번호:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type="submit">로그인</button>
+        <div className="login-container">
+            <h1>MILP Simulator</h1>
+            <form className="login-form" onSubmit={handleLogin}>
+                <label className="login-label" htmlFor="id">아이디</label>
+                <input
+                    type="text"
+                    id="id"
+                    name="id"
+                    className="login-input"
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                />
+                <label className="login-label" htmlFor="password">비밀번호</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    className="login-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type="submit" className="login-button">로그인</button>
             </form>
         </div>
     );
