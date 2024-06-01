@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi, fetchData, postData } from "../components/Functions";
-import Header from "../components/Header"
+import Header from "../components/Header";
 import "../styles/App.css";
-import profile from "../assets/profile.png"
+import profile from "../assets/profile.png";
 
 const User = (props) => {
     const [old_password, setOld] = useState("");
@@ -105,7 +105,7 @@ const User = (props) => {
 
     return (
         <div className="bigcontainer">
-            <Header/>
+            <Header user={props.user}/>
             <div id="sub-container">
                 <div className="sub" style={{marginRight: "20px"}}>
                     <div id="profile">

@@ -6,7 +6,7 @@ import Piechart from "../components/chart/PieChart";
 import "../styles/App.css";
 import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
-
+import Header from "../components/Header"
 
 const Start = (props) => {
   const [Modalstate,setModalstate] = useState(false)
@@ -282,17 +282,9 @@ const calculate_Congettion_Utilization = () => {
     setCurrentBoardedPassengers('');
   };
 
-  const handleUserInfo = () => {
-    navigate("/user");
-  };
-
   return (
     <div className="bigcontainer">
-      <header className="header">사용자 페이지
-      {props.user != 0 && (     
-        <button className="userInfoButton" onClick={handleUserInfo}>사용자 정보</button>
-      )}
-      </header>
+      <Header user={props.user}/>
       <div className="content">
         <div className="aside">
           <div className="aside-content">
