@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
 import "./Login.css";
 
-function Login() {
+function Login(props) {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -11,15 +11,17 @@ function Login() {
         event.preventDefault(); // Prevent the default form submission
         try {
             const response = await privateApi.post("/users/auth", {
-                id: id,
-                password: password
-            },
-            {
-                withCredentials: true
-            });
+                    id: id,
+                    password: password
+                }
+            );
             console.log(response);
             if (response.status === 200) {
                 alert("로그인 성공");
+
+                // 사용자 구분
+                props.setUser(response.data.data.admin ? 2:1);
+                
                 // Handle successful login (e.g., save token, redirect)
                 handleLoginSuccess(response);
             }
@@ -36,6 +38,11 @@ function Login() {
     const handleLoginSuccess = (response) => {
         privateApi.defaults.headers.common["Authorization"] = `Bearer ${response.data['data']['token']['access']}`; //accesstoken header에 저장
         navigate("/start"); // 페이지 이동을 useNavigate로 변경
+    };
+
+    const handleNonMember = () => {
+        props.setUser(0);
+        navigate("/start");
     };
 
     return (
@@ -62,6 +69,7 @@ function Login() {
                 />
                 <button type="submit" className="login-button">로그인</button>
             </form>
+            <button onClick={handleNonMember}>비회원으로 시작하기</button>
         </div>
     );
 }
