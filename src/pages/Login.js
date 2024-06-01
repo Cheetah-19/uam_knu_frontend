@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
-import axios from "axios";
 
 
 function Login() {
@@ -32,7 +31,7 @@ function Login() {
     };
 
     const handleLoginSuccess = (response) => {
-        privateApi.defaults.headers.common["Authorization"] = `Bearer ${response.data['data']['token']['access']}`;
+        privateApi.defaults.headers.common["Authorization"] = `Bearer ${response.data['data']['token']['access']}`; //accesstoken header에 저장
         navigate("/start"); // 페이지 이동을 useNavigate로 변경
     };
 
