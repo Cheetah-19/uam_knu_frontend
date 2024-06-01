@@ -1,38 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Donutchart from "../components/chart/DonutChart";
 import Piechart from "../components/chart/PieChart";
 import "../styles/App.css";
-import { privateApi } from "../components/Functions";
+import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
+import Header from "../components/Header"
 
-async function fetchData(endpoint) {
-  try {
-    const response = await privateApi.get(endpoint); // 이곳에서의 endpoint란 BASE_URL뒤에 붙는 Api 주소.
-    return response.data;
-  } catch (error) {
-    console.error('데이터 가져오기 실패:', error);
-    return null;
-  }
-}
-
-async function postData(endpoint, dataToSend) {
-  try {
-    const response = await privateApi.post(endpoint, dataToSend,
-      {
-        withCredentials: true
-      });
-    return response.data;
-  } catch (error) {
-    console.error('데이터 전송 실패:', error);
-    throw error; // 오류를 다시 던져서 호출하는 쪽에서 오류 처리할 수 있도록 함.
-  }
-}
-
-
-
-const Start = () => {
-  const [Modalstate, setModalstate] = useState(false)
+const Start = (props) => {
+  const [Modalstate,setModalstate] = useState(false);
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
@@ -60,8 +37,18 @@ const Start = () => {
   const [previous_congetion_utilization_Data, SetPreviousCongettionUtilizationData] = useState(null);
   const [newsolution, setNewsolution] = useState(null); // 최적화 후 데이터 상태
 
-
   useEffect(() => {
+    const fetchNewAccessToken = async () => {
+      try {
+        const responseData = await fetchData('/api/token/refresh');
+      } catch (error) {
+        console.log(error.response.data.message);
+        props.setUser(0);
+      }
+    };
+
+    fetchNewAccessToken();
+    
     const fetchDataFromServer = async () => {
       try {
         const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
@@ -73,6 +60,7 @@ const Start = () => {
         console.error('버티포트 정보를 가져오는 중 오류 발생:', error);
       }
     };
+
     fetchDataFromServer();
   }, []);
 
@@ -176,8 +164,6 @@ const Start = () => {
       fetchStateData(stateId);
     }
   }, [stateId, selectedVertiport]);
-
-
 
   const constantInputs = [
     { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -391,7 +377,7 @@ const calculate_Congettion_Utilization = (data = {}) => {
 
   return (
     <div className="bigcontainer">
-      <header className="header">사용자 페이지</header>
+      <Header user={props.user}/>
       <div className="content">
         <div className="aside">
           <div className="aside-content">
@@ -460,10 +446,11 @@ const calculate_Congettion_Utilization = (data = {}) => {
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
-              <React.Fragment>
-                <button onClick={setModalstate}> 버티포트 추가</button>
-
-              </React.Fragment>
+              {props.user !== 0 && (     
+                <React.Fragment>
+                  <button onClick={setModalstate}> 버티포트 추가</button>
+                </React.Fragment>
+              )}
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
