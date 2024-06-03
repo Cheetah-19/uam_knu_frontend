@@ -112,7 +112,7 @@ header .header-btn {
 
 
 .header {
-  height: 65px;
+  height: 25%;
   background-color: #eeccee;
   display: flex;
   align-items: center;
@@ -126,6 +126,22 @@ header .header-btn {
   background-color: white;
 }
 
+.button-style {
+  border-radius: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 12px; /* 버튼의 패딩 조정 */
+  max-width: 200px; /* 버튼의 최대 너비 설정 */
+  flex-shrink: 0; /* 버튼이 축소되지 않도록 설정 */
+  align-items: center;
+  background-color: #91F48F;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .dropdown-container {
   text-align: center; /* 추가 */
   display: flex;
@@ -133,6 +149,7 @@ header .header-btn {
   height: 100%;
   align-items: center;
   justify-content: center;
+  gap: 10px; /* 요소들 사이의 간격 설정 */
   
 }
 
@@ -310,10 +327,10 @@ header .header-btn {
 
 .calculation-overlay {
   position: absolute;
-  top: calc(65px + 70px); /* header의 높이와 좌측 20% 제거 */
+  top: 19%; /* header의 높이와 20% 제거 */
   left: 20%; /* 좌측 20% 제거 */
   width: 80%; /* 화면 전체에서 좌측 20%, 우측 20%를 제외한 영역 */
-  height: calc(100vh - 65px - 70px); /* 화면 전체에서 header와 tablist의 높이를 제외한 영역 */
+  height: 81%; /* 화면 전체에서 header와 tablist의 높이를 제외한 영역 */
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;

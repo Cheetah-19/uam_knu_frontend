@@ -455,11 +455,11 @@ const calculate_Congettion_Utilization = (data = {}) => {
                   </Dropdown.Item>
                 ))}
               </DropdownButton>
-              {props.user !== 0 && (     
-                <React.Fragment>
-                  <button onClick={setModalstate}> 버티포트 추가</button>
-                </React.Fragment>
-              )}
+              {props.user !== 0 && (
+    <React.Fragment>
+      <button onClick={setModalstate} className="button-style">버티포트 추가</button>
+    </React.Fragment>
+  )}
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
