@@ -98,7 +98,7 @@ function AddVertiport(props) {
     const handleUpdate = async (event) => {
         event.preventDefault(); // Prevent the default form submission
         try {
-            const response = await privateApi.post("/vertiports",{
+            const response = await privateApi.put("/vertiports",{
                 "name": selectedVertiport,
                 "fato": maxFatoUAM,
                 "path_in": maxPathInUAM,
@@ -108,14 +108,19 @@ function AddVertiport(props) {
             });
             console.log(response);
             if (response.status === 200) {
-                alert("새 버티포트 추가!");
+                alert("버티포트 수정!");
                 // Handle successful login (e.g., save token, redirect)
             }
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                alert("버티포트 추가 실패 : 400");
+            if (error.response){
+                if(error.response.status === 400) {
+                    alert("버티포트 수정 실패 : 400");
+                }
+                else if(error.response.status === 401) {
+                    alert("버티포트 수정 실패 : 관리자가 아닙니다.");
+                }
             } else {
-                alert("버티포트 추가 실패 : other");
+                alert("버티포트 수정 실패 : other");
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
         }
@@ -177,8 +182,11 @@ function AddVertiport(props) {
                     ))}
                 </div>
                 <div className="constant-settings" id='button'>
-                    <button className="post-button" onClick={addVertiport === true ? handlePost : handleUpdate}>수정</button>
-
+                {addVertiport === true ?
+                    <button className="post-button" onClick={handlePost}>추가</button>
+                    :
+                    <button className="post-button" onClick={handleUpdate}>수정</button>
+                }
                 </div>
             </span>
 
