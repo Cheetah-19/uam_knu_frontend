@@ -133,41 +133,41 @@ const User = (props) => {
                 <div className="sub" style={{marginLeft: "20px"}}>
                     관리
                     <div>
-                    <form onSubmit={handleChangePW}>
-                        <div className="sub-info password-reset">
-                            <label htmlFor="old_password">현재 비밀번호</label>
-                            <input className="sub-info-contents"
-                                type="password"
-                                id="old_password"
-                                name="old_password"
-                                value={old_password}
-                                onChange={(e) => setOld(e.target.value)}
-                            />
-                        </div>
-                        <div className="sub-info password-reset">
-                            <label htmlFor="new_password1">새 비밀번호</label>
-                            <input className="sub-info-contents"
-                                type="password"
-                                id="new_password1"
-                                name="new_password1"
-                                value={new_password1}
-                                onChange={(e) => setNew1(e.target.value)}
-                            />
-                        </div>
-                        <div className="sub-info password-reset">
-                            <label htmlFor="new_password2">새 비밀번호 확인</label>
-                            <input className="sub-info-contents"
-                                type="password"
-                                id="new_password2"
-                                name="new_password2"
-                                value={new_password2}
-                                onChange={(e) => setNew2(e.target.value)}
-                            />
-                        </div>
-                        <button id="reset-btn" className="sub-btn" type="submit">변경하기</button>
-                    </form>
-                    <button id="logout-btn" className="sub-btn" onClick={handleLogout}>로그아웃</button>
-                    <button id="delete-btn" className="sub-btn" onClick={handleDeleteUser}>회원탈퇴</button>
+                        <form onSubmit={handleChangePW}>
+                            <div className="sub-info password-reset">
+                                <label htmlFor="old_password">현재 비밀번호</label>
+                                <input className="sub-info-contents"
+                                    type="password"
+                                    id="old_password"
+                                    name="old_password"
+                                    value={old_password}
+                                    onChange={(e) => setOld(e.target.value)}
+                                />
+                            </div>
+                            <div className="sub-info password-reset">
+                                <label htmlFor="new_password1">새 비밀번호</label>
+                                <input className="sub-info-contents"
+                                    type="password"
+                                    id="new_password1"
+                                    name="new_password1"
+                                    value={new_password1}
+                                    onChange={(e) => setNew1(e.target.value)}
+                                />
+                            </div>
+                            <div className="sub-info password-reset">
+                                <label htmlFor="new_password2">새 비밀번호 확인</label>
+                                <input className="sub-info-contents"
+                                    type="password"
+                                    id="new_password2"
+                                    name="new_password2"
+                                    value={new_password2}
+                                    onChange={(e) => setNew2(e.target.value)}
+                                />
+                            </div>
+                            <button id="reset-btn" className="sub-btn" type="submit">변경하기</button>
+                        </form>
+                        <button id="logout-btn" className="sub-btn" onClick={handleLogout}>로그아웃</button>
+                        <button id="delete-btn" className="sub-btn" onClick={handleDeleteUser}>회원탈퇴</button>
                     </div>
                 </div>
             </div>
