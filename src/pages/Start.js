@@ -7,9 +7,10 @@ import "../styles/App.css";
 import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
 import Header from "../components/Header"
+import ButtonGroup from '../components/ButtonGroup';
 
 const Start = (props) => {
-  const [Modalstate,setModalstate] = useState(false);
+  const [Modalstate, setModalstate] = useState(false);
   const [weight, setWeight] = useState(0.5); // State variable to hold the weight value
   const [vertiports, setVertiports] = useState([]);
   const [selectedVertiport, setSelectedVertiport] = useState(null);
@@ -48,7 +49,7 @@ const Start = (props) => {
     };
 
     fetchNewAccessToken();
-    
+
     const fetchDataFromServer = async () => {
       try {
         const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
@@ -125,9 +126,9 @@ const Start = (props) => {
           setPreviousData(selectedState);
           //console.log("선택 데이터 = ", selectedState);
 
-           // Calculate congestion and utilization using selectedState
-           const previous_congetion_utilization_Data = calculate_Congettion_Utilization(selectedState);
-           SetPreviousCongettionUtilizationData(previous_congetion_utilization_Data); // New state setter for previous data
+          // Calculate congestion and utilization using selectedState
+          const previous_congetion_utilization_Data = calculate_Congettion_Utilization(selectedState);
+          SetPreviousCongettionUtilizationData(previous_congetion_utilization_Data); // New state setter for previous data
 
           // 최적화 후 데이터 가져오기
           const responseOptimization = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}&sequence=${sequenceId}`);
@@ -264,7 +265,7 @@ const Start = (props) => {
       waiting_room_psg: waitingRoomPassengers
     };
   };
-    //모달창 닫기
+  //모달창 닫기
   const closeModal = (closeModal) => {
     setModalstate(false);
   };
@@ -275,44 +276,44 @@ const Start = (props) => {
   }
 
   // 최적화 전 혼잡도 및 이용률 계산
-const calculate_Congettion_Utilization = (data = {}) => {
-  // 가중치 정의
-  const weights = {
-    w1: 0.04,
-    w2: 0.02,
-    w3: 0.38,
-    w4: 0.31,
-    w5: 0.1,
-    w6: 0.15,
-    w7: 0.31,
-    w8: 0.2,
-    w9: 0.2,
-    w10: 0.29
+  const calculate_Congettion_Utilization = (data = {}) => {
+    // 가중치 정의
+    const weights = {
+      w1: 0.04,
+      w2: 0.02,
+      w3: 0.38,
+      w4: 0.31,
+      w5: 0.1,
+      w6: 0.15,
+      w7: 0.31,
+      w8: 0.2,
+      w9: 0.2,
+      w10: 0.29
+    };
+
+    // 혼잡도 계산
+    const congestion = (
+      weights.w1 * ((data.fato_in_UAM ?? currentFatoInUAM) / maxFatoUAM) +
+      weights.w2 * ((data.path_in_UAM ?? currentPathInUAM) / maxPathInUAM) +
+      weights.w3 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
+      weights.w4 * ((data.gate_UAM_psg ?? currentGatePassengers) / maxGatePassengers) +
+      weights.w5 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
+      weights.w6 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
+    );
+
+    // 이용률 계산
+    const utilization = (
+      weights.w7 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
+      weights.w8 * ((data.gate_UAM_psg ?? currentBoardedPassengers) / (maxGateUAM * 4)) +
+      weights.w9 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
+      weights.w10 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
+    );
+
+    return {
+      congestion: congestion,
+      utilization: utilization
+    };
   };
-
-  // 혼잡도 계산
-  const congestion = (
-    weights.w1 * ((data.fato_in_UAM ?? currentFatoInUAM) / maxFatoUAM) +
-    weights.w2 * ((data.path_in_UAM ?? currentPathInUAM) / maxPathInUAM) +
-    weights.w3 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
-    weights.w4 * ((data.gate_UAM_psg ?? currentGatePassengers) / maxGatePassengers) +
-    weights.w5 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
-    weights.w6 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
-  );
-
-  // 이용률 계산
-  const utilization = (
-    weights.w7 * ((data.gate_UAM ?? currentGateUAM) / maxGateUAM) +
-    weights.w8 * ((data.gate_UAM_psg ?? currentBoardedPassengers) / (maxGateUAM * 4)) +
-    weights.w9 * ((data.path_out_UAM ?? currentPathOutUAM) / maxPathOutUAM) +
-    weights.w10 * ((data.fato_out_UAM ?? currentFatoOutUAM) / maxFatoUAM)
-  );
-
-  return {
-    congestion: congestion,
-    utilization: utilization
-  };
-};
 
 
 
@@ -386,7 +387,7 @@ const calculate_Congettion_Utilization = (data = {}) => {
 
   return (
     <div className="bigcontainer">
-      <Header user={props.user}/>
+      <Header user={props.user} />
       <div className="content">
         <div className="aside">
           <div className="aside-content">
@@ -407,6 +408,8 @@ const calculate_Congettion_Utilization = (data = {}) => {
             </div>
             <div className="current-situation-settings">
               <h5>현재 상황 설정</h5>
+              <ButtonGroup /> {/* ButtonGroup 컴포넌트 추가 */}
+
               {currentSituationInputs.map(input => (
                 <div className="current-situation-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>
@@ -419,6 +422,7 @@ const calculate_Congettion_Utilization = (data = {}) => {
                   />
                 </div>
               ))}
+
             </div>
             <div className="current-situation-settings">
               <h5>가중치 설정</h5>
@@ -456,10 +460,10 @@ const calculate_Congettion_Utilization = (data = {}) => {
                 ))}
               </DropdownButton>
               {props.user !== 0 && (
-    <React.Fragment>
-      <button onClick={setModalstate} className="button-style">버티포트 추가</button>
-    </React.Fragment>
-  )}
+                <React.Fragment>
+                  <button onClick={setModalstate} className="button-style">버티포트 추가</button>
+                </React.Fragment>
+              )}
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>

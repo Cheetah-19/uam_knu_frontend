@@ -1,0 +1,15 @@
+.button-style {
+    border-radius: 10px;
+    text-overflow: ellipsis;
+    align-items: center;
+    background-color: #D9D9D9;
+    color: black;
+    border: none;
+    font-size: 13px;
+    padding: auto;
+    margin: 3px;
+  }
+
+.ButtonGroup{
+    display: flex;
+}
