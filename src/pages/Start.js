@@ -38,6 +38,17 @@ const Start = (props) => {
   const [previous_congetion_utilization_Data, SetPreviousCongettionUtilizationData] = useState(null);
   const [newsolution, setNewsolution] = useState(null); // 최적화 후 데이터 상태
 
+  const handleFileData = (data) => {
+    //console.log("스타트데이터 : ",data);
+    setcurrentFatoInUAM(data['Fato_In에 있는 UAM 수'] || '');
+    setCurrentPathInUAM(data['Path_In에 있는 UAM 수'] || '');
+    setCurrentGateUAM(data['Gate에 있는 UAM 수'] || '');
+    setcurrentPathOutUAM(data['Path_Out에 있는 UAM 수'] || '');
+    setCurrentFatoOutUAM(data['Fato_Out에 있는 UAM 수'] || '');
+    setCurrentGatePassengers(data['대합실의 승객 수'] || '');
+    setCurrentBoardedPassengers(data['UAM에 탑승한 승객 수'] || '');
+  };
+
   useEffect(() => {
     const fetchNewAccessToken = async () => {
       try {
@@ -408,8 +419,8 @@ const Start = (props) => {
             </div>
             <div className="current-situation-settings">
               <h5>현재 상황 설정</h5>
-              <ButtonGroup /> {/* ButtonGroup 컴포넌트 추가 */}
-
+              <ButtonGroup onFileData={handleFileData} /> {/* 파일 업로드한 데이터 가져오기 */}
+              
               {currentSituationInputs.map(input => (
                 <div className="current-situation-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>

@@ -5,4 +5,3 @@ Fato_Out에 있는 UAM 수 :
 대합실의 승객 수 : 
 Path_Out에 있는 UAM 수 : 
 UAM에 탑승한 승객 수 : 
-가중치 설정 (0~1) : 

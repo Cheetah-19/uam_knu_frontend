@@ -10,6 +10,13 @@
     margin: 3px;
   }
 
-.ButtonGroup{
+  .ButtonGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.file_button{
     display: flex;
 }
