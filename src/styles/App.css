@@ -12,7 +12,7 @@ html,body{
 }
 
 header {
-  background: #42BBFF;
+  background: #03a6ff;
   display: flex;
   justify-content: space-between;
 }
@@ -38,7 +38,7 @@ header .header-btn {
 }
 
 .selected {
-  background: #1F94FF;
+  background: #0080ff;
 }
 
 #sub-container {
@@ -57,6 +57,7 @@ header .header-btn {
   background: white;
   font-size: 27px;
   font-weight: bold;
+  border-radius: 10px;
 }
 
 #profile {
@@ -85,17 +86,20 @@ header .header-btn {
 
 .password-reset input{
   padding-left: 15px;
+  border-radius: 10px;
+  border: 1px solid #777575;
 }
 
 .sub-btn {
   width: 100%;
   height: 40px;
   border: none;
+  border-radius: 10px;
 }
 
 #reset-btn {
   margin-top: 15px;
-  background: #42BBFF;
+  background: #03a6ff;
   color: white;
   font-weight: bold;
 }
@@ -186,14 +190,20 @@ header .header-btn {
   background-color: white;
   max-height: 100vh; 
   overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+  padding-top: 30px;
 }
 
 .aside-content {
-  flex: 0 0 80%; /* 텍스트 박스 영역 80% */
+  flex: 0 0 85%; /* 텍스트 박스 영역 80% */
   overflow: auto;
 }
+
+.aside-content h5 {
+  font-weight: bold;
+}
+
 .aside-buttons {
-  flex: 0 0 20%; /* 버튼 영역 20% */
+  flex: 0 0 15%; /* 버튼 영역 20% */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
@@ -201,7 +211,7 @@ header .header-btn {
   position: sticky;
   bottom: 0;
   background-color: white;
-  padding: 5%;
+  padding: 5% 10%;
   grid-column-gap: 10px; /* 버튼 사이의 간격 설정 */
 }
 
@@ -213,7 +223,7 @@ header .header-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #91F48F;
+  background-color: #ffc952;
   color: black;
   padding: 10% 20%;
   border: none;
@@ -227,7 +237,7 @@ header .header-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #D9D9D9; 
+  background-color: #e0dede;; 
   color: black;
   padding: 10% 20%;
   border: none;
@@ -245,7 +255,7 @@ header .header-btn {
 }
 
 .constant-settings, .current-situation-settings {
-  padding: 20px;
+  padding: 0 20px 40px 20px;
   display: flex; /* 내부 요소들을 세로로 정렬 */
   flex-direction: column;
   align-items: center; /* 가운데 정렬 */
@@ -253,7 +263,7 @@ header .header-btn {
 
 .constant-input-container, .current-situation-input-container {
   display: flex;
-  width: 80%; /* Width of the outside container */
+  width: 85%; /* Width of the outside container */
   flex-direction: column;
   align-items: flex-start; /* 라벨을 좌측 정렬 */
   margin-bottom: 10px;
@@ -266,14 +276,11 @@ header .header-btn {
 .constant-input, .current-situation-input {
   width: 100%;
   padding: 5px;
-  background-color: #D9D9D9;
-  border: 0px solid #ccc;
+  background-color: #e0dede;
+  border: none;
   border-radius: 10px;
   box-sizing: border-box;
   text-align: center; /* 텍스트를 가운데 정렬합니다. */
-  /*추가 */
-  margin-left: 0px;
-  margin-right: 35px;
 }
 
 .slidecontainer {
@@ -309,7 +316,7 @@ header .header-btn {
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #04AA6D; /* Green background */
+  background: #ffc952; /* Green background */
   cursor: pointer; /* Cursor on hover */
   border-radius: 10px; /*추가 (좌 우 끝으로 몰렸을때, 침범하지 않도록)*/
 }
@@ -317,20 +324,23 @@ header .header-btn {
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #04AA6D; /* Green background */
+  background: #ffc952; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
-.main.calculation-overlay {
-  position: relative; /* 부모 요소가 상대 위치여야 자식 요소의 절대 위치가 작동함 */
+.chart-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .calculation-overlay {
   position: absolute;
-  top: 19%; /* header의 높이와 20% 제거 */
-  left: 20%; /* 좌측 20% 제거 */
-  width: 80%; /* 화면 전체에서 좌측 20%, 우측 20%를 제외한 영역 */
-  height: 81%; /* 화면 전체에서 header와 tablist의 높이를 제외한 영역 */
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;

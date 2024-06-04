@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../styles/file.css";
 
 function ButtonGroup({ onFileData }) {
@@ -18,31 +18,38 @@ function ButtonGroup({ onFileData }) {
   };
 
   const handleUpload = () => {
-    if (selectedFile) {
-      const fileReader = new FileReader();
-      fileReader.onload = (event) => {
-        const fileContent = event.target.result;
-        const lines = fileContent.split('\n');
-        const data = {};
+    const fileReader = new FileReader();
+    fileReader.onload = (event) => {
+      const fileContent = event.target.result;
+      const lines = fileContent.split('\n');
+      const data = {};
+      try {
         lines.forEach((line) => {
           const [key, value] = line.split(' : ');
           data[key.trim()] = Number(value.trim());
         });
-        // Start.js로 데이터 전달
-        onFileData(data);
-      };
-      fileReader.readAsText(selectedFile);
-    }
+      } catch (error) {
+        alert("잘못된 형식의 파일입니다.");
+      }
+      // Start.js로 데이터 전달
+      onFileData(data);
+    };
+    fileReader.readAsText(selectedFile);
   };
+
+  useEffect(() => {
+    if (selectedFile) {
+      handleUpload();
+    }
+  }, [selectedFile]);
 
   return (
     <div className="ButtonGroup">
       <div className="file_button">
-      <button className="button-style" onClick={handleDownload}>양식 다운로드</button>
-      <button className="button-style" onClick={handleUpload}>파일 업로드</button>
+        <button className="button-style" onClick={handleDownload}>양식 다운로드</button>
+        <label className="button-style" for="file-upload-button">파일 업로드</label>
       </div>
-      <input className="button-style" type="file" onChange={handleFileChange} />
-      
+      <input id="file-upload-button" className="button-style" type="file" accept=".txt" onChange={handleFileChange} style={{display:"none"}} />
     </div>
   );
 }

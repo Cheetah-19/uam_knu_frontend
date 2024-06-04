@@ -1,5 +1,19 @@
 <svg width="1920" height="1920" viewBox="0 0 1920 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1920" height="1920" fill="#7690FF"/>
-<path d="M960 160L1652.82 560V1360L960 1760L267.18 1360V560L960 160Z" fill="#86C7ED"/>
-<path d="M960 460L1393.01 710V1210L960 1460L526.987 1210V710L960 460Z" fill="#BDDFF4"/>
+  <rect width="1920" height="1920" fill="#0080ff"/>
+  <defs>
+    <!-- 첫 번째 path를 위한 그라데이션 정의 -->
+    <linearGradient id="gradient1" x1="960" y1="60" x2="960" y2="1560" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0080ff"/>
+      <stop offset="100%" stop-color="#03a6ff"/>
+    </linearGradient>
+    <!-- 두 번째 path를 위한 그라데이션 정의 -->
+    <linearGradient id="gradient2" x1="960" y1="260" x2="960" y2="1260" gradientUnits="userSpaceOnUse">
+      <stop offset="30%" stop-color="#03a6ff"/>
+      <stop offset="100%" stop-color="#92CDF9"/>
+    </linearGradient>
+  </defs>
+  <!-- 첫 번째 path에 그라데이션 적용 -->
+  <path d="M960 160L1652.82 560V1360L960 1760L267.18 1360V560L960 160Z" fill="url(#gradient1)"/>
+  <!-- 두 번째 path에 그라데이션 적용 -->
+  <path d="M960 460L1393.01 710V1210L960 1460L526.987 1210V710L960 460Z" fill="url(#gradient2)"/>
 </svg>
