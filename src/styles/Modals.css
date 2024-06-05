@@ -13,20 +13,20 @@
  
 /* modal창 */
 .modalBody {
-  position: absolute;
+  display: flex;
   width: 60%;
   height: 60%;
-  padding: 40px;
+  padding: 20px;
   text-align: center;
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
   box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  max-width: 700px;
+  z-index: 2;
 }
  
 #modalCloseBtn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
+  height: 0;
   border: none;
   color: rgba(0, 0, 0, 0.7);
   background-color: transparent;
@@ -37,109 +37,141 @@
   cursor: pointer;
 }
 
-#v-line{
-  position: absolute;
-  display: inline-block;
-  border-left : solid #020c117b;
-  height : 90%;
-  top:10%;
-  left:30%;
-}
- 
-
 .Addmodal-left{
-  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 30%;
-  height: 95%;
-  top: 0%;
-  left:0%;
+  padding-right: 15px;
   overflow-y: auto;
 }
 
-.Addmodal-right{
-  position: absolute;
-  width: 69%;
-  height: 100%;
-  top: 0%;
-  left:31%;
+#v-line{
+  border: 1px solid #e0dede;
+  height : 100%;
 }
 
-.Addbutton{
-  position: absolute;
-  top: 31px;
-  left: 10%;
-  width: 80%;
-  height: 66px;
+.Addmodal-right{
+  width: 69%;
+  height: 100%;
+}
+
+.Addmodal-right h4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+  margin: 0;
+  font-weight: bold;
+}
+
+.constants-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  padding-left: 20px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.Addbutton, .vertiports-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
   border: 1px solid;  
   border-radius: 10px;
 }
 
+.Addbutton {
+  height: 47px;
+  background: #03a6ff;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+  max-width: 200px;
+}
+
+.Addbutton:hover {
+  background: #0080ff;
+}
+
 .plusmark{
-  position: absolute;
-  display: flex;
   height: 100%;
   width:25%;
-  top:0%;
-  left:0%;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
-  justify-content: center;
-  align-items: center;
-}
-.plustext{
-  position: absolute;
-  display: flex;
-  height: 100%;
-  width: 75%;
-  top:0%;
-  left:30%;
-  font-size: 24px;
-  font-weight: bold;
-  justify-content: center;
-  align-items: center;
 }
 
 .vertiports-list{
-  position: absolute;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width:100%;
-  top: 100px;
   height:77%;
 }
 
-.vertiports-index{
-  position: relative;
-  width:80%;
-  left :  10%;  
-  height: 22%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 1px solid;
-  border-radius: 10px;
-  background-color: white;
+.vertiports-name {
+  padding: 10px 0;
+  margin-top: 12px !important;
+  width: 90%;
+  height: 47px;
+  font-size: 17px !important;
 }
-.constant-settings#modal{
-  position: absolute;
-  height: 90%;
-  width: 100%;
 
+.vertiports-name:hover {
+  background: #c4c4c4;
+}
+
+.vertiports-name.selected {
+  background:#909090;
+  color: white;
+}
+
+.constant-settings#modal{
+  display: flex;
+  justify-content: center;
+  height: 80%;
+  width: 100%;
+  padding: 10px 0 10px 20px;
 }
 
 .constant-settings#button{
-  position:absolute;
-  padding: 0px;
   height: 10%;
   width: 100%;
-  top:90%;
+  display: flex;
 }
-.post-button{
-  position: absolute;
+
+.post-button {
   display:flex;
   justify-content: center;
   align-items: center;
   width: 30%;
-  height: 60%;
+  margin: 0 5px;
+  padding: 3px;
   border: 1px solid;  
   border-radius: 10px;
+  background: #03a6ff;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  max-width: 200px;
+}
+
+.post-button:hover {
+  background: #0080ff;
+}
+
+.post-button.delete {
+  background: #F16B6F;
+}
+
+.post-button.delete:hover {
+  background: #db5054;
+}
+
+.post-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }

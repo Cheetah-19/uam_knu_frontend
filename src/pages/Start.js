@@ -464,18 +464,20 @@ const Start = (props) => {
         <div className="main">
           <div className="tablist">
             <div className="dropdown-container">
-              <DropdownButton id="dropdown-left" title="버티포트">
-                {vertiports.map((vertiport, index) => (
-                  <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
-                    {vertiport.name}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-              {props.user !== 0 && (
-                <React.Fragment>
-                  <button onClick={setModalstate} className="button-style">버티포트 추가</button>
-                </React.Fragment>
-              )}
+              <div style={{display:"flex", width:"50%", justifyContent:"center"}}>
+                <DropdownButton id="dropdown-left" title="버티포트">
+                  {vertiports.map((vertiport, index) => (
+                    <Dropdown.Item key={index} onClick={() => handleVertiportSelect(vertiport)}>
+                      {vertiport.name}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                {props.user !== 0 && (
+                  <React.Fragment>
+                    <button onClick={setModalstate} className="button-style">버티포트 관리</button>
+                  </React.Fragment>
+                )}
+              </div>
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
@@ -507,7 +509,7 @@ const Start = (props) => {
             )}
             {
               Modalstate &&
-              <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} closeModal={closeModal}></Modal>
+              <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} setVertiports={setVertiports} closeModal={closeModal} user={props.user}></Modal>
             }
             {selectedGraph === 'donut' && (
               <div className="chart-container">

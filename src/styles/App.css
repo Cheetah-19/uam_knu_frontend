@@ -207,6 +207,7 @@ header .header-btn {
 
 .aside-content h5 {
   font-weight: bold;
+  margin-bottom: 15px;
 }
 
 .aside-buttons {
@@ -278,6 +279,13 @@ header .header-btn {
 
 .constant-input-container label, .current-situation-input-container label {
   margin-bottom: 5px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  text-align: left;
+  color: #777575;
 }
 
 .constant-input, .current-situation-input {
