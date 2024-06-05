@@ -15,7 +15,8 @@ function ButtonGroup({ onFileData }) {
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-  };
+    event.target.value = "";
+    };
 
   const handleUpload = () => {
     const fileReader = new FileReader();
