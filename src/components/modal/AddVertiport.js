@@ -175,6 +175,7 @@ function AddVertiport(props) {
                     ))}
                 </div>
             </span>
+            <span id="v-line" />
             <span className="Addmodal-right">
                 <h4>버티포트 관리</h4>
                 <div className="constant-settings" id='modal'>
@@ -199,7 +200,7 @@ function AddVertiport(props) {
                                 value={input.name.includes('max') ? eval(input.name) : ''}
                                 className={input.className}
                                 onChange={handleInputChange}
-                                disabled={props.user === 2 ? false : true }
+                                disabled={addVertiport === true || props.user === 2 ? false : true }
                             />
                         </div>
                         ))}
