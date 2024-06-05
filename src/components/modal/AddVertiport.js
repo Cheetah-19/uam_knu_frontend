@@ -1,6 +1,6 @@
 import "../../styles/App.css"
 import { useState } from "react";
-import { privateApi } from "../Functions";
+import { privateApi, fetchData } from "../Functions";
 import React from 'react';
 function AddVertiport(props) {
     const [maxFatoUAM, setMaxFatoUAM] = useState('');
@@ -10,7 +10,19 @@ function AddVertiport(props) {
     const [maxGatePassengers, setMaxGatePassengers] = useState('');
     const [selectedVertiport, setSelectedVertiport] = useState(null);
     const [addVertiport, setAddvertiport ] = useState(true);
-    
+
+    const fetchVertiport = async () => {
+      try {
+          const vertiportsData = await fetchData('/vertiports'); //다음과 같이 endpoint에 /vertiports만 지정해줘도 BASE_URL/vertiports로 요청이 들어간다.
+          if (vertiportsData && vertiportsData.data) {
+          //console.log('버티포트 정보:', vertiportsData.data);
+          props.setVertiports(vertiportsData.data);
+          }
+      } catch (error) {
+          console.error('버티포트 정보를 가져오는 중 오류 발생:', error);
+      }
+    };
+
     const handleVertiportSelect = (selectedVertiport) => {
       console.log('선택된 버티포트:', selectedVertiport);
       setSelectedVertiport(selectedVertiport);
@@ -75,8 +87,8 @@ function AddVertiport(props) {
             console.log(response);
             if (response.status === 200) {
                 alert(selectedVertiport + " 버티포트를 추가하였습니다");
-                // Handle successful login (e.g., save token, redirect)
-                // closeModal();
+                fetchVertiport();
+                handleVertiportSelect();
             }
         } catch (error) {
             console.log(error)
@@ -103,7 +115,7 @@ function AddVertiport(props) {
             console.log(response);
             if (response.status === 200) {
                 alert(selectedVertiport + "를 수정하였습니다");
-                // Handle successful login (e.g., save token, redirect)
+                fetchVertiport();
             }
         } catch (error) {
             if (error.response){
@@ -128,7 +140,8 @@ function AddVertiport(props) {
                 console.log(response);
                 if (response.status === 200) {
                     alert(selectedVertiport + "를 삭제하였습니다");
-                    // Handle successful login (e.g., save token, redirect)
+                    fetchVertiport();
+                    handleVertiportSelect();
                 }
             } catch (error) {
                 if (error.response){

@@ -509,7 +509,7 @@ const Start = (props) => {
             )}
             {
               Modalstate &&
-              <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} closeModal={closeModal} user={props.user}></Modal>
+              <Modal modaltype="addVertiport" constants={constantInputs} vertiports={vertiports} setVertiports={setVertiports} closeModal={closeModal} user={props.user}></Modal>
             }
             {selectedGraph === 'donut' && (
               <div className="chart-container">

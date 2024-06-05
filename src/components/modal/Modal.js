@@ -12,7 +12,7 @@ function Modal(props){
             <div className="modalBody" onClick={(e) => e.stopPropagation()}>
                 {props.children}
                 {props.modaltype === 'addVertiport' &&
-                    <AddVertiport constants={props.constants} vertiports={props.vertiports} closeModal={closeModal} user={props.user} />
+                    <AddVertiport constants={props.constants} vertiports={props.vertiports} setVertiports={props.setVertiports} closeModal={closeModal} user={props.user} />
                 }
                 <button id="modalCloseBtn" onClick={closeModal}>
                     ✖
