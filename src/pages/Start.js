@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Donutchart from "../components/chart/DonutChart";
 import Piechart from "../components/chart/PieChart";
@@ -37,7 +36,8 @@ const Start = (props) => {
   const [previousData, setPreviousData] = useState(null); // 최적화 전 데이터 상태 추가
   const [previous_congetion_utilization_Data, SetPreviousCongettionUtilizationData] = useState(null);
   const [newsolution, setNewsolution] = useState(null); // 최적화 후 데이터 상태
-
+  let isCalculated = false;
+  
   const handleFileData = (data) => {
     //console.log("스타트데이터 : ",data);
     setcurrentFatoInUAM(data['Fato_In에 있는 UAM 수'] || '');
@@ -201,10 +201,9 @@ const Start = (props) => {
   };
 
   const handleGraphSelect = (graphType) => {
-    setSelectedGraph(graphType);
-    const dropdownButton = document.getElementById('dropdown-right');
-    if (dropdownButton) {
-      dropdownButton.innerText = graphType === 'pie' ? '점유상황' : '혼잡도 및 이용률';
+    if((isCalculated || showChart) || (selectedVertiport && stateId)){
+      setSelectedGraph(graphType);
+      document.getElementById('dropdown-right').innerText = graphType === 'pie' ? '점유상황' : '혼잡도 및 이용률';
     }
   };
 
@@ -330,11 +329,11 @@ const Start = (props) => {
 
 
   const handleCalculation = async () => {
-
     const occupancyData = calculate_Occupancy();
     const congetion_utilization_Data = calculate_Congettion_Utilization();
     setOccupancyData(occupancyData);
     Setcongetion_utilization_Data(congetion_utilization_Data);
+    isCalculated = true;
 
     const inputs = [
       maxFatoUAM, maxPathInUAM, maxPathOutUAM, maxGateUAM, maxGatePassengers,
@@ -375,8 +374,8 @@ const Start = (props) => {
         const { solution } = responseData.data;
         setSolution(solution); // solution 상태 업데이트
         setShowChart(true);
-        setSelectedGraph('donut');
-        handleGraphSelect('donut');
+        setSelectedGraph('pie');
+        handleGraphSelect('pie');
         // 식별 번호 목록 업데이트
         await fetchStatesByVertiport();
       }
@@ -395,6 +394,14 @@ const Start = (props) => {
     setCurrentFatoOutUAM('');
     setCurrentGatePassengers('');
     setCurrentBoardedPassengers('');
+    setSelectedVertiport(null);
+    handleVertiportSelect();
+    setShowChart(false);
+    setSelectedGraph(null);
+    setStateId(null);
+    isCalculated = false;
+    document.getElementById('dropdown-right').innerText = "그래프";
+    document.getElementById('dropdown-sequence').innerText = "시퀀스";
   };
 
   return (
@@ -484,7 +491,7 @@ const Start = (props) => {
               </DropdownButton>
               <DropdownButton
                 id="dropdown-sequence"  // 기존 코드: id="dropdown-right"
-                title="시퀀스 선택"
+                title="시퀀스"
               >
                 {sequences.map((sequence, index) => (
                   <Dropdown.Item key={index} onClick={() => handleSequenceSelect(sequence)}>
