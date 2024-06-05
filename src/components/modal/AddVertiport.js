@@ -74,14 +74,14 @@ function AddVertiport(props) {
             });
             console.log(response);
             if (response.status === 200) {
-                alert("새 버티포트 추가!");
+                alert(selectedVertiport + " 버티포트를 추가하였습니다");
                 // Handle successful login (e.g., save token, redirect)
                 // closeModal();
             }
         } catch (error) {
             console.log(error)
             if (error.response && error.response.status === 400) {
-                alert("버티포트 추가 실패 : 400");
+                alert("버티포트 추가 실패 : " + error.message);
             } else {
                 alert("버티포트 실패 : other");
             }
@@ -102,21 +102,47 @@ function AddVertiport(props) {
             });
             console.log(response);
             if (response.status === 200) {
-                alert("버티포트 수정!");
+                alert(selectedVertiport + "를 수정하였습니다");
                 // Handle successful login (e.g., save token, redirect)
             }
         } catch (error) {
             if (error.response){
                 if(error.response.status === 400) {
-                    alert("버티포트 수정 실패 : 400");
+                    alert("버티포트 수정 실패 : " + error.response.data.message);
                 }
                 else if(error.response.status === 401) {
-                    alert("버티포트 수정 실패 : 관리자가 아닙니다.");
+                    alert("버티포트 수정 실패 : " + error.response.data.message);
                 }
             } else {
                 alert("버티포트 수정 실패 : other");
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
+        }
+    };
+    
+    const handleDelete = async (event) => {
+        event.preventDefault(); // Prevent the default form submission
+        if(window.confirm(selectedVertiport + "를 삭제하시겠습니까?")){
+            try {
+                const response = await privateApi.delete(`/vertiports/${selectedVertiport}`);
+                console.log(response);
+                if (response.status === 200) {
+                    alert(selectedVertiport + "를 삭제하였습니다");
+                    // Handle successful login (e.g., save token, redirect)
+                }
+            } catch (error) {
+                if (error.response){
+                    if(error.response.status === 401) {
+                        alert("버티포트 삭제 실패 : " + error.response.data.message);
+                    }
+                    else {
+                        alert("버티포트 삭제 실패 : " + error.message);
+                    }
+                } else {
+                    alert("버티포트 삭제 실패 : other");
+                }
+                console.error("Login failed:", error.response ? error.response.data : error.message);
+            }
         }
     };
 
@@ -171,7 +197,10 @@ function AddVertiport(props) {
                         <button className="post-button" onClick={handlePost}>추가</button>
                         :
                         props.user === 2 ?
-                        <button className="post-button" onClick={handleUpdate} disabled>수정</button>
+                        <div className="post-button-container">
+                            <button className="post-button" onClick={handleUpdate}>수정</button>
+                            <button className="post-button delete" onClick={handleDelete}>삭제</button>
+                        </div>
                         :
                         <></>
                     }

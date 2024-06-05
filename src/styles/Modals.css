@@ -131,6 +131,7 @@
 .constant-settings#button{
   height: 10%;
   width: 100%;
+  display: flex;
 }
 
 .post-button {
@@ -138,6 +139,7 @@
   justify-content: center;
   align-items: center;
   width: 30%;
+  margin: 0 5px;
   padding: 3px;
   border: 1px solid;  
   border-radius: 10px;
@@ -149,4 +151,18 @@
 
 .post-button:hover {
   background: #0080ff;
+}
+
+.post-button.delete {
+  background: #F16B6F;
+}
+
+.post-button.delete:hover {
+  background: #db5054;
+}
+
+.post-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
