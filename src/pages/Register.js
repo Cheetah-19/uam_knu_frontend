@@ -7,7 +7,6 @@ const Register = ({ setIsLogin }) => {
     const [id, setId] = useState("");
     const [password, setPassword1] = useState("");
     const [phone_number, setPhoneNumber] = useState("");
-    const navigate = useNavigate();
 
     const handleRegister = async (event) => {
         event.preventDefault(); // Prevent the default form submission
