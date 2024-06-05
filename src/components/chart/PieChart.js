@@ -5,7 +5,7 @@ import styles from '../../styles/DonutChart.module.css';
 const PieChart = ({ solution, occupancyData }) => {
     const Options = {};
 
-    // 최적화 전 파이차트 데이터
+    // 최적화 전 도넛 차트 데이터
     const labelsBefore = ["Fato In UAM", "Fato Out UAM", "Gate UAM", "Gate UAM Passengers", "Path In UAM", "Path Out UAM", "Waiting Room Passengers"];
     const datasetsBefore = [{
         data: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
@@ -21,7 +21,7 @@ const PieChart = ({ solution, occupancyData }) => {
 
     useEffect(() => {
         if (occupancyData) {
-            // 최적화 전 파이차트 데이터 설정
+            // 최적화 전 도넛 차트 데이터 설정
             const datasetsBeforeUpdated = [{
                 data: [
                     occupancyData.fato_in_UAM,
@@ -32,8 +32,8 @@ const PieChart = ({ solution, occupancyData }) => {
                     occupancyData.path_out_UAM,
                     occupancyData.waiting_room_psg
                 ],
-                backgroundColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
-                borderColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
+                backgroundColor: ["#FFF8DC", "#DA70D6", "#7B68EE", "#AFEEEE", "#7FFF00", "#FF7F50", "#708090"],
+                borderColor: ["#FFF8DC", "#DA70D6", "#7B68EE", "#AFEEEE", "#7FFF00", "#FF7F50", "#708090"],
             }];
             setPieChartDataBefore({ labels: labelsBefore, datasets: datasetsBeforeUpdated });
         }
@@ -43,12 +43,12 @@ const PieChart = ({ solution, occupancyData }) => {
         if (solution) {
         //console.log("받은 sol = ",solution);
 
-            // 최적화 후 도넛 차트 데이터 설정
+            // 최적화 후 파이차트 데이터 설정
             const labelsAfter = labelsBefore;
             const datasetsAfter = [{
                 data: [solution.fato_in_UAM, solution.fato_out_UAM,solution.gate_UAM,solution.gate_UAM_psg,solution.path_in_UAM,solution.path_out_UAM,solution.waiting_room_psg],
-                backgroundColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
-                borderColor: ["#ffeb9b", "#b5f2ff", "#ffcd56", "#36a2eb", "#ff6384", "#e7e9ed", "#4bc0c0"],
+                backgroundColor: ["#FFF8DC", "#DA70D6", "#7B68EE", "#AFEEEE", "#7FFF00", "#FF7F50", "#708090"],
+                borderColor: ["#FFF8DC", "#DA70D6", "#7B68EE", "#AFEEEE", "#7FFF00", "#FF7F50", "#708090"],
             }];
             setPieChartDataAfter({ labels: labelsAfter, datasets: datasetsAfter });
           }
@@ -58,7 +58,7 @@ const PieChart = ({ solution, occupancyData }) => {
         if (chartRefBefore.current) {
           // 최적화 전 Chart.js 인스턴스 생성
           const newChartInstanceBefore = new Chart(chartRefBefore.current, {
-            type: 'pie',
+            type: 'doughnut', // 파이차트를 도넛차트로 변경
             data: pieChartDataBefore,
             options: Options
           });
@@ -74,7 +74,7 @@ const PieChart = ({ solution, occupancyData }) => {
         if (chartRefAfter.current) {
           // 최적화 후 Chart.js 인스턴스 생성
           const newChartInstanceAfter = new Chart(chartRefAfter.current, {
-            type: 'pie',
+            type: 'doughnut', // 파이차트를 도넛차트로 변경
             data: pieChartDataAfter,
             options: Options
           });

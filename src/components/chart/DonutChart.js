@@ -5,7 +5,7 @@ import styles from '../../styles/DonutChart.module.css';
 const DonutChart = ({ solution, congetion_utilization_Data }) => {
   const Options = {};
 
-  // 최적화 전 도넛 차트 데이터 설정
+  // 최적화 전 파이차트 데이터 설정
   const labelsBefore = ["congestion", "using"];
   const datasetsBefore = [{
     data: [50, 50],
@@ -19,13 +19,9 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   const chartRefBefore = useRef(null); // 최적화 전 차트 인스턴스 변수
   const chartRefAfter = useRef(null); // 최적화 후 차트 인스턴스 변수
 
-  
-
-
   useEffect(() => {
     if (solution) {
-      //console.log("받은 sol = ", solution);
-      // 최적화 후 도넛 차트 데이터 설정
+      // 최적화 후 파이차트 데이터 설정
       const labelsAfter = ["congestion", "using"];
       const datasetsAfter = [{
         data: [solution.congestion * 100, solution.utilization * 100],
@@ -38,7 +34,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
 
   useEffect(() => {
     if (congetion_utilization_Data) {
-      // 최적화 전 도넛 차트 데이터 설정
+      // 최적화 전 파이차트 데이터 설정
       const datasetsBefore = [{
         data: [
           congetion_utilization_Data.congestion * 100,
@@ -55,7 +51,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     if (chartRefBefore.current) {
       // 최적화 전 Chart.js 인스턴스 생성
       const newChartInstanceBefore = new Chart(chartRefBefore.current, {
-        type: 'doughnut',
+        type: 'pie', // 도넛차트를 파이차트로 변경
         data: donutChartDataBefore,
         options: Options
       });
@@ -71,7 +67,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     if (chartRefAfter.current) {
       // 최적화 후 Chart.js 인스턴스 생성
       const newChartInstanceAfter = new Chart(chartRefAfter.current, {
-        type: 'doughnut',
+        type: 'pie', // 도넛차트를 파이차트로 변경
         data: donutChartDataAfter,
         options: Options
       });
@@ -84,18 +80,17 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   }, [donutChartDataAfter]);
 
   useEffect(() => {
-    //console.log('congetion_utilization_Data:', congetion_utilization_Data);
-}, [congetion_utilization_Data]);
-
+    console.log('congetion_utilization_Data:', congetion_utilization_Data);
+  }, [congetion_utilization_Data]);
 
   return (
     <div className={styles.DonutChart}>
-      {/* 최적화 전 도넛 차트 */}
+      {/* 최적화 전 파이차트 */}
       <div>
         <h3>Before Optimization</h3>
         <canvas ref={chartRefBefore} />
       </div>
-      {/* 최적화 후 도넛 차트 */}
+      {/* 최적화 후 파이차트 */}
       <div>
         <h3>After Optimization</h3>
         <canvas ref={chartRefAfter} />
