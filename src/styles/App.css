@@ -171,6 +171,13 @@ header .header-btn {
   color : black;
   font-size: 20px;
 }
+#dropdown-sequence{
+  background-color: white;
+  border-color: transparent;
+  font-family: Pretendard-Regular;
+  color : black;
+  font-size: 20px;
+}
 
 .dropdown-container .dropdown {
   width: 50%;

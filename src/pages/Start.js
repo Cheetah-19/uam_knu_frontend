@@ -161,6 +161,7 @@ const Start = (props) => {
   // 시퀀스를 선택할 때 stateId를 업데이트하는 함수
   const handleSequenceSelect = (sequence) => {
     setStateId(sequence);
+    document.getElementById('dropdown-sequence').innerText = sequence;
   };
 
   // sequence를 선택할 때 데이터를 가져오는 useEffect
@@ -420,7 +421,7 @@ const Start = (props) => {
             <div className="current-situation-settings">
               <h5>현재 상황 설정</h5>
               <ButtonGroup onFileData={handleFileData} /> {/* 파일 업로드한 데이터 가져오기 */}
-              
+
               {currentSituationInputs.map(input => (
                 <div className="current-situation-input-container" key={input.name}> {/* 수정 */}
                   <label>{input.label}</label>
@@ -480,7 +481,7 @@ const Start = (props) => {
                 <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
               </DropdownButton>
               <DropdownButton
-                id="dropdown-right"
+                id="dropdown-sequence"  // 기존 코드: id="dropdown-right"
                 title="시퀀스 선택"
               >
                 {sequences.map((sequence, index) => (
