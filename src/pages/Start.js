@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import Donutchart from "../components/chart/DonutChart";
-import Piechart from "../components/chart/PieChart";
+import VerticalBarChart from "../components/chart/VerticalBarChart";
 import "../styles/App.css";
 import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
@@ -530,9 +530,9 @@ const Start = (props) => {
             {selectedGraph === 'pie' && (
               <div className="chart-container">
                 {stateId && previousData && newsolution ? (
-                  <Piechart solution={newsolution} occupancyData={previousData} />
+                  <VerticalBarChart solution={newsolution} occupancyData={previousData} />
                 ) : (
-                  <Piechart solution={solution} occupancyData={occupancyData} />
+                  <VerticalBarChart solution={solution} occupancyData={occupancyData} />
                 )}
               </div>
             )}
