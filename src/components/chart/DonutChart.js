@@ -24,7 +24,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
       // 최적화 후 파이차트 데이터 설정
       const labelsAfter = ["congestion", "using"];
       const datasetsAfter = [{
-        data: [solution.congestion * 100, solution.utilization * 100],
+        data: [solution.congestion / (solution.congestion + solution.utilization) * 100, solution.utilization / (solution.congestion + solution.utilization) * 100],
         backgroundColor: ["#ffeb9b", "#b5f2ff"],
         borderColor: ["#ffeb9b", "#b5f2ff"],
       }];
@@ -37,8 +37,8 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
       // 최적화 전 파이차트 데이터 설정
       const datasetsBefore = [{
         data: [
-          congetion_utilization_Data.congestion * 100,
-          congetion_utilization_Data.utilization * 100
+          congetion_utilization_Data.congestion / (congetion_utilization_Data.utilization + congetion_utilization_Data.congestion) * 100,
+          congetion_utilization_Data.utilization / (congetion_utilization_Data.utilization + congetion_utilization_Data.congestion) * 100
         ],
         backgroundColor: ["#ffeb9b", "#b5f2ff"],
         borderColor: ["#ffeb9b", "#b5f2ff"],
