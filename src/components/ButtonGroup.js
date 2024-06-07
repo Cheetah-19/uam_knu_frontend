@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/file.css";
+import { alertToast } from "./Notification";
 
 function ButtonGroup({ onFileData }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -30,7 +31,7 @@ function ButtonGroup({ onFileData }) {
           data[key.trim()] = Number(value.trim());
         });
       } catch (error) {
-        alert("잘못된 형식의 파일입니다.");
+        alertToast({msg: "파일 형식이 잘못되었습니다.", type: "error", pos: "top-center"});
       }
       // Start.js로 데이터 전달
       onFileData(data);

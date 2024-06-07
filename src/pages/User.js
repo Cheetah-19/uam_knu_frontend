@@ -4,6 +4,7 @@ import { privateApi, fetchData, postData } from "../components/Functions";
 import Header from "../components/Header";
 import "../styles/App.css";
 import profile from "../assets/profile.png";
+import { alertToast } from "../components/Notification";
 
 const User = (props) => {
     const [old_password, setOld] = useState("");
@@ -18,7 +19,7 @@ const User = (props) => {
                 const responseData = await fetchData("/api/token/refresh");
             } catch (error) {
                 console.log(error.response.data.message);
-                alert("로그아웃 됩니다");
+                alertToast({msg: "로그아웃 됩니다", type: "warning", pos: "top-center"});
                 props.setUser(0);
                 navigate("/");
             }
@@ -32,7 +33,7 @@ const User = (props) => {
                 setInfo(responseData.data);
             } catch (error) {
                 console.log(error.response.data.detail);
-                alert("로그아웃 됩니다");
+                alertToast({msg: "로그아웃 됩니다", type: "warning", pos: "top-center"});
                 props.setUser(0);
                 navigate("/");
             }
@@ -49,20 +50,19 @@ const User = (props) => {
                 new_password1: new_password1,
                 new_password2: new_password2
             })
-
-            alert("비밀번호 변경 성공");
+            alertToast({msg: "비밀번호 변경 성공", type: "success", pos: "top-center"});
         } catch (error) {
             if (error.response){
                 if (error.response.status === 400) {
-                    alert("비밀번호 변경 실패: " + error.response.data.message);
+                    alertToast({msg: "비밀번호 변경 실패: " + error.response.data.message, type: "error", pos: "top-center"});
                 }
                 else if (error.response.status === 401) {
-                    alert("비밀번호 변경 실패: " + error.response.data.detail);
+                    alertToast({msg: "비밀번호 변경 실패: " + error.response.data.detail, type: "error", pos: "top-center"});
                     props.setUser(0);
                     navigate("/");
                 }
             } else {
-                alert("비밀번호 변경 실패: 서버 오류");
+                alertToast({msg: "비밀번호 변경 실패: 서버 오류", type: "error", pos: "top-center"});
             }
         }
     };
@@ -70,17 +70,16 @@ const User = (props) => {
     const handleLogout = async (event) => {
         try {
             const response = await privateApi.delete("users/auth")
-
-            alert("로그아웃 되었습니다.");
+            alertToast({msg: "로그아웃 되었습니다", type: "success", pos: "top-center"});
             props.setUser(0);
             navigate("/");
         } catch (error) {
             if (error.response && error.response.status !== 202) {
-                alert("로그아웃 실패: " + error.response.data.detail);
+                alertToast({msg: "로그아웃 실패: " + error.response.data.detail, type: "error", pos: "top-center"});
                 props.setUser(0);
                 navigate("/");
             } else {
-                alert("로그아웃 실패: 서버 오류");
+                alertToast({msg: "로그아웃 실패: 서버 오류", type: "error", pos: "top-center"});
             }
         }
     };
@@ -89,15 +88,14 @@ const User = (props) => {
         if(window.confirm("회원탈퇴를 하시겠습니까?")){
             try {
                 const response = await privateApi.delete("users")
-    
-                alert("회원탈퇴가 되었습니다");
+                alertToast({msg: "회원탈퇴가 되었습니다", type: "success", pos: "top-center"});
                 navigate("/");
             } catch (error) {
                 if (error.response && error.response.status === 401) {
-                    alert("회원탈퇴 실패: " + error.response.data.message);
+                    alertToast({msg: "회원탈퇴 실패: " + error.response.data.message, type: "error", pos: "top-center"});
                     navigate("/");
                 } else {
-                    alert("회원탈퇴 실패: 서버 오류");
+                    alertToast({msg: "회원탈퇴 실패: 서버 오류", type: "error", pos: "top-center"});
                 }
             }
         }

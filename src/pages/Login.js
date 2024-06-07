@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { privateApi } from "../components/Functions";
 import logo from "../assets/logo.png";
 import Register from "../pages/Register";
+import { alertToast } from "../components/Notification";
 import "./Login.css";
 
 function Login(props) {
@@ -21,7 +22,7 @@ function Login(props) {
             );
             console.log(response);
             if (response.status === 200) {
-                alert("로그인 성공");
+                alertToast({msg: "로그인 성공", type: "success", pos: "top-center"});
 
                 // 사용자 구분
                 props.setUser(response.data.data.admin ? 2:1);
@@ -31,9 +32,9 @@ function Login(props) {
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                alert("로그인 실패: 잘못된 아이디 또는 비밀번호");
+                alertToast({msg: "로그인 실패: 아이디 또는 비밀번호가 일치하지 않습니다.", type: "error", pos: "top-center"});
             } else {
-                alert("로그인 실패: 서버 오류");
+                alertToast({msg: "로그인 실패: 서버 오류", type: "error", pos: "top-center"});
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
         }

@@ -2,6 +2,7 @@ import "../../styles/App.css"
 import { useState } from "react";
 import { privateApi, fetchData } from "../Functions";
 import React from 'react';
+import { alertToast } from "../Notification";
 function AddVertiport(props) {
     const [maxFatoUAM, setMaxFatoUAM] = useState('');
     const [maxPathInUAM, setMaxPathInUAM] = useState('');
@@ -86,16 +87,16 @@ function AddVertiport(props) {
             });
             console.log(response);
             if (response.status === 200) {
-                alert(selectedVertiport + " 버티포트를 추가하였습니다");
+                alertToast({msg: selectedVertiport + " 버티포트를 추가하였습니다", type: "success", pos: "top-center"});
                 fetchVertiport();
                 handleVertiportSelect();
             }
         } catch (error) {
             console.log(error)
             if (error.response && error.response.status === 400) {
-                alert("버티포트 추가 실패 : " + error.message);
+                alertToast({msg: "버티포트 추가 실패 : " + error.message, type: "error", pos: "top-center"});
             } else {
-                alert("버티포트 실패 : other");
+                alertToast({msg: "버티포트 추가 실패 : 알 수 없는 이유", type: "error", pos: "top-center"});
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
         }
@@ -114,19 +115,19 @@ function AddVertiport(props) {
             });
             console.log(response);
             if (response.status === 200) {
-                alert(selectedVertiport + "를 수정하였습니다");
+                alertToast({msg: selectedVertiport + "를 수정하였습니다", type: "success", pos: "top-center"});
                 fetchVertiport();
             }
         } catch (error) {
             if (error.response){
                 if(error.response.status === 400) {
-                    alert("버티포트 수정 실패 : " + error.response.data.message);
+                    alertToast({msg: "버티포트 수정 실패 : " + error.response.data.message, type: "error", pos: "top-center"});
                 }
                 else if(error.response.status === 401) {
-                    alert("버티포트 수정 실패 : " + error.response.data.message);
+                    alertToast({msg: "버티포트 수정 실패 : " + error.response.data.message, type: "error", pos: "top-center"});
                 }
             } else {
-                alert("버티포트 수정 실패 : other");
+                alertToast({msg: "버티포트 수정 실패 : 알 수 없는 이유", type: "error", pos: "top-center"});
             }
             console.error("Login failed:", error.response ? error.response.data : error.message);
         }
@@ -139,20 +140,20 @@ function AddVertiport(props) {
                 const response = await privateApi.delete(`/vertiports/${selectedVertiport}`);
                 console.log(response);
                 if (response.status === 200) {
-                    alert(selectedVertiport + "를 삭제하였습니다");
+                    alertToast({msg: selectedVertiport + "를 삭제하였습니다", type: "success", pos: "top-center"});
                     fetchVertiport();
                     handleVertiportSelect();
                 }
             } catch (error) {
                 if (error.response){
                     if(error.response.status === 401) {
-                        alert("버티포트 삭제 실패 : " + error.response.data.message);
+                        alertToast({msg: "버티포트 삭제 실패 : " + error.response.data.message, type: "error", pos: "top-center"});
                     }
                     else {
-                        alert("버티포트 삭제 실패 : " + error.message);
+                        alertToast({msg: "버티포트 삭제 실패 : " + error.message, type: "error", pos: "top-center"});
                     }
                 } else {
-                    alert("버티포트 삭제 실패 : other");
+                    alertToast({msg: "버티포트 삭제 실패 : 알 수 없는 이유", type: "error", pos: "top-center"});
                 }
                 console.error("Login failed:", error.response ? error.response.data : error.message);
             }

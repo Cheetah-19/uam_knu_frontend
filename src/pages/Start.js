@@ -7,6 +7,7 @@ import { privateApi, fetchData, postData } from "../components/Functions";
 import Modal from "../components/modal/Modal";
 import Header from "../components/Header"
 import ButtonGroup from '../components/ButtonGroup';
+import { alertToast } from "../components/Notification";
 
 const Start = (props) => {
   const [Modalstate, setModalstate] = useState(false);
@@ -346,7 +347,7 @@ const Start = (props) => {
 
     const isValid = numericInputs.every(value => !isNaN(value) && value !== '');
     if (!isValid) {
-      alert('모든 텍스트 박스를 채우고, 숫자 값만 입력하세요.');
+      alertToast({ msg: '모든 텍스트 박스를 채우고, 숫자 값만 입력하세요.', type: 'warning', pos: 'top-center' });
       handleReset();
       return;
     }

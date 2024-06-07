@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../components/Functions";
 import "./Login.css";
-
+import { alertToast } from "../components/Notification";
 const Register = ({ setIsLogin }) => {
     const [id, setId] = useState("");
     const [password, setPassword1] = useState("");
@@ -16,14 +16,13 @@ const Register = ({ setIsLogin }) => {
                 password: password,
                 phone_number: phone_number
             });
-
-            alert("회원가입 성공");
+            alertToast({ msg: "회원가입 성공", type: "success", pos: "top-center" });
             setIsLogin(1);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                alert("회원가입 실패: 잘못된 아이디 또는 비밀번호");
+                alertToast({ msg: "회원가입 실패: 잘못된 아이디 또는 비밀번호", type: "error", pos: "top-center" });
             } else {
-                alert("회원가입 실패: 서버 오류");
+                alertToast({ msg: "회원가입 실패: 서버 오류", type: "error", pos: "top-center" });
             }
         }
     };
