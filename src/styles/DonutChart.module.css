@@ -14,7 +14,8 @@
     }
 }
 
-.DonutChart canvas {
-    width: 80%; /* 차트의 너비를 100%로 설정 */
-    height: 80%; /* 차트의 높이를 100%로 설정 */
+.chartText {
+    margin-left: 110px;
+    font-size: 32px;
+    font-family: 'Pretendard-Regular';
 }

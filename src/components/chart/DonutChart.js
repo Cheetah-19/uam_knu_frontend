@@ -87,13 +87,13 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     <div className={styles.DonutChart}>
       {/* 최적화 전 파이차트 */}
       <div>
-        <h3>Before Optimization</h3>
-        <canvas ref={chartRefBefore} />
+        <div className={styles.chartText}> Before Optimization</div>
+        <canvas ref={chartRefBefore} width={450} height={450} /> {/* 차트 크기 키우기 */}
       </div>
       {/* 최적화 후 파이차트 */}
       <div>
-        <h3>After Optimization</h3>
-        <canvas ref={chartRefAfter} />
+        <div className={styles.chartText}> After Optimization</div>
+        <canvas ref={chartRefAfter} width={450} height={450} />
       </div>
     </div>
   );
