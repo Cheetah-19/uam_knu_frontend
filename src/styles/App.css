@@ -305,6 +305,12 @@ header .header-btn {
   text-align: center; /* 가운데 정렬 */
 }
 
+.slidecontainer#vert-chart{
+  position: relative;
+  width:20%;
+  left: 50%;
+}
+
 /* The slider itself */
 .slider {
   -webkit-appearance: none;  /* Override default CSS styles */

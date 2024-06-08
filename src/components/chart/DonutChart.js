@@ -3,6 +3,8 @@ import Chart from 'chart.js/auto';
 import styles from '../../styles/DonutChart.module.css';
 
 const DonutChart = ({ solution, congetion_utilization_Data }) => {
+  const arr = solution;
+  solution = arr[0];
   const Options = {};
 
   // 최적화 전 파이차트 데이터 설정
@@ -13,6 +15,11 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     borderColor: ["#ffeb9b", "#b5f2ff"],
   }];
 
+  const [weight, setWeight] = useState(solution.weight); 
+    const handleWeightChange = (e) => {
+        setWeight(parseFloat(e.target.value));
+    };
+
   const [donutChartDataBefore, setDonutChartDataBefore] = useState({ labels: labelsBefore, datasets: datasetsBefore });
   const [donutChartDataAfter, setDonutChartDataAfter] = useState({ labels: labelsBefore, datasets: datasetsBefore }); // 초기화 후 데이터를 초기화 전과 동일하게 설정
 
@@ -20,7 +27,11 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   const chartRefAfter = useRef(null); // 최적화 후 차트 인스턴스 변수
 
   useEffect(() => {
+    if (weight){
+      solution = arr.find(item => item.weight === weight);
+    }
     if (solution) {
+      
       // 최적화 후 파이차트 데이터 설정
       const labelsAfter = ["congestion", "using"];
       const datasetsAfter = [{
@@ -30,7 +41,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
       }];
       setDonutChartDataAfter({ labels: labelsAfter, datasets: datasetsAfter });
     }
-  }, [solution]);
+  }, [solution,weight]);
 
   useEffect(() => {
     if (congetion_utilization_Data) {
@@ -84,18 +95,36 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   }, [congetion_utilization_Data]);
 
   return (
-    <div className={styles.DonutChart}>
-      {/* 최적화 전 파이차트 */}
-      <div>
-        <div className={styles.chartText}> Before Optimization</div>
-        <canvas ref={chartRefBefore} width={450} height={450} /> {/* 차트 크기 키우기 */}
+    <div>
+      <div className="slidecontainer" id='vert-chart'>
+          {/* Range slider for weight */}
+          <input
+            type="range"
+            name="weight"
+            value={weight}
+            min="0"
+            max="1"
+            step="0.1" // Add step attribute
+            className="slider"
+            onChange={handleWeightChange}
+          />
+          {/* Display the selected weight value */}
+          <div>{weight}</div>
       </div>
-      {/* 최적화 후 파이차트 */}
-      <div>
-        <div className={styles.chartText}> After Optimization</div>
-        <canvas ref={chartRefAfter} width={450} height={450} />
+      <div className={styles.DonutChart}>
+        {/* 최적화 전 파이차트 */}
+        <div>
+          <div className={styles.chartText}> Before Optimization</div>
+          <canvas ref={chartRefBefore} width={450} height={450} /> {/* 차트 크기 키우기 */}
+        </div>
+        {/* 최적화 후 파이차트 */}
+        <div>
+          <div className={styles.chartText}> After Optimization</div>
+          <canvas ref={chartRefAfter} width={450} height={450} />
+        </div>
       </div>
     </div>
+    
   );
 };
 

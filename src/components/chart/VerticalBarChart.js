@@ -3,8 +3,18 @@ import Chart from 'chart.js/auto';
 import styles from '../../styles/DonutChart.module.css';
 
 const BarChart = ({ solution, occupancyData }) => {
+    
+    const arr = solution;
+    solution = solution[0];
+    console.log("vertical:",solution);
     const chartRef = useRef(null);
     const [chartInstance, setChartInstance] = useState(null);
+
+    const [weight, setWeight] = useState(solution.weight); 
+    const handleWeightChange = (e) => {
+        setWeight(parseFloat(e.target.value));
+    };
+    
 
     useEffect(() => {
         if (chartRef.current) {
@@ -83,15 +93,53 @@ const BarChart = ({ solution, occupancyData }) => {
                 ];
             }
 
+            if(weight){
+                solution = arr.find(item => item.weight === weight);
+                if(solution) {
+                    chartInstance.data.datasets[1].data = [
+                        solution.fato_in_UAM,
+                        solution.fato_out_UAM,
+                        solution.gate_UAM,
+                        solution.gate_UAM_psg,
+                        solution.path_in_UAM,
+                        solution.path_out_UAM,
+                        solution.waiting_room_psg
+                    ];
+
+                }
+
+            }
+
             chartInstance.update();
         }
-    }, [solution, occupancyData, chartInstance]);
+    }, [solution, occupancyData, chartInstance,weight]);
 
     return (
-        <div className={styles.DonutChart}>
+        <div>
+            <div className="slidecontainer" id='vert-chart'>
+                {/* Range slider for weight */}
+                <input
+                  type="range"
+                  name="weight"
+                  value={weight}
+                  min="0"
+                  max="1"
+                  step="0.1" // Add step attribute
+                  className="slider"
+                  onChange={handleWeightChange}
+                />
+                {/* Display the selected weight value */}
+                <div>{weight}</div>
+            </div>
+            <div className={styles.DonutChart}>
+            
             <h2>최적화 전/후 점유상황 비교</h2>
             <canvas ref={chartRef} />
+            
+            </div>
         </div>
+       
+        
     );
 };
 
