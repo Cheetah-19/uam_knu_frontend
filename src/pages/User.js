@@ -49,7 +49,7 @@ const User = (props) => {
                 old_password: old_password,
                 new_password1: new_password1,
                 new_password2: new_password2
-            })
+            });
             alertToast({msg: "비밀번호 변경 성공", type: "success", pos: "top-center"});
         } catch (error) {
             if (error.response){
@@ -69,7 +69,7 @@ const User = (props) => {
 
     const handleLogout = async (event) => {
         try {
-            const response = await privateApi.delete("users/auth")
+            const response = await privateApi.delete("users/auth");
             alertToast({msg: "로그아웃 되었습니다", type: "success", pos: "top-center"});
             props.setUser(0);
             navigate("/");
@@ -87,7 +87,7 @@ const User = (props) => {
     const handleDeleteUser = async (event) => {
         if(window.confirm("회원탈퇴를 하시겠습니까?")){
             try {
-                const response = await privateApi.delete("users")
+                const response = await privateApi.delete("users");
                 alertToast({msg: "회원탈퇴가 되었습니다", type: "success", pos: "top-center"});
                 navigate("/");
             } catch (error) {
