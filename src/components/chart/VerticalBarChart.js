@@ -4,15 +4,14 @@ import styles from '../../styles/DonutChart.module.css';
 
 const BarChart = ({ solution, occupancyData }) => {
     const arr = solution;
-    solution = solution[0];
-    // console.log("vertical:",solution);
+    solution = arr[0];
 
     const chartRef = useRef(null);
     const chartRef2 = useRef(null);
     const [chartInstance, setChartInstance] = useState(null);
     const [chartInstance2, setChartInstance2] = useState(null);
 
-    const [weight, setWeight] = useState(solution.weight); 
+    const [weight, setWeight] = useState(solution.weight);
     const handleWeightChange = (e) => {
         const value = parseFloat(e.target.value);
         let closest = null;
@@ -160,15 +159,17 @@ const BarChart = ({ solution, occupancyData }) => {
 
             if(weight) {
                 solution = arr.find(item => item.weight == weight);
-                chartInstance.data.datasets[1].data = [
-                    solution.fato_in_UAM,
-                    solution.fato_out_UAM,
-                    solution.gate_UAM,
-                    solution.gate_UAM_psg,
-                    solution.path_in_UAM,
-                    solution.path_out_UAM,
-                    solution.waiting_room_psg
-                ];
+                if(solution){
+                    chartInstance.data.datasets[1].data = [
+                        solution.fato_in_UAM,
+                        solution.fato_out_UAM,
+                        solution.gate_UAM,
+                        solution.gate_UAM_psg,
+                        solution.path_in_UAM,
+                        solution.path_out_UAM,
+                        solution.waiting_room_psg
+                    ];
+                }
             }
 
             chartInstance.update();
@@ -190,15 +191,17 @@ const BarChart = ({ solution, occupancyData }) => {
 
             if(weight){
                 solution = arr.find(item => item.weight == weight);
-                chartInstance2.data.datasets[1].data = [
-                    solution.fato_in_UAM,
-                    solution.fato_out_UAM,
-                    solution.gate_UAM,
-                    solution.gate_UAM_psg,
-                    solution.path_in_UAM,
-                    solution.path_out_UAM,
-                    solution.waiting_room_psg
-                ];
+                if(solution){
+                    chartInstance2.data.datasets[1].data = [
+                        solution.fato_in_UAM,
+                        solution.fato_out_UAM,
+                        solution.gate_UAM,
+                        solution.gate_UAM_psg,
+                        solution.path_in_UAM,
+                        solution.path_out_UAM,
+                        solution.waiting_room_psg
+                    ];
+                }
             }
 
             chartInstance2.update();

@@ -193,7 +193,7 @@ const Start = (props) => {
   const handleGraphSelect = (graphType) => {
     if((isCalculated || showChart) || (selectedVertiport && stateId)){
       setSelectedGraph(graphType);
-      document.getElementById('dropdown-right').innerText = graphType === 'pie' ? '점유상황' : '혼잡도 및 이용률';
+      document.getElementById('dropdown-right').innerText = graphType === 'bar' ? '점유상황' : '혼잡도 및 이용률';
     }
   };
 
@@ -362,10 +362,10 @@ const Start = (props) => {
       console.log('서버로부터 최적화 받은 데이터:', responseData.data);
       if (responseData && responseData.result === 'success' && responseData.data) {
         const { solution } = responseData.data;
-        setSolution(solution); // solution 상태 업데이트
+        setStateId(null);
+        setSolution(transformNewSolution([solution])); // solution 상태 업데이트
         setShowChart(true);
-        setSelectedGraph('pie');
-        handleGraphSelect('pie');
+        handleGraphSelect('bar');
         // 식별 번호 목록 업데이트
         await fetchStatesByVertiport();
       }
@@ -477,7 +477,7 @@ const Start = (props) => {
               </div>
               <DropdownButton id="dropdown-right" title="그래프">
                 <Dropdown.Item onClick={() => handleGraphSelect('donut')}>혼잡도 및 이용률</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleGraphSelect('pie')}>점유상황</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleGraphSelect('bar')}>점유상황</Dropdown.Item>
               </DropdownButton>
               <DropdownButton
                 id="dropdown-sequence"  // 기존 코드: id="dropdown-right"
@@ -517,7 +517,7 @@ const Start = (props) => {
                 )}
               </div>
             )}
-            {selectedGraph === 'pie' && (
+            {selectedGraph === 'bar' && (
               <div className="chart-container">
                 {stateId && previousData && newsolution ? (
                   <VerticalBarChart solution={newsolution} occupancyData={previousData} /> //newsolution = array

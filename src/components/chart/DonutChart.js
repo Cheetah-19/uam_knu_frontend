@@ -7,7 +7,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   solution = arr[0];
   const Options = {};
 
-  // 최적화 전 파이차트 데이터 설정
+  // 최적화 전 도넛차트 데이터 설정
   const labelsBefore = ["congestion", "using"];
   const datasetsBefore = [{
     data: [50, 50],
@@ -38,7 +38,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
   const chartRefAfter = useRef(null); // 최적화 후 차트 인스턴스 변수
 
   useEffect(() => {
-    // 최적화 후 파이차트 데이터 설정
+    // 최적화 후 도넛차트 데이터 설정
     solution = arr.find(item => item.weight == weight);
 
     const labelsAfter = ["congestion", "using"];
@@ -52,7 +52,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
 
   useEffect(() => {
     if (congetion_utilization_Data) {
-      // 최적화 전 파이차트 데이터 설정
+      // 최적화 전 도넛차트 데이터 설정
       const datasetsBefore = [{
         data: [
           congetion_utilization_Data.congestion / (congetion_utilization_Data.utilization + congetion_utilization_Data.congestion) * 100,
@@ -69,7 +69,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     if (chartRefBefore.current) {
       // 최적화 전 Chart.js 인스턴스 생성
       const newChartInstanceBefore = new Chart(chartRefBefore.current, {
-        type: 'doughnut', // 도넛차트를 파이차트로 변경
+        type: 'doughnut', // 도넛차트를 도넛차트로 변경
         data: donutChartDataBefore,
         options: Options
       });
@@ -85,7 +85,7 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
     if (chartRefAfter.current) {
       // 최적화 후 Chart.js 인스턴스 생성
       const newChartInstanceAfter = new Chart(chartRefAfter.current, {
-        type: 'doughnut', // 도넛차트를 파이차트로 변경
+        type: 'doughnut', // 도넛차트를 도넛차트로 변경
         data: donutChartDataAfter,
         options: Options
       });
@@ -117,12 +117,12 @@ const DonutChart = ({ solution, congetion_utilization_Data }) => {
           <div>{weight}</div>
       </div>
       <div className={styles.DonutChart}>
-        {/* 최적화 전 파이차트 */}
+        {/* 최적화 전 도넛차트 */}
         <div className={`${styles.dunut}`}>
           <div className={styles.chartText}> 최적화 전 </div>
           <canvas ref={chartRefBefore} /> {/* 차트 크기 키우기 */}
         </div>
-        {/* 최적화 후 파이차트 */}
+        {/* 최적화 후 도넛차트 */}
         <div className={`${styles.dunut}`}>
           <div className={styles.chartText}> 최적화 후 </div>
           <canvas ref={chartRefAfter} />
