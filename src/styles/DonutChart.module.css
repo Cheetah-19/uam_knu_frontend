@@ -1,6 +1,5 @@
-.DonutChart {
-    max-width: 1000%;
-    max-height: 80%;
+.DonutChart, .BarchartContainer {
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
@@ -14,8 +13,38 @@
     }
 }
 
+.dunut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    margin: 0 30px;
+}
+
 .chartText {
-    margin-left: 110px;
-    font-size: 32px;
+    font-size: 25px;
     font-family: 'Pretendard-Regular';
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.BarchartContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.Bar_chart1 {
+    max-width: 550px;
+    min-width: 400px;
+    width: 60%;
+    height: 400px;
+}
+
+.Bar_chart2 {
+    max-width: 370px;
+    min-width: 300px;
+    width: 40%;
+    height: 400px;
 }

@@ -77,15 +77,35 @@ const Start = (props) => {
     fetchDataFromServer();
   }, []);
 
-  // 버티포트 선택 시 식별 번호 콘솔에 출력
-  // useEffect(() => {
-  //   console.log('식별 번호:', stateId);
-  // }, [stateId]);
+
+  // 데이터 형식 변환 함수 작성
+  const transformNewSolution = (newsolution) => {
+    if (Array.isArray(newsolution) && newsolution.length > 0) {
+      const results = [];
+      for (const sols of newsolution){
+        console.log("sols:",sols);
+        results.push({
+          congestion: parseFloat(sols.congestion),
+          fato_in_UAM: parseInt(sols.fato_in_UAM, 10),
+          fato_out_UAM: parseInt(sols.fato_out_UAM, 10),
+          gate_UAM: parseInt(sols.gate_UAM, 10),
+          gate_UAM_psg: parseInt(sols.gate_UAM_psg, 10),
+          path_in_UAM: parseInt(sols.path_in_UAM, 10),
+          path_out_UAM: parseInt(sols.path_out_UAM, 10),
+          utilization: parseFloat(sols.utilization),
+          waiting_room_psg: parseInt(sols.waiting_room_psg, 10),
+          weight: parseFloat(sols.weight)
+        })
+      }
+      return results;
+    }
+    return null;
+  };
 
   const fetchStatesByVertiport = async () => {
     if (!selectedVertiport) return;
 
-    try {
+    try { 
       //console.log("선택 버티포트 = ", selectedVertiport.name)
 
       const responseData = await fetchData(`/users/history?vertiport=${selectedVertiport.name}`);
@@ -107,57 +127,25 @@ const Start = (props) => {
     fetchStatesByVertiport();
   }, [selectedVertiport]);
 
-  // 데이터 형식 변환 함수 작성
-  const transformNewSolution = (newsolution) => {
-    if (Array.isArray(newsolution) && newsolution.length > 0) {
-      const results = [];
-      for (const sols of newsolution){
-        console.log("sols:",sols);
-        results.push({
-          congestion: parseFloat(sols.congestion),
-          fato_in_UAM: parseInt(sols.fato_in_UAM, 10),
-          fato_out_UAM: parseInt(sols.fato_out_UAM, 10),
-          gate_UAM: parseInt(sols.gate_UAM, 10),
-          gate_UAM_psg: parseInt(sols.gate_UAM_psg, 10),
-          path_in_UAM: parseInt(sols.path_in_UAM, 10),
-          path_out_UAM: parseInt(sols.path_out_UAM, 10),
-          utilization: parseFloat(sols.utilization),
-          waiting_room_psg: parseInt(sols.waiting_room_psg, 10),
-          weight: parseFloat(sols.weight)
-        })
-
-      }
-      return results;
-    }
-    return null;
-  };
-
-
-  const fetchStateData = async (sequenceId) => {
+  const fetchOptimizations = async () => {
     try {
-      const response = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}`);
-      if (response && response.data && response.data.result === 'success' && response.data.data) {
-        const states = response.data.data.states;
-        const selectedState = states.find(state => state.sequence === sequenceId);
-        if (selectedState) {
-          setPreviousData(selectedState);
-          console.log("선택 데이터 = ", selectedState);
+      const selectedState = states.find(state => state.sequence === stateId);
+      if (selectedState) {
+        setPreviousData(selectedState);
+        //console.log("선택 데이터 = ", selectedState);
 
-          // Calculate congestion and utilization using selectedState
-          const previous_congetion_utilization_Data = calculate_Congettion_Utilization(selectedState);
-          SetPreviousCongettionUtilizationData(previous_congetion_utilization_Data); // New state setter for previous data
-          
-          // 최적화 후 데이터 가져오기
-          const responseOptimization = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}&sequence=${sequenceId}`);
-          // console.log(`/users/history?vertiport=${selectedVertiport.name}&sequence=${sequenceId}`); 
-          if (responseOptimization && responseOptimization.data && responseOptimization.data.result === 'success' && responseOptimization.data.data) {
-            const optimizationData = responseOptimization.data.data.optimization;  
-            // console.log("최적화 데이터 = ", optimizationData);
-            if (optimizationData) { 
-              const transformedSolution = transformNewSolution(optimizationData);
-              setNewsolution(transformedSolution);
-              console.log("최적화 데이터 = ", transformedSolution);
-            }
+        // Calculate congestion and utilization using selectedState
+        const previous_congetion_utilization_Data = calculate_Congettion_Utilization(selectedState);
+        SetPreviousCongettionUtilizationData(previous_congetion_utilization_Data); // New state setter for previous data
+
+        // 최적화 후 데이터 가져오기
+        const responseOptimization = await privateApi.get(`/users/history?vertiport=${selectedVertiport.name}&sequence=${stateId}`);
+        if (responseOptimization && responseOptimization.data && responseOptimization.data.result === 'success' && responseOptimization.data.data) {
+          const optimizationData = responseOptimization.data.data.optimizations;
+          if (optimizationData) {
+            const transformedSolution = transformNewSolution(optimizationData);
+            setNewsolution(transformedSolution);
+            //console.log("최적화 데이터 = ", transformedSolution);
           }
         }
       }
@@ -167,20 +155,18 @@ const Start = (props) => {
   };
 
   // 시퀀스를 선택할 때 stateId를 업데이트하는 함수
-  const handleSequenceSelect = (sequence) => {
-    // console.log(sequence);
-    setStateId(sequence);
-    document.getElementById('dropdown-sequence').innerText = sequence;
+  const handleSequenceSelect = (state) => {
+    setStateId(state.sequence);
+
+    document.getElementById('dropdown-sequence').innerText = state.datetime.substr(0, 10) + " " + state.datetime.substr(11, 8);
   };
 
   // sequence를 선택할 때 데이터를 가져오는 useEffect
   useEffect(() => {
     if (stateId && selectedVertiport) {
-      fetchStateData(stateId);
+      fetchOptimizations();
     }
   }, [stateId, selectedVertiport]);
-
-
 
   const constantInputs = [
     { name: "maxFatoUAM", label: "Fato의 최대 UAM 수", className: "constant-input" },
@@ -194,10 +180,10 @@ const Start = (props) => {
     { name: "currentFatoInUAM", label: "Fato_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentPathInUAM", label: "Path_In에 있는 UAM 수", className: "current-situation-input" },
     { name: "currentGateUAM", label: "Gate에 있는 UAM 수", className: "current-situation-input" },
-    { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
-    { name: "currentGatePassengers", label: "대합실의 승객 수", className: "current-situation-input" },
     { name: "currentPathOutUAM", label: "Path_Out에 있는 UAM 수", className: "current-situation-input" },
-    { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" }
+    { name: "currentFatoOutUAM", label: "Fato_Out에 있는 UAM 수", className: "current-situation-input" },
+    { name: "currentBoardedPassengers", label: "UAM에 탑승한 승객 수", className: "current-situation-input" },
+    { name: "currentGatePassengers", label: "대합실의 승객 수", className: "current-situation-input" }
   ];
 
   const handleWeightChange = (e) => {
@@ -497,9 +483,9 @@ const Start = (props) => {
                 id="dropdown-sequence"  // 기존 코드: id="dropdown-right"
                 title="시퀀스"
               >
-                {states.map((state) => (
-                  <Dropdown.Item key={state.sequence} onClick={() => handleSequenceSelect(state.sequence)}>
-                    {state.sequence}
+                {states.map((state, index) => (
+                  <Dropdown.Item key={index} onClick={() => handleSequenceSelect(state)}>
+                    {state.datetime.substr(0, 10) + " " + state.datetime.substr(11, 8)}
                   </Dropdown.Item>
                 ))}
               </DropdownButton>

@@ -306,9 +306,8 @@ header .header-btn {
 }
 
 .slidecontainer#vert-chart{
-  position: relative;
   width:20%;
-  left: 50%;
+  margin-top: 50px;
 }
 
 /* The slider itself */
@@ -355,7 +354,6 @@ header .header-btn {
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .calculation-overlay {
