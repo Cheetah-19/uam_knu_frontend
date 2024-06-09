@@ -46,8 +46,8 @@ const Start = (props) => {
     setCurrentGateUAM(data['Gate에 있는 UAM 수'] || '');
     setcurrentPathOutUAM(data['Path_Out에 있는 UAM 수'] || '');
     setCurrentFatoOutUAM(data['Fato_Out에 있는 UAM 수'] || '');
-    setCurrentGatePassengers(data['대합실의 승객 수'] || '');
     setCurrentBoardedPassengers(data['UAM에 탑승한 승객 수'] || '');
+    setCurrentGatePassengers(data['대합실의 승객 수'] || '');
   };
 
   useEffect(() => {
