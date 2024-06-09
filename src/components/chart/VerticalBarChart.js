@@ -162,12 +162,10 @@ const BarChart = ({ solution, occupancyData }) => {
                 if(solution){
                     chartInstance.data.datasets[1].data = [
                         solution.fato_in_UAM,
-                        solution.fato_out_UAM,
-                        solution.gate_UAM,
-                        solution.gate_UAM_psg,
                         solution.path_in_UAM,
+                        solution.gate_UAM,
                         solution.path_out_UAM,
-                        solution.waiting_room_psg
+                        solution.fato_out_UAM,
                     ];
                 }
             }
@@ -193,12 +191,7 @@ const BarChart = ({ solution, occupancyData }) => {
                 solution = arr.find(item => item.weight == weight);
                 if(solution){
                     chartInstance2.data.datasets[1].data = [
-                        solution.fato_in_UAM,
-                        solution.fato_out_UAM,
-                        solution.gate_UAM,
                         solution.gate_UAM_psg,
-                        solution.path_in_UAM,
-                        solution.path_out_UAM,
                         solution.waiting_room_psg
                     ];
                 }
