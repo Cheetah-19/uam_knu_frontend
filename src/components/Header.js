@@ -12,9 +12,13 @@ const Header = ({ user }) => {
         return location.pathname === path ? "selected" : "";
     };
 
+    const handleLogoClick = () => {
+        navigate('/');
+    };
+
     return (
         <header>
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" onClick={handleLogoClick}/>
             <div>
                 <div className={`header-btn ${isSelected('/start')}`} onClick={() => navigate("/start")}>
                     최적화하기
